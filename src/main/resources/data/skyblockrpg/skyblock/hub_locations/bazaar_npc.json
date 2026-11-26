@@ -1,0 +1,14 @@
+{
+  "id": "bazaar_npc",
+  "name": "Bazaar (NPC position)",
+  "parent_id": "bazaar_alley",
+  "category": "npc",
+  "dimension": "minecraft:overworld",
+  "x": -33.5,
+  "y": 73.0,
+  "z": -22.5,
+  "description": "Published reference position for the Bazaar NPC; not yet an NPC spawn instruction.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Bazaar_Alley",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
