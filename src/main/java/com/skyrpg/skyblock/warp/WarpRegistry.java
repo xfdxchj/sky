@@ -3,6 +3,7 @@ package com.skyrpg.skyblock.warp;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.skyrpg.skyblock.SkyBlockRPG;
+import com.skyrpg.skyblock.region.RegionRegistry;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -31,6 +32,8 @@ public final class WarpRegistry {
                         required(json, "dimension"), number(json, "x"), number(json, "y"), number(json, "z"),
                         (float) optionalNumber(json, "yaw", 0), (float) optionalNumber(json, "pitch", 0),
                         optional(json, "required_region_id", ""), optional(json, "description", ""));
+                if (!warp.requiredRegionId().isBlank() && RegionRegistry.get(warp.requiredRegionId()).isEmpty())
+                    throw new IllegalArgumentException("Unknown required region: " + warp.requiredRegionId());
                 String key = warp.id().toLowerCase(Locale.ROOT);
                 if (loaded.putIfAbsent(key, warp) != null)
                     throw new IllegalArgumentException("Duplicate warp id: " + warp.id());
