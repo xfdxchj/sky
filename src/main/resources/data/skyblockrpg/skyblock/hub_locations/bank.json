@@ -1,0 +1,14 @@
+{
+  "id": "bank",
+  "name": "Bank",
+  "parent_id": "village",
+  "category": "service",
+  "dimension": "minecraft:overworld",
+  "x": -20.0,
+  "y": 71.0,
+  "z": -65.0,
+  "description": "Village location containing the Banker and bank services.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Bank",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
