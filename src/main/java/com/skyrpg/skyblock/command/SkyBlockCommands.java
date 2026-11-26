@@ -32,6 +32,7 @@ import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.quest.QuestDefinition;
 import com.skyrpg.skyblock.quest.QuestManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
+import com.skyrpg.skyblock.gui.GuiMenuManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -49,6 +50,11 @@ public final class SkyBlockCommands {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("skyblock")
+                .then(literal("menu").executes(context -> {
+                    var player = context.getSource().getPlayerOrThrow();
+                    GuiMenuManager.openMain(player);
+                    return 1;
+                }))
                 .then(literal("status").executes(context -> {
                     ServerCommandSource source = context.getSource();
                     String worldName = source.getServer().getSaveProperties().getLevelName();
