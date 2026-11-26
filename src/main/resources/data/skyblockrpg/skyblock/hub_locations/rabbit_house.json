@@ -1,6 +1,6 @@
 {
   "id": "rabbit_house",
-  "name": "rabbit_house",
+  "name": "Rabbit House",
   "parent_id": "mountain",
   "category": "service",
   "dimension": "minecraft:overworld",
