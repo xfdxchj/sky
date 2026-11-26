@@ -2,6 +2,12 @@
 
 A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 
+## Development documentation
+
+- [Development status v0.4](docs/DEV_STATUS_v0.4.md): what is implemented and what has actually been verified.
+- [Development task list v0.4](docs/DEV_TASKS_v0.4.md): remaining work and acceptance criteria.
+- Development may proceed directly on `main`; feature branches are optional and used only when they materially help isolate risk or parallel work.
+
 ## Environment
 - Minecraft Java Edition 1.21.1
 - Java 21
