@@ -4,11 +4,15 @@ import com.skyrpg.skyblock.command.SkyBlockCommands;
 import com.skyrpg.skyblock.config.SkyBlockConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
 import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.economy.ShopRegistry;
+import com.skyrpg.skyblock.region.RegionRegistry;
+import com.skyrpg.skyblock.region.RegionManager;
+import com.skyrpg.skyblock.warp.WarpRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +38,12 @@ public final class SkyBlockRPG implements ModInitializer {
             MobRegistry.reload(server.getResourceManager());
             ItemRegistry.reload(server.getResourceManager());
             ShopRegistry.reload(server.getResourceManager());
+            RegionRegistry.reload(server.getResourceManager());
+            WarpRegistry.reload(server.getResourceManager());
             LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
         });
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+        ServerTickEvents.END_PLAYER_TICK.register(RegionManager::tick);\n\n        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
