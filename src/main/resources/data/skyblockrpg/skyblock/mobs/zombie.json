@@ -11,5 +11,41 @@
   "source_type": "community-wiki",
   "source_url": "https://hypixelskyblock.minecraft.wiki/w/Zombie",
   "retrieved_at": "2026-11-26",
-  "confidence": "Wiki-listed Private Island Lv1 HP/Damage/XP/Coins; Defense 0 remains a project placeholder."
+  "confidence": "Wiki-listed Private Island Lv1 HP/Damage/XP/Coins; Defense 0 remains a project placeholder.",
+  "family_id": "zombie",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "rotten_flesh",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "poisonous_potato",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.05,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "potato",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.025,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "carrot",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.025,
+      "drop_type": "item"
+    }
+  ]
 }
