@@ -17,6 +17,7 @@ import com.skyrpg.skyblock.region.RegionRegistry;
 import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.island.IslandRegistry;
+import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.structure.StructureRegistry;
 import com.skyrpg.skyblock.connection.ConnectionRegistry;
 import com.skyrpg.skyblock.hub.HubRegistry;
@@ -25,6 +26,8 @@ import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
 import com.skyrpg.skyblock.gui.SkyBlockGui;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
@@ -70,6 +73,26 @@ public final class SkyBlockRPG implements ModInitializer {
             for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 RegionManager.tick(player);
             }
+        });
+
+        PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
+            if (world.isClient || !(world instanceof net.minecraft.server.world.ServerWorld serverWorld)
+                    || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer)) return true;
+            return !PrivateIslandManager.isProtectedFrom(serverPlayer, serverWorld, pos);
+        });
+
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (world.isClient || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer)) {
+                return ActionResult.PASS;
+            }
+            var serverWorld = serverPlayer.getServerWorld();
+            var clicked = hitResult.getBlockPos();
+            var placementTarget = clicked.offset(hitResult.getSide());
+            if (PrivateIslandManager.isProtectedFrom(serverPlayer, serverWorld, clicked)
+                    || PrivateIslandManager.isProtectedFrom(serverPlayer, serverWorld, placementTarget)) {
+                return ActionResult.FAIL;
+            }
+            return ActionResult.PASS;
         });
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
