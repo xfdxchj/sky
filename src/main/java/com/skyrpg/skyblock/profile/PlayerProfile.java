@@ -14,7 +14,7 @@ import java.util.Set;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
-    public static final int CURRENT_VERSION = 3;
+    public static final int CURRENT_VERSION = 4;
 
     private final UUID playerId;
     private String lastKnownName;
