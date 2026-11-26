@@ -84,6 +84,6 @@ public final class SkyBlockRPG implements ModInitializer {
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
         });
 
-        LOGGER.info("{} v{} initialized. P3 combat mixin is ready.", MOD_NAME, "0.1.0-alpha.3");
+        LOGGER.info("{} v{} initialized. P5.2 map connections are ready.", MOD_NAME, "0.1.0-alpha.3");
     }
 }
