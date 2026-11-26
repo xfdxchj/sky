@@ -1,7 +1,7 @@
 {
   "id": "village",
   "name": "Village",
-  "parent_id": "hub_island",
+  "parent_id": "",
   "category": "area",
   "dimension": "minecraft:overworld",
   "x": -3.0,
