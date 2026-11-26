@@ -44,6 +44,8 @@ import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.island.IslandManager;
 import com.skyrpg.skyblock.structure.StructureCommands;
 import com.skyrpg.skyblock.connection.ConnectionCommands;
+import com.skyrpg.skyblock.hub.HubCommands;
+import com.skyrpg.skyblock.hub.HubRegistry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -66,9 +68,11 @@ public final class SkyBlockCommands {
                     String dimension = player.getServerWorld().getRegistryKey().getValue().toString();
                     context.getSource().sendFeedback(() -> Text.literal("SkyBlock Map Format v1 | Loaded islands: "
                             + IslandRegistry.all().size() + " | Connections: " + com.skyrpg.skyblock.connection.ConnectionRegistry.all().size()
+                            + " | Hub POIs: " + HubRegistry.all().size()
                             + " | Current dimension: " + dimension), false);
                     return 1;
                 }))
+                .then(HubCommands.command())
                 .then(literal("island")
                         .then(literal("list").executes(context -> {
                             context.getSource().sendFeedback(() -> Text.literal("Loaded SkyBlock islands: " + IslandRegistry.all().size()), false);
@@ -143,7 +147,7 @@ public final class SkyBlockCommands {
                     String worldName = source.getServer().getSaveProperties().getLevelName();
                     source.sendFeedback(() -> Text.literal("[SkyBlock RPG] Core loaded successfully."), false);
                     source.sendFeedback(() -> Text.literal("World: " + worldName), false);
-                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P5.2)"), false);
+                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P5.3)"), false);
                     return 1;
                 }))
                 .then(literal("profile").executes(context -> {
