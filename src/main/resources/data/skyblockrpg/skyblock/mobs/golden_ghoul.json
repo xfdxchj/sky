@@ -37,8 +37,9 @@
       "item_id": "golden_powder",
       "min_count": 0,
       "max_count": 1,
-      "chance": 0.0001,
-      "drop_type": "item"
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
     }
   ]
 }
