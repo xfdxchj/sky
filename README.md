@@ -14,7 +14,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P5.2 (Island connections; build/test pending)
+## Current milestone: P5.3 (Hub location catalogue foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -255,3 +255,12 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Includes clearly labelled starter bridge, portal and outpost fixtures. These are project test coordinates, not Hypixel map data.
 - This is an adjacency graph only; shortest-path search, actual portal blocks/effects, supports/rails and verified Hypixel map coordinates remain future work.
 - Local Java 21 Gradle build and in-game verification are pending.
+
+
+### P5.3 Hub location catalogue foundation
+- Adds sourced Hub points of interest for Village, Bank, Auction House, Bazaar Alley, Mining District and selected NPC reference positions.
+- Adds /skyblock hub, /skyblock hub list, /skyblock hub info <id>, /skyblock hub locate <id> and /skyblock hub nearest.
+- Coordinates are community-wiki references, not official API data, region bounds or NPC spawn instructions.
+- No Hub terrain or third-party schematic/NBT assets are included; map asset licensing and Minecraft-version compatibility remain open.
+- Design: docs/P5.3_HUB_LOCATION_CATALOGUE.md
+- Test checklist: docs/P5.3_HUB_LOCATION_CATALOGUE_TEST_PLAN.md
