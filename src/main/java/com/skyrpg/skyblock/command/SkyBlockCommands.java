@@ -33,6 +33,9 @@ import com.skyrpg.skyblock.quest.QuestDefinition;
 import com.skyrpg.skyblock.quest.QuestManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
 import com.skyrpg.skyblock.gui.GuiMenuManager;
+import com.skyrpg.skyblock.accessory.AccessoryPowerManager;
+import com.skyrpg.skyblock.accessory.PowerDefinition;
+import com.skyrpg.skyblock.accessory.PowerRegistry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -465,7 +468,94 @@ public final class SkyBlockCommands {
                             ProfileManager.markChanged(player);
                             context.getSource().sendFeedback(() -> Text.literal("Removed " + id + " from your Accessory Bag."), false);
                             return 1;
+                        })))
+                        .then(literal("power").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            var profile = ProfileManager.get(player);
+                            int ap = profile.getAccessoryPower();
+                            context.getSource().sendFeedback(() -> Text.literal("Accessory Power: " + ap
+                                    + " | Multiplier: " + String.format("%.2f", AccessoryPowerManager.getStatsMultiplier(ap))), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Selected Power: " + profile.getSelectedPower()
+                                    + " | Tuning Points: " + profile.getUsedTuningPoints() + "/" + AccessoryPowerManager.getTuningPoints(ap)), false);
+                            for (PowerDefinition power : PowerRegistry.all()) {
+                                context.getSource().sendFeedback(() -> Text.literal((profile.getUnlockedPowers().contains(power.id()) ? "[Unlocked] " : "[Locked] ")
+                                        + power.id() + " - " + power.name()), false);
+                            }
+                            return 1;
+                        })
+                        .then(literal("select").then(argument("powerId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "powerId");
+                            var profile = ProfileManager.get(player);
+                            if (!profile.selectPower(id)) {
+                                context.getSource().sendError(Text.literal("Power is unknown or not unlocked: " + id));
+                                return 0;
+                            }
+                            ProfileManager.markChanged(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Selected accessory power: " + id), false);
+                            return 1;
+                        })))
+                        .then(literal("unlock").then(argument("powerId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "powerId");
+                            PowerDefinition power = PowerRegistry.get(id).orElse(null);
+                            if (power == null || power.starter() || power.powerStoneItemId().isBlank()) {
+                                context.getSource().sendError(Text.literal("Unknown power or no Power Stone configured: " + id));
+                                return 0;
+                            }
+                            var profile = ProfileManager.get(player);
+                            var inventory = profile.getInventory();
+                            if (profile.getUnlockedPowers().contains(power.id())) {
+                                context.getSource().sendError(Text.literal("Power already unlocked: " + id));
+                                return 0;
+                            }
+                            if (inventory.getCount(power.powerStoneItemId()) < 9) {
+                                context.getSource().sendError(Text.literal("Unlocking " + id + " requires 9x " + power.powerStoneItemId()));
+                                return 0;
+                            }
+                            if (!profile.unlockPower(id) || !inventory.remove(power.powerStoneItemId(), 9)) {
+                                context.getSource().sendError(Text.literal("Could not unlock power; no items were consumed."));
+                                return 0;
+                            }
+                            ProfileManager.markChanged(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Unlocked accessory power: " + id), false);
+                            return 1;
                         }))))
+                        .then(literal("tuning").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            var profile = ProfileManager.get(player);
+                            int available = AccessoryPowerManager.getTuningPoints(profile.getAccessoryPower());
+                            context.getSource().sendFeedback(() -> Text.literal("Tuning Points: " + profile.getUsedTuningPoints()
+                                    + "/" + available), false);
+                            for (StatType stat : StatType.values()) {
+                                int points = profile.getTuningAllocations().getOrDefault(stat, 0);
+                                if (AccessoryPowerManager.isTunable(stat) || points > 0) {
+                                    context.getSource().sendFeedback(() -> Text.literal(stat.id() + ": " + points
+                                            + " (+" + String.format("%.2f", points * AccessoryPowerManager.tuningValue(stat)) + ")"), false);
+                                }
+                            }
+                            return 1;
+                        })
+                        .then(literal("set").then(argument("stat", StringArgumentType.word())
+                                .then(argument("points", IntegerArgumentType.integer(0, 100000)).executes(context -> {
+                                    var player = context.getSource().getPlayerOrThrow();
+                                    String statId = StringArgumentType.getString(context, "stat");
+                                    var stat = StatType.fromId(statId);
+                                    if (stat.isEmpty()) {
+                                        context.getSource().sendError(Text.literal("Unknown stat: " + statId));
+                                        return 0;
+                                    }
+                                    int points = IntegerArgumentType.getInteger(context, "points");
+                                    var profile = ProfileManager.get(player);
+                                    if (!profile.setTuningPoints(stat.get(), points)) {
+                                        context.getSource().sendError(Text.literal("Invalid tuning stat or insufficient available points."));
+                                        return 0;
+                                    }
+                                    ProfileManager.markChanged(player);
+                                    context.getSource().sendFeedback(() -> Text.literal("Set " + stat.get().id()
+                                            + " tuning to " + points + " points."), false);
+                                    return 1;
+                                })))))
                 .then(literal("equipment").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     var equipment = ProfileManager.get(player).getInventory().getEquipment();
