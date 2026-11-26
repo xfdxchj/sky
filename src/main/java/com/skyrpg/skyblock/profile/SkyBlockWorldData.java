@@ -132,7 +132,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 5);
+        nbt.putInt("dataVersion", 6);
         return nbt;
     }
 }
