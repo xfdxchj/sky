@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P3.2 (implementation branch; build/test pending)
+## Current milestone: P3.3 (implementation branch; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -21,6 +21,8 @@ P3.1 connects the P2 equipment/stat model to server-authoritative melee combat a
 - Crit Chance clamp and finite/range guards for damage calculations
 - Starter-mob reward mapping for Zombie, Skeleton and Spider; unregistered entities receive no coins or Combat XP
 - Mob definitions loaded from datapack JSON resources, including level, reference HP/Damage, Defense, rewards and provenance fields
+- Registered mobs use persistent SkyBlock HP pools independent of vanilla max health; vanilla health is synchronized proportionally for the visible health bar
+- Custom mob HP is stored by entity UUID in dimension-scoped world PersistentState; unregistered entities retain vanilla health behavior
 - Item definitions loaded from datapack JSON resources, replacing the Java static item catalogue
 - `/skyblock mob list`, `/skyblock mob info <mobId>` and `/skyblock item info <itemId>`
 - Kill rewards persisted through the existing player profile
@@ -57,6 +59,11 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock equip <itemId>`
 - `/skyblock unequip <slot>`
 
+### P3.3 mob HP
+- Design: `docs/P3.3_DESIGN.md`
+- Test checklist: `docs/P3.3_TEST_PLAN.md`
+- Registered mob HP and max HP are independent of vanilla entity max health; the existing native damage pipeline still handles mitigation and invulnerability frames.
+
 ### P3.2 data files
 - Mob data: `src/main/resources/data/skyblockrpg/skyblock/mobs/*.json`
 - Item data: `src/main/resources/data/skyblockrpg/skyblock/items/*.json`
@@ -65,11 +72,11 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ### P3 limitations
 - Combat interception currently applies to melee attacks against living non-player entities while a registered SkyBlock weapon is equipped.
-- Vanilla entity health is not scaled to Hypixel mob health. The current Zombie/Skeleton/Spider mapping is only a combat/reward test bridge.
+- Vanilla entities remain temporary stand-ins for SkyBlock mobs. P3.3 adds independent persistent HP pools, but does not add custom entity classes or AI.
 - Starter mob attributes are placeholders pending source verification; vanilla entity health remains independent of reference SkyBlock HP.
 - No custom mob entity types, AI, spawn tables, boss phases, abilities, ranged weapons, attack-speed timing, Ferocity, enchantments, reforges or elemental damage yet.
 - The logical SkyBlock inventory still has no custom GUI and is not rendered as vanilla item stacks.
-- Full Fabric Gradle build and in-game behavior have not been verified in this environment.
+- Full Fabric Gradle build and in-game behavior for P3.3 must be verified in the local project environment.
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
