@@ -15,6 +15,14 @@ Move from abstract region/warp coordinates to a map model that can describe and 
 - Island visit uses the configured spawn point and the normal server teleport path.
 - The starter island included here is explicitly a project fixture, not a reconstruction of Hypixel Private Island or Hub.
 
+## Implemented in P5.1
+
+- Native Minecraft structure NBT templates loaded through StructureTemplateManager.
+- JSON manifests define template ID, target dimension, origin, rotation, mirror, safety volume and provenance.
+- Operator-only paste command with build-height/world-border checks and all-air preflight.
+- Entity placement is disabled; a tiny project-authored NBT marker is included for testing.
+- Direct .schem parsing and actual Hypixel map assets remain deferred.
+
 ## Commands
 
 - `/skyblock map` — report map format version, loaded island count and current dimension.
@@ -36,7 +44,7 @@ Do not label generated fixture terrain as Hypixel geometry. Actual Hub, Private 
 
 ## Deferred
 
-- Structure NBT / schematic import and paste transforms.
+- Direct Sponge/WorldEdit .schem parsing and bulk conversion tooling (native structure NBT placement is implemented in P5.1).
 - Island protection and build permissions.
 - Portal links, island-to-island route graph and map GUI.
 - Actual Hypixel terrain/building assets and verified region coordinates.
