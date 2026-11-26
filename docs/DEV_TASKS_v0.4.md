@@ -44,6 +44,21 @@
 
 ---
 
+## 2.1 M1：Core 扩展 API（新增）
+
+**目标：** 让附属模组安全注册技能，并把扩展数据保存在 Core 玩家档案中。
+
+- [x] Namespaced 技能注册与 XP 曲线定义。
+- [x] SkillAPI 注册、查询、等级和经验入口。
+- [x] PlayerDataAPI 模块数据读写入口。
+- [x] 旧技能存档键迁移至 `skyblockrpg:<skill>`。
+- [x] 扩展模组缺席时保留其技能 XP 和模块数据。
+- [ ] 用户本地 Gradle build 与 Core-only 游戏验证。
+- [ ] 最小测试扩展 Mod 验证注册顺序与依赖加载。
+- [ ] 后续发布 StatAPI、ItemAPI、CurrencyAPI、RewardAPI、QuestAPI 和事件 API。
+
+**验收：** 见 `CORE_API_v1_TEST_PLAN.md`。
+
 ## 3. P1：玩家系统完善
 
 **目标：形成所有玩法模块可统一调用的玩家成长与属性基础。**
