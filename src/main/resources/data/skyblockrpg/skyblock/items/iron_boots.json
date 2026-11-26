@@ -1,0 +1,15 @@
+{
+  "id": "iron_boots",
+  "name": "Iron Boots",
+  "rarity": "COMMON",
+  "type": "ARMOR",
+  "max_stack_size": 1,
+  "stats": {
+    "health": 10,
+    "defense": 5
+  },
+  "lore": [
+    "A simple pair of iron boots."
+  ],
+  "equipment_slot": "boots"
+}
