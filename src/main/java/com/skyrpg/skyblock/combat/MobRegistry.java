@@ -41,7 +41,7 @@ public final class MobRegistry {
                         JsonObject d = value.getAsJsonObject();
                         drops.add(new MobDropDefinition(optional(d,"item_id",""),
                                 integer(d,"min_count",0), integer(d,"max_count",0),
-                                number(d,"chance",1.0), optional(d,"drop_type","item")));
+                                number(d,"chance",0.0), bool(d,"chance_known",d.has("chance")), optional(d,"drop_type","item")));
                     }
                 }
                 MobDefinition d = new MobDefinition(id, optional(j,"name",id), optional(j,"entity_type",""),
@@ -92,4 +92,5 @@ public final class MobRegistry {
     private static int integer(JsonObject j,String k,int d) { return j.has(k) ? j.get(k).getAsInt() : d; }
     private static long longNumber(JsonObject j,String k,long d) { return j.has(k) ? j.get(k).getAsLong() : d; }
     private static double number(JsonObject j,String k,double d) { return j.has(k) ? j.get(k).getAsDouble() : d; }
+    private static boolean bool(JsonObject j,String k,boolean d) { return j.has(k) ? j.get(k).getAsBoolean() : d; }
 }
