@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.2 (region and warp foundation; build/test pending)
+## Current milestone: P4.3 (NPC interaction foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -53,6 +53,9 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock bank` (show Purse and Bank balances)
 - `/skyblock bank deposit <amount>`
 - `/skyblock bank withdraw <amount>`
+- `/skyblock npc list`
+- `/skyblock npc info <npcId>`
+- `/skyblock npc spawn <npcId>` (permission level 2; development/test spawn)
 - `/skyblock region list`
 - `/skyblock region here`
 - `/skyblock warp list`
@@ -109,6 +112,17 @@ This is the simplified melee core only. It does not yet include additive damage 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
 
+### P4.3 NPC interaction foundation
+- Design: `docs/P4.3_NPC_DESIGN.md`
+- Test checklist: `docs/P4.3_NPC_TEST_PLAN.md`
+- Loads NPC identities, dialogue lines, region restrictions and action bindings from JSON resources.
+- Adds per-instance NPC command tags so multiple NPC definitions can share a vanilla villager stand-in without sharing identity.
+- Adds `/skyblock npc list`, `/skyblock npc info <npcId>` and permission-level-2 `/skyblock npc spawn <npcId>`.
+- Server-side right-click interaction suppresses vanilla trading for tagged NPCs and supports guide dialogue plus existing Bank, Shop catalogue and Warp entry points.
+- Includes three starter test NPC definitions; they are fixtures, not verified Hypixel NPC placements or dialogue.
+- No custom NPC models/skins, GUI dialogue choices, quest engine, natural placement or schedules yet.
+- Local Java 21 Gradle build and in-game verification are pending.
+
 ### P4.2 region and warp foundation
 - Design: `docs/P4.2_REGION_WARP_DESIGN.md`
 - Test checklist: `docs/P4.2_REGION_WARP_TEST_PLAN.md`
@@ -116,7 +130,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Detects region entry server-side, reports first discovery and persists discovered region IDs in the existing player profile.
 - Adds JSON-driven warp destinations, dimension-aware teleportation and optional region-discovery unlock requirements.
 - Includes a clearly labelled project test region and test warp; these coordinates are not Hypixel map coordinates.
-- Region/warp registries load from resources at server start. No Hypixel island terrain, region map data, NPC UI or map assets are included yet.
+- Region/warp registries load from resources at server start. No Hypixel island terrain, verified region map data or map assets are included yet.
 - Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.1 bank and purse separation
