@@ -43,26 +43,58 @@ public final class CombatManager {
         double calculatedDamage = CombatMath.calculateDamage(weaponDamage,
                 profile.getFinalStat(StatType.STRENGTH), profile.getFinalStat(StatType.CRIT_DAMAGE),
                 mob.defense(), critical);
-        float damage = (float) Math.min(calculatedDamage, MAX_MINECRAFT_DAMAGE);
+        double safeDamage = Math.min(calculatedDamage, MAX_MINECRAFT_DAMAGE);
 
-        if (damage <= 0.0F) {
+        if (safeDamage <= 0.0) {
             player.sendMessage(Text.literal("Your equipped weapon has no effective damage."), true);
             return true;
         }
 
-        float before = target.getHealth();
-        boolean applied = target.damage(player.getDamageSources().playerAttack(player), damage);
+        boolean customHealth = !mob.id().equals("unregistered") && mob.health() > 0.0;
+        SkyBlockMobHealthData hpData = customHealth ? SkyBlockMobHealthData.get(world) : null;
+        double hpBefore = customHealth ? hpData.getOrCreate(target, mob) : target.getHealth();
+        float vanillaMax = Math.max(1.0F, target.getMaxHealth());
+
+        // Keep Minecraft's visible health bar proportional to the authoritative SkyBlock HP pool.
+        if (customHealth) target.setHealth((float) (vanillaMax * hpBefore / mob.health()));
+
+        double requested = customHealth ? Math.min(safeDamage, hpBefore) : safeDamage;
+        float vanillaDamage = (float) Math.min(MAX_MINECRAFT_DAMAGE,
+                customHealth ? requested * vanillaMax / mob.health() : requested);
+        float vanillaBefore = target.getHealth();
+        boolean applied = target.damage(player.getDamageSources().playerAttack(player), vanillaDamage);
         if (!applied) {
             player.sendMessage(Text.literal("The target resisted the attack."), true);
             return true;
         }
 
-        float after = Math.max(0.0F, target.getHealth());
-        double actualHealthLoss = Math.max(0.0, before - after);
-        player.sendMessage(Text.literal(String.format("%s: %.1f damage%s | Target HP: %.1f",
-                mob.displayName(), actualHealthLoss, critical ? " CRITICAL!" : "", after)), true);
+        double hpAfter;
+        if (customHealth) {
+            // Convert the damage actually accepted by vanilla's damage pipeline back into SkyBlock HP.
+            double vanillaLoss = Math.max(0.0, vanillaBefore - Math.max(0.0F, target.getHealth()));
+            double acceptedSkyBlockDamage = vanillaLoss / vanillaMax * mob.health();
+            hpAfter = Math.max(0.0, hpBefore - acceptedSkyBlockDamage);
+            if (target.isDead() || hpAfter <= 0.0001) {
+                hpAfter = 0.0;
+                hpData.setCurrent(target, mob, 0.0);
+                target.kill();
+            } else {
+                hpData.setCurrent(target, mob, hpAfter);
+                target.setHealth((float) (vanillaMax * hpAfter / mob.health()));
+            }
+        } else {
+            hpAfter = Math.max(0.0, target.getHealth());
+        }
 
-        if (after <= 0.0F || !target.isAlive()) {
+        double dealt = Math.max(0.0, hpBefore - hpAfter);
+        player.sendMessage(Text.literal(String.format("%s: %.1f damage%s | HP: %.1f/%.1f",
+                mob.displayName(), dealt, critical ? " CRITICAL!" : "", hpAfter,
+                customHealth ? mob.health() : vanillaMax)), true);
+
+        if (customHealth && hpAfter <= 0.0) {
+            hpData.remove(target);
+        }
+        if (hpAfter <= 0.0 || !target.isAlive()) {
             if (mob.coinReward() > 0) profile.addCoins(mob.coinReward());
             if (mob.combatXpReward() > 0) profile.addSkillExperience(SkillType.COMBAT, mob.combatXpReward());
             ProfileManager.markChanged(player);
