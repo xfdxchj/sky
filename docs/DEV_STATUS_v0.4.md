@@ -13,7 +13,7 @@
 
 | 引用 | 当前情况 |
 |---|---|
-| 默认分支 `main` | 已整合 P0 至 P5.2 的累计功能代码，并保留 v0.4 开发基线文档 |
+| 默认分支 `main` | 已整合 P0 至 P5.2 的累计功能代码，并继续包含 P5.3 Hub POI 目录基础实现 |
 | `p5.2-island-connections` | P5.2 集成来源分支；其代码已并入 main，后续可继续保留作历史参考 |
 | 后续开发 | 默认直接在 `main` 上继续；只有改动风险、并行工作或回滚需求明显时才使用临时分支 |
 
@@ -42,7 +42,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 | P2 物品与装备 | 🟡 基础已有 | JSON 物品定义、逻辑背包、装备、饰品包、Power、Tuning、Reforge 基础存在；物品实例、附魔、原版物品注册和完整 Tooltip 未完成 |
 | P3 战斗与怪物 | 🟡 基础已有 | 伤害计算、怪物 JSON、独立怪物 HP、玩家受伤桥接和手动生成存在；掉落闭环、自然刷怪、AI 与完整战斗反馈未完成 |
 | P4 成长与解锁 | 🟡 基础已有 | NPC、任务基础、对话和 GUI 框架存在；Collections、配方、Bestiary 和完整目标类型未完成 |
-| P5 世界与地图 | 🟡 框架已有 | 区域、Warp、岛屿、NBT 结构导入、桥梁和传送路线已有；真实地图内容、私人岛完整玩法和地图保护未完成 |
+| P5 世界与地图 | 🟡 框架与目录已有 | 区域、Warp、岛屿、NBT 结构导入、桥梁和传送路线已有；P5.3 已建立 9 个有来源的 Hub POI 坐标记录与查询命令；真实地形、建筑、NPC 实体布置、区域边界和私人岛完整玩法仍未完成 |
 | P6 生活职业 | ⬜ 未开始 | Mining、Farming、Fishing、Foraging 的完整循环未实现 |
 | P7 自动化与经济扩展 | 🟡 经济基础已有 | Purse、Bank、商店已有；Minion、仓库扩展和单机市场模拟未完成 |
 | P8 Slayer 与 Boss | ⬜ 未开始 | 尚无完整 Slayer 任务和 Boss 战斗闭环 |
@@ -107,7 +107,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `WarpRegistry`、`WarpManager`：Warp 定义和传送。
 - `IslandRegistry`、`IslandManager`：岛屿定义、测试岛生成与访问。
 - `StructureRegistry`、`StructureImportManager`：原生结构 NBT 导入和放置。
-- `ConnectionRegistry`、`ConnectionManager`：桥梁与传送路线定义、桥面生成和入口距离校验。
+- `ConnectionRegistry`、`ConnectionManager`：桥梁与传送路线定义、桥面生成和入口距离校验。\n- `HubLocationDefinition`、`HubRegistry`：9 个有来源的 Hub 地点/NPC 参考坐标；`HubCommands` 提供列表、详情、定位和最近点查询。
 
 **边界：** 当前 starter island、marker、bridge、portal、outpost 都是项目测试 fixture，不是 Hypixel 地图坐标或官方地图资产。
 
@@ -157,7 +157,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：P5.0 曾出现 4 个编译错误，后续已修复并推送。
 - 2026-11-27：用户记录 P5.2 本地 Gradle 构建成功（BUILD SUCCESSFUL，JAR 约 261.8 KB）。
 - 构建环境记录：Gradle 8.12.1、JDK 21。
-- P5.2 的 `runClient` 和完整游戏内行为仍需测试。
+- P5.2 的 `runClient` 和完整游戏内行为仍需测试。\n- P5.3 尚未由用户本地 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
