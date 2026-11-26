@@ -1,0 +1,14 @@
+{
+  "id": "crypts",
+  "name": "Crypts",
+  "parent_id": "graveyard",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": -146,
+  "y": 57,
+  "z": -100,
+  "description": "Underground Hub combat area containing Crypt Ghouls and Golden Ghouls.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Crypts",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
