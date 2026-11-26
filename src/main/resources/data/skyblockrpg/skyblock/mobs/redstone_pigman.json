@@ -1,0 +1,55 @@
+{
+  "id": "redstone_pigman",
+  "name": "Redstone Pigman",
+  "entity_type": "",
+  "level": 8,
+  "health": 250,
+  "damage": 75,
+  "defense": 0,
+  "coin_reward": 2,
+  "combat_xp_reward": 12,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Redstone_Pigman",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current listed stats and explicit drop chances; Defense not listed.",
+  "family_id": "redstone_pigman",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "deep_caverns_pigmens_den",
+  "drops": [
+    {
+      "item_id": "gold_nugget",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 0.5,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "redstone",
+      "min_count": 5,
+      "max_count": 5,
+      "chance": 0.5,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "flaming_sword",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "exp_share_core",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0001,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
