@@ -57,6 +57,9 @@ public final class ItemRegistry {
         ItemDefinition exact = ITEMS.get(normalized);
         if (exact != null) return Optional.of(exact);
         if (!normalized.contains(":")) return Optional.ofNullable(ITEMS.get("skyblockrpg:" + normalized));
+        if (normalized.startsWith("skyblockrpg:")) {
+            return Optional.ofNullable(ITEMS.get(normalized.substring("skyblockrpg:".length())));
+        }
         return Optional.empty();
     }
     public static Collection<ItemDefinition> all() { return Collections.unmodifiableCollection(ITEMS.values()); }
