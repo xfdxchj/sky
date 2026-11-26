@@ -102,7 +102,7 @@ public final class PlayerInventory {
             ItemDefinition candidate = ItemRegistry.get(id).orElse(null);
             if (candidate == null || candidate.type() != ItemType.ACCESSORY) continue;
             ItemDefinition current = winners.get(candidate.accessoryLine());
-            if (current == null || candidate.rarity().ordinal() > current.rarity().ordinal()
+            if (current == null || candidate.rarity().upgradeRank() > current.rarity().upgradeRank()
                     || (candidate.rarity() == current.rarity()
                     && candidate.accessoryPower() > current.accessoryPower())) {
                 winners.put(candidate.accessoryLine(), candidate);
