@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P3.1
+## Current milestone: P3.2 (implementation branch; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -20,6 +20,9 @@ P3.1 connects the P2 equipment/stat model to server-authoritative melee combat a
 - Baseline combat stats: 30 Crit Chance and 50 Crit Damage (community-wiki sourced)
 - Crit Chance clamp and finite/range guards for damage calculations
 - Starter-mob reward mapping for Zombie, Skeleton and Spider; unregistered entities receive no coins or Combat XP
+- Mob definitions loaded from datapack JSON resources, including level, reference HP/Damage, Defense, rewards and provenance fields
+- Item definitions loaded from datapack JSON resources, replacing the Java static item catalogue
+- `/skyblock mob list`, `/skyblock mob info <mobId>` and `/skyblock item info <itemId>`
 - Kill rewards persisted through the existing player profile
 - `/skyblock combat` displays equipped weapon and combat stats
 
@@ -30,7 +33,8 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ### Data provenance
 - Hypixel's official public API documents SkyBlock resources such as items, collections and skills. It does not provide a complete public mob-stat / mob-reward endpoint.
-- Combat formula, baseline Crit Chance/Crit Damage and starter-mob reward references currently come from the community-maintained Hypixel SkyBlock Wiki. See `DATA_SOURCES.md`.
+- The P3.1 combat formula and baseline Crit Chance/Crit Damage are community-wiki references. See `DATA_SOURCES.md`.
+- P3.2 starter mob level/HP/Damage/Defense fields are explicitly provisional project values, not official Hypixel data. Existing coin/Combat XP values preserve the P3.1 tested behavior.
 - The training sword's item stats remain project test values, not a Hypixel item.
 
 ### Commands
@@ -45,15 +49,24 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock skill <skill> add <amount>` (permission level 2)
 - `/skyblock items`
 - `/skyblock item give <itemId> [count]` (permission level 2)
+- `/skyblock item info <itemId>`
+- `/skyblock mob list`
+- `/skyblock mob info <mobId>`
 - `/skyblock inventory`
 - `/skyblock equipment`
 - `/skyblock equip <itemId>`
 - `/skyblock unequip <slot>`
 
+### P3.2 data files
+- Mob data: `src/main/resources/data/skyblockrpg/skyblock/mobs/*.json`
+- Item data: `src/main/resources/data/skyblockrpg/skyblock/items/*.json`
+- Schema: `docs/P3.2_DATA_SCHEMA.md`
+- Test checklist: `docs/P3.2_TEST_PLAN.md`
+
 ### P3 limitations
 - Combat interception currently applies to melee attacks against living non-player entities while a registered SkyBlock weapon is equipped.
 - Vanilla entity health is not scaled to Hypixel mob health. The current Zombie/Skeleton/Spider mapping is only a combat/reward test bridge.
-- Mob Defense is set to 0 until a defensible data source / custom mob data model exists.
+- Starter mob attributes are placeholders pending source verification; vanilla entity health remains independent of reference SkyBlock HP.
 - No custom mob entity types, AI, spawn tables, boss phases, abilities, ranged weapons, attack-speed timing, Ferocity, enchantments, reforges or elemental damage yet.
 - The logical SkyBlock inventory still has no custom GUI and is not rendered as vanilla item stacks.
 - Full Fabric Gradle build and in-game behavior have not been verified in this environment.
