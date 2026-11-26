@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.7 (Accessory Power foundation; build/test pending)
+## Current milestone: P4.8 (Reforge foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -117,6 +117,17 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P4.8 Basic Reforge foundation
+- Design: `docs/P4.8_REFORGE_SYSTEM_DESIGN.md`
+- Test checklist: `docs/P4.8_REFORGE_SYSTEM_TEST_PLAN.md`
+- Loads JSON reforge definitions from `data/skyblockrpg/skyblock/reforges/*.json`.
+- Adds a server-side basic reforge roll for equipped weapon and armor slots; compatible registered reforges are selected with equal probability and charge their configured coin cost (500 coins in the supplied fixtures).
+- Reforge state is stored per equipped slot in PlayerInventory NBT and contributes additive modifiers through the existing final-stat pipeline.
+- Replacing or unequipping an item clears that slot's reforge; P4.8 does not yet have unique item-instance identity, so reforges do not follow an item into the inventory.
+- Commands: `/skyblock reforge`, `/skyblock reforge roll <slot>`.
+- `test_fierce` and `test_titanic` are project test fixtures, not verified Hypixel reforge tables. Rarity scaling, full compatibility pools, Reforge Stones, special bonuses and GUI are deferred.
+- Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.7 Accessory Power, Powers, Power Stones and Tuning
 - Design: `docs/P4.7_ACCESSORY_POWER_SYSTEM_DESIGN.md`
