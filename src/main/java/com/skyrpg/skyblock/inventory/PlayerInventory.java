@@ -69,7 +69,6 @@ public final class PlayerInventory {
     }
 
     public boolean unequip(EquipmentSlot slot) {
-        if (slot == EquipmentSlot.ACCESSORY) return false;
         String itemId = equipment.get(slot);
         if (itemId == null || !add(itemId, 1)) return false;
         equipment.remove(slot);
@@ -88,8 +87,10 @@ public final class PlayerInventory {
 
     /** Returns an accessory to the logical inventory; the bag is unchanged if inventory insertion fails. */
     public boolean removeAccessory(String itemId) {
-        int index = accessoryBag.indexOf(itemId);
-        if (index < 0 || !add(itemId, 1)) return false;
+        ItemDefinition def = ItemRegistry.get(itemId).orElse(null);
+        if (def == null) return false;
+        int index = accessoryBag.indexOf(def.id());
+        if (index < 0 || !add(def.id(), 1)) return false;
         accessoryBag.remove(index);
         return true;
     }
