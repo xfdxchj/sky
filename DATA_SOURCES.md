@@ -62,6 +62,19 @@ These are useful current references, but they are not official Hypixel API data 
   - Emerald Slime: https://hypixelskyblock.minecraft.wiki/w/Cubic_%28Mob_Type%29 — Lv4, 80 Health, 70 Damage, 6 Combat XP, 1 Coin.
 - Island coverage notes: the current Wiki's Mobs page states that the Gold Mine is the only public island without mobs. The Farming Islands do have passive animal families; these are better represented in a later farming/collection milestone rather than the current hostile-combat bridge.
 
+## Community-wiki mob level and reward formulas
+
+The current Mobs page documents that HP and Damage determine Mob Level, and that Mob Level generally determines skill XP, coins and experience orbs. For the standard `Mob` category, the page currently lists:
+
+- Mob Level: `floor((log10(HP * Damage) - 2) ^ 2.6)`, minimum 1.
+- Skill XP: `floor(Mob Level * 1.5)`, minimum +5 Combat XP (or +25 Fishing XP).
+- Coins: `floor(Mob Level / 3)`, minimum 1 coin.
+- Experience orbs: `floor(Mob Level * 1.1)`, minimum 1.
+
+The Wiki notes that these formulas apply to the overwhelming majority of mobs, while special categories (Pests, Minibosses, Bosses, Slayer mobs and Sea Creatures) have separate formulas or manually set values. The imported starter JSON keeps the published per-mob values for auditability. A future reward-calculation milestone should model reward mode/category explicitly rather than assuming every mob follows the standard formula.
+
+Source: https://hypixelskyblock.minecraft.wiki/w/Mobs (Mob Levels section; current page history lists the 2026-10-06 0.27.2 change).
+
 ## Project-only placeholders
 
 - `training_sword` is a test item, not a Hypixel item.
