@@ -1,6 +1,6 @@
 # SkyBlock Data Sources and Confidence
 
-Research snapshot: 2026-11-26.
+Research snapshot: 2026-11-27.
 
 This file separates official Hypixel data interfaces from community-maintained game documentation and project placeholders.
 
@@ -140,3 +140,27 @@ All added records are explicit-spawn-capable vanilla stand-ins through `spawn_en
   - Advanced reforges are applied through an anvil or The Hex and use stone-rarity-based costs; full stone data is deferred.
 
 These are community-maintained Wiki references, not official Hypixel API data. The P4.8 `test_fierce` and `test_titanic` values are project-only test fixtures and are not copied from the Wiki's live reforge tables.
+
+
+## P5.3 Hub location references
+
+The initial Hub point-of-interest catalogue uses the following community-wiki pages. Coordinates are reference points as listed on those pages; they are not region bounds, safe teleport destinations, or official API data.
+
+- Village: https://hypixelskyblock.minecraft.wiki/w/Village — reference coordinate -3, 70, -85.
+- Bank: https://hypixelskyblock.minecraft.wiki/w/Bank — reference coordinate -20, 71, -65; Banker NPC position -29.5, 72, -38.
+- Auction House: https://hypixelskyblock.minecraft.wiki/w/Auction_House — reference coordinate -18, 71, -90.
+- Bazaar Alley: https://hypixelskyblock.minecraft.wiki/w/Bazaar_Alley — reference coordinate -32, 71, -27; Bazaar NPC position -33.5, 73, -22.5; Bazaar Agent position -35.5, 73, -31.5.
+- Mining District: https://hypixelskyblock.minecraft.wiki/w/Mining_District — reference coordinate 2, 62, -122.
+- Blacksmith: https://hypixelskyblock.minecraft.wiki/w/Blacksmith — Hub NPC position 10.5, 63, -126.5; the page history records the 2026 Hub redesign move.
+
+These coordinates were read from the community-maintained Wiki on 2026-11-27 and are tagged as community_wiki in each JSON. They must be rechecked before using them for actual NPC placement or region boundaries.
+
+### Current Hub asset/version caveat
+
+The Hub was redesigned in the 0.24.2 update in February 2026, including location moves and visual updates. Hypixel SkyBlock's current client requirement has since moved beyond the project's Minecraft 1.21.1 target (the Wiki overview reports Minecraft 26.1+ as of 2026-08-18). Do not assume a current Hub world download is directly compatible with this project's runtime.
+
+Public GitHub research found older Hub recreation/world references, but no current Hub asset with clearly scoped redistribution permission:
+- https://github.com/CarsCupcake/SkyblockRemake includes an older Hub world archive in an AGPL-3.0 code repository; the repository license alone does not establish a separate license for Hypixel-derived world assets.
+- https://github.com/SadanMasterMode/SkyblockCreation-World is a small-scale recreation and has no declared repository license.
+
+No external Hub world, schematic or NBT asset has been copied into this project.
