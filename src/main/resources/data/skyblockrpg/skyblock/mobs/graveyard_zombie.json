@@ -50,5 +50,6 @@
       "drop_type": "item",
       "chance_known": false
     }
-  ]
+  ],
+  "spawn_entity_type": "minecraft:zombie"
 }
