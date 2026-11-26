@@ -4,8 +4,8 @@
   "starter": false,
   "power_stone_item_id": "power_stone_forceful",
   "stats": {
-    "crit_damage": 46.28,
-    "strength": 173.56,
-    "health": 16.2
+    "crit_damage": 4.8,
+    "strength": 18.0,
+    "health": 1.68
   }
 }
