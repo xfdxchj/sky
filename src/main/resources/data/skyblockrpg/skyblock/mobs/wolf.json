@@ -30,15 +30,17 @@
       "item_id": "hound_pet_legendary",
       "min_count": 0,
       "max_count": 1,
-      "chance": 0.00001,
-      "drop_type": "item"
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
     },
     {
       "item_id": "hound_pet_epic",
       "min_count": 0,
       "max_count": 1,
-      "chance": 0.00003,
-      "drop_type": "item"
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
     }
   ]
 }
