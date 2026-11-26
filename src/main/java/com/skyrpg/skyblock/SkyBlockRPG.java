@@ -45,6 +45,10 @@ public final class SkyBlockRPG implements ModInitializer {
 
         ServerTickEvents.END_PLAYER_TICK.register(RegionManager::tick);
 
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> RegionManager.remove(handler.getPlayer()));
+
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> RegionManager.clear());
+
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
