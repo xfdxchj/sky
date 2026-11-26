@@ -1,0 +1,14 @@
+{
+  "id": "rabbit_house",
+  "name": "rabbit_house",
+  "parent_id": "mountain",
+  "category": "service",
+  "dimension": "minecraft:overworld",
+  "x": 65,
+  "y": 68,
+  "z": 7,
+  "description": "Chocolate Factory employee location on the outskirts of Village.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Rabbit_House",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
