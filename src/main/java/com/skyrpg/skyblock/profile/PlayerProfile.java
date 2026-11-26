@@ -11,11 +11,12 @@ import java.util.UUID;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
-    public static final int CURRENT_VERSION = 2;
+    public static final int CURRENT_VERSION = 3;
 
     private final UUID playerId;
     private String lastKnownName;
     private long coins;
+    private long bankCoins;
     private final PlayerStats stats;
     private PlayerInventory inventory;
     private final Map<SkillType, Double> skillExperience;
@@ -25,6 +26,7 @@ public final class PlayerProfile {
         this.playerId = playerId;
         this.lastKnownName = playerName == null ? "" : playerName;
         this.coins = 0L;
+        this.bankCoins = 0L;
         this.stats = new PlayerStats();
         this.inventory = new PlayerInventory();
         this.skillExperience = new EnumMap<>(SkillType.class);
@@ -36,6 +38,22 @@ public final class PlayerProfile {
     public String getLastKnownName() { return lastKnownName; }
     public void setLastKnownName(String name) { this.lastKnownName = name == null ? "" : name; }
     public long getCoins() { return coins; }
+    public long getBankCoins() { return bankCoins; }
+    public void setBankCoinsForLoad(long amount) { bankCoins = Math.max(0L, amount); }
+
+    public boolean depositCoins(long amount) {
+        if (amount <= 0 || coins < amount || bankCoins > Long.MAX_VALUE - amount) return false;
+        coins -= amount;
+        bankCoins += amount;
+        return true;
+    }
+
+    public boolean withdrawCoins(long amount) {
+        if (amount <= 0 || bankCoins < amount || coins > Long.MAX_VALUE - amount) return false;
+        bankCoins -= amount;
+        coins += amount;
+        return true;
+    }
 
     public boolean addCoins(long amount) {
         if (amount <= 0 || coins > Long.MAX_VALUE - amount) return false;
