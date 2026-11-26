@@ -1,0 +1,14 @@
+{
+  "id": "wilderness",
+  "name": "Wilderness",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": 106,
+  "y": 66,
+  "z": 118,
+  "description": "Hub area containing the Fairy Pond and Dark Auction access.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Wilderness",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
