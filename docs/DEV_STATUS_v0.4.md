@@ -107,7 +107,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `WarpRegistry`、`WarpManager`：Warp 定义和传送。
 - `IslandRegistry`、`IslandManager`：岛屿定义、测试岛生成与访问。
 - `StructureRegistry`、`StructureImportManager`：原生结构 NBT 导入和放置。
-- `ConnectionRegistry`、`ConnectionManager`：桥梁与传送路线定义、桥面生成和入口距离校验。\n- `HubLocationDefinition`、`HubRegistry`：9 个有来源的 Hub 地点/NPC 参考坐标；`HubCommands` 提供列表、详情、定位和最近点查询。
+- `ConnectionRegistry`、`ConnectionManager`：桥梁与传送路线定义、桥面生成和入口距离校验。
+- `HubLocationDefinition`、`HubRegistry`：9 个有来源的 Hub 地点/NPC 参考坐标；`HubCommands` 提供列表、详情、定位和最近点查询。
 
 **边界：** 当前 starter island、marker、bridge、portal、outpost 都是项目测试 fixture，不是 Hypixel 地图坐标或官方地图资产。
 
@@ -157,7 +158,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：P5.0 曾出现 4 个编译错误，后续已修复并推送。
 - 2026-11-27：用户记录 P5.2 本地 Gradle 构建成功（BUILD SUCCESSFUL，JAR 约 261.8 KB）。
 - 构建环境记录：Gradle 8.12.1、JDK 21。
-- P5.2 的 `runClient` 和完整游戏内行为仍需测试。\n- P5.3 尚未由用户本地 Gradle build 或游戏内测试。
+- P5.2 的 `runClient` 和完整游戏内行为仍需测试。
+- P5.3 尚未由用户本地 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
