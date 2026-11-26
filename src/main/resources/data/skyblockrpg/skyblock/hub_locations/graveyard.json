@@ -1,0 +1,14 @@
+{
+  "id": "graveyard",
+  "name": "Graveyard",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": -99,
+  "y": 71,
+  "z": -54,
+  "description": "Hub area with low-level Zombies and access toward Spider's Den.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Graveyard",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
