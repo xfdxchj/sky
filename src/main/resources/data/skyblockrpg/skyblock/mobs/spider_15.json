@@ -1,0 +1,39 @@
+{
+  "id": "spider_15",
+  "name": "Spider (Private Island)",
+  "entity_type": "",
+  "level": 20,
+  "health": 849,
+  "damage": 194,
+  "defense": 0,
+  "coin_reward": 6,
+  "combat_xp_reward": 30,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Spider",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Exact SPIDER_15 Private Island variant row. Defense is not listed and remains a project placeholder.",
+  "family_id": "spider",
+  "category": "hostile",
+  "mob_types": [
+    "arthropod"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "string",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
