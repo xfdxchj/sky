@@ -132,7 +132,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Adds `/skyblock map`, `/skyblock island list|info <id>|generate <id>|visit <id>`.
 - The included `starter_island_fixture` is only a development fixture; it is not Hypixel Private Island or Hub geometry. No terrain is generated automatically when a world opens.
 - Native structure NBT import is implemented in P5.1. P5.2 adds JSON-driven bridge and portal route definitions. Island protection, actual Hypixel map assets and map GUI remain deferred.
-- User reported Java 21 Gradle build success on 2026-11-27 (JAR about 261.8 KB); runClient and full in-game verification remain pending.
+- Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.8 Basic Reforge foundation
 - Design: `docs/P4.8_REFORGE_SYSTEM_DESIGN.md`
@@ -254,7 +254,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Adds proximity-gated portal travel delegated to the existing WarpManager, preserving destination warp discovery requirements.
 - Includes clearly labelled starter bridge, portal and outpost fixtures. These are project test coordinates, not Hypixel map data.
 - This is an adjacency graph only; shortest-path search, actual portal blocks/effects, supports/rails and verified Hypixel map coordinates remain future work.
-- Local Java 21 Gradle build and in-game verification are pending.
+- User reported Java 21 Gradle build success on 2026-11-27 (JAR about 261.8 KB); runClient and full in-game verification remain pending.
 
 
 ### P5.3 Hub location catalogue foundation
