@@ -26,6 +26,9 @@ import com.skyrpg.skyblock.region.RegionRegistry;
 import com.skyrpg.skyblock.warp.WarpDefinition;
 import com.skyrpg.skyblock.warp.WarpManager;
 import com.skyrpg.skyblock.warp.WarpRegistry;
+import com.skyrpg.skyblock.npc.NpcDefinition;
+import com.skyrpg.skyblock.npc.NpcManager;
+import com.skyrpg.skyblock.npc.NpcRegistry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -47,7 +50,7 @@ public final class SkyBlockCommands {
                     String worldName = source.getServer().getSaveProperties().getLevelName();
                     source.sendFeedback(() -> Text.literal("[SkyBlock RPG] Core loaded successfully."), false);
                     source.sendFeedback(() -> Text.literal("World: " + worldName), false);
-                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.0)"), false);
+                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.3)"), false);
                     return 1;
                 }))
                 .then(literal("profile").executes(context -> {
@@ -269,6 +272,35 @@ public final class SkyBlockCommands {
                             }
                             return 1;
                         })))
+                .then(literal("npc")
+                        .then(literal("list").executes(context -> {
+                            var npcs = NpcRegistry.all();
+                            context.getSource().sendFeedback(() -> Text.literal("Loaded SkyBlock NPCs: " + npcs.size()), false);
+                            for (NpcDefinition npc : npcs) context.getSource().sendFeedback(
+                                    () -> Text.literal(npc.id() + " | " + npc.displayName() + " | " + npc.action()
+                                            + (npc.requiredRegionId().isBlank() ? "" : " | region: " + npc.requiredRegionId())), false);
+                            return 1;
+                        }))
+                        .then(literal("info").then(argument("npcId", StringArgumentType.word()).executes(context -> {
+                            String id = StringArgumentType.getString(context, "npcId");
+                            NpcDefinition npc = NpcRegistry.get(id).orElse(null);
+                            if (npc == null) {
+                                context.getSource().sendError(Text.literal("Unknown SkyBlock NPC: " + id));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal(npc.displayName() + " [" + npc.id() + "]"), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Entity: " + npc.entityType()
+                                    + " | Interaction radius: " + npc.interactionRadius()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Required region: "
+                                    + (npc.requiredRegionId().isBlank() ? "none" : npc.requiredRegionId())
+                                    + " | Action: " + npc.action()
+                                    + (npc.actionTarget().isBlank() ? "" : " -> " + npc.actionTarget())), false);
+                            npc.dialogue().forEach(line -> context.getSource().sendFeedback(() -> Text.literal(line), false));
+                            return 1;
+                        })))
+                        .then(literal("spawn").requires(source -> source.hasPermissionLevel(2))
+                                .then(argument("npcId", StringArgumentType.word()).executes(context ->
+                                        spawnNpc(context.getSource(), StringArgumentType.getString(context, "npcId"))))))
                 .then(literal("warp")
                         .then(literal("list").executes(context -> {
                             var player = context.getSource().getPlayerOrThrow();
@@ -424,6 +456,44 @@ public final class SkyBlockCommands {
         }
         source.sendFeedback(() -> Text.literal("Spawned " + mob.displayName() + " [Lv" + mob.level()
                 + "] with " + mob.health() + " SkyBlock HP. Tag: " + MobRegistry.entityTag(mob.id())), false);
+        return 1;
+    }
+
+    private static int spawnNpc(ServerCommandSource source, String npcId) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        var player = source.getPlayerOrThrow();
+        NpcDefinition npc = NpcRegistry.get(npcId).orElse(null);
+        if (npc == null) {
+            source.sendError(Text.literal("Unknown NPC id: " + npcId));
+            return 0;
+        }
+        Identifier entityId = Identifier.tryParse(npc.entityType());
+        if (entityId == null) {
+            source.sendError(Text.literal("Invalid NPC entity type: " + npc.entityType()));
+            return 0;
+        }
+        EntityType<?> type = Registries.ENTITY_TYPE.getOrEmpty(entityId).orElse(null);
+        if (type == null) {
+            source.sendError(Text.literal("Unknown Minecraft entity type: " + entityId));
+            return 0;
+        }
+        Entity entity = type.create(player.getServerWorld());
+        if (!(entity instanceof LivingEntity)) {
+            source.sendError(Text.literal("Configured NPC entity is not living: " + entityId));
+            return 0;
+        }
+        var position = player.getPos().add(player.getRotationVec(1.0F).multiply(2.0));
+        entity.refreshPositionAndAngles(position.x, position.y, position.z, player.getYaw(), 0.0F);
+        entity.addCommandTag(NpcManager.entityTag(npc.id()));
+        entity.setCustomName(Text.literal(npc.displayName()));
+        entity.setCustomNameVisible(true);
+        entity.setInvulnerable(true);
+        entity.setSilent(true);
+        if (!player.getServerWorld().spawnEntity(entity)) {
+            source.sendError(Text.literal("Could not spawn NPC: " + npc.id()));
+            return 0;
+        }
+        source.sendFeedback(() -> Text.literal("Spawned NPC " + npc.displayName()
+                + " [" + npc.id() + "] with tag " + NpcManager.entityTag(npc.id())), false);
         return 1;
     }
 
