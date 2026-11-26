@@ -59,6 +59,14 @@ public final class SkyBlockWorldData extends PersistentState {
                 NbtList discovered = entry.getList("discoveredRegions", NbtElement.STRING_TYPE);
                 for (int j = 0; j < discovered.size(); j++) profile.discoverRegion(discovered.getString(j));
 
+                NbtList activeQuests = entry.getList("activeQuests", NbtElement.COMPOUND_TYPE);
+                for (int j = 0; j < activeQuests.size(); j++) {
+                    NbtCompound quest = activeQuests.getCompound(j);
+                    profile.loadQuestProgress(quest.getString("id"), quest.getInt("progress"));
+                }
+                NbtList completedQuests = entry.getList("completedQuests", NbtElement.STRING_TYPE);
+                for (int j = 0; j < completedQuests.size(); j++) profile.loadCompletedQuest(completedQuests.getString(j));
+
                 NbtCompound skills = entry.getCompound("skills");
                 for (String key : skills.getKeys()) {
                     SkillType.fromId(key).ifPresent(type -> {
@@ -100,6 +108,18 @@ public final class SkyBlockWorldData extends PersistentState {
             profile.getDiscoveredRegions().forEach(id -> discovered.add(NbtString.of(id)));
             entry.put("discoveredRegions", discovered);
 
+            NbtList activeQuests = new NbtList();
+            profile.getActiveQuests().forEach((id, progress) -> {
+                NbtCompound quest = new NbtCompound();
+                quest.putString("id", id);
+                quest.putInt("progress", progress);
+                activeQuests.add(quest);
+            });
+            entry.put("activeQuests", activeQuests);
+            NbtList completedQuests = new NbtList();
+            profile.getCompletedQuests().forEach(id -> completedQuests.add(NbtString.of(id)));
+            entry.put("completedQuests", completedQuests);
+
             NbtCompound skills = new NbtCompound();
             profile.getSkillExperience().forEach((type, xp) -> skills.putDouble(type.id(), xp));
             entry.put("skills", skills);
@@ -112,7 +132,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 4);
+        nbt.putInt("dataVersion", 5);
         return nbt;
     }
 }
