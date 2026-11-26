@@ -39,6 +39,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 - Hypixel's official public API documents SkyBlock resources such as items, collections and skills. It does not provide a complete public mob-stat / mob-reward endpoint.
 - The P3.1 combat formula and baseline Crit Chance/Crit Damage are community-wiki references. See `DATA_SOURCES.md`.
 - P3.2/P3.4 mob values are tagged community-wiki sourced, not official API values. Private Island Zombie/Skeleton/Spider include all 15 listed variants each; additional sourced examples cover Graveyard, Crypts, Ruins, The Park and Deep Caverns. Defense 0 remains a project placeholder where the Wiki does not publish a value.
+- The Wiki's current standard Mob category derives most Mob Levels and rewards from HP/Damage and Mob Level; the formulas and exceptions are recorded in `DATA_SOURCES.md` for a future reward-calculation milestone.
 - The training sword's item stats remain project test values, not a Hypixel item.
 
 ### Commands
