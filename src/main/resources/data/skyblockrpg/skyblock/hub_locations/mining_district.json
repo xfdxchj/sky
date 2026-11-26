@@ -1,7 +1,7 @@
 {
   "id": "mining_district",
   "name": "Mining District",
-  "parent_id": "hub_island",
+  "parent_id": "",
   "category": "area",
   "dimension": "minecraft:overworld",
   "x": 2.0,
