@@ -1,0 +1,14 @@
+{
+  "id": "angler_angus_npc",
+  "name": "Angler Angus (NPC position)",
+  "parent_id": "farm",
+  "category": "npc",
+  "dimension": "minecraft:overworld",
+  "x": 125.5,
+  "y": 70,
+  "z": -67.5,
+  "description": "Fishing Outpost NPC reference position. This is a coordinate reference only, not an NPC spawn instruction.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Angler_Angus",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
