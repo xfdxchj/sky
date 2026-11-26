@@ -1,6 +1,8 @@
 package com.skyrpg.skyblock.profile;
 
 import com.skyrpg.skyblock.skill.SkillType;
+import net.minecraft.util.Identifier;
+import net.minecraft.nbt.NbtCompound;
 import com.skyrpg.skyblock.stats.PlayerStats;
 import com.skyrpg.skyblock.inventory.PlayerInventory;
 import com.skyrpg.skyblock.stats.StatType;
@@ -9,6 +11,7 @@ import com.skyrpg.skyblock.accessory.PowerRegistry;
 import com.skyrpg.skyblock.stats.StatModifier;
 
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Collections;
@@ -18,7 +21,7 @@ import java.util.HashMap;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
-    public static final int CURRENT_VERSION = 7;
+    public static final int CURRENT_VERSION = 8;
 
     private final UUID playerId;
     private String lastKnownName;
@@ -26,7 +29,8 @@ public final class PlayerProfile {
     private long bankCoins;
     private final PlayerStats stats;
     private PlayerInventory inventory;
-    private final Map<SkillType, Double> skillExperience;
+    private final Map<Identifier, Double> skillExperience;
+    private final Map<Identifier, NbtCompound> moduleData = new LinkedHashMap<>();
     private int profileVersion;
     private final Set<String> discoveredRegions = new LinkedHashSet<>();
     private final Map<String, Integer> activeQuests = new HashMap<>();
@@ -42,8 +46,7 @@ public final class PlayerProfile {
         this.bankCoins = 0L;
         this.stats = new PlayerStats();
         this.inventory = new PlayerInventory();
-        this.skillExperience = new EnumMap<>(SkillType.class);
-        for (SkillType type : SkillType.values()) skillExperience.put(type, 0.0);
+        this.skillExperience = new LinkedHashMap<>();
         this.profileVersion = CURRENT_VERSION;
     }
 
@@ -200,16 +203,54 @@ public final class PlayerProfile {
                 tuningValue, StatModifier.Operation.ADDITIVE));
         return stats.getFinal(type, modifiers);
     }
-    public Map<SkillType, Double> getSkillExperience() { return skillExperience; }
-    public double getSkillExperience(SkillType type) { return skillExperience.getOrDefault(type, 0.0); }
+    /** Returns an immutable snapshot of all retained namespaced skill XP values. */
+    public Map<Identifier, Double> getSkillExperience() { return Collections.unmodifiableMap(skillExperience); }
 
-    public boolean addSkillExperience(SkillType type, double amount) {
-        if (amount <= 0 || !Double.isFinite(amount)) return false;
-        double current = getSkillExperience(type);
-        double next = current + amount;
+    public double getSkillExperience(Identifier skillId) {
+        return skillId == null ? 0.0 : skillExperience.getOrDefault(skillId, 0.0);
+    }
+
+    /** Legacy compatibility for Core's original built-in skill identifiers. */
+    public double getSkillExperience(SkillType type) {
+        return type == null ? 0.0 : getSkillExperience(type.identifier());
+    }
+
+    public boolean addSkillExperience(Identifier skillId, double amount) {
+        if (skillId == null || amount <= 0 || !Double.isFinite(amount)) return false;
+        double next = getSkillExperience(skillId) + amount;
         if (!Double.isFinite(next)) return false;
-        skillExperience.put(type, next);
+        skillExperience.put(skillId, next);
         return true;
+    }
+
+    /** Legacy compatibility for Core's original built-in skill identifiers. */
+    public boolean addSkillExperience(SkillType type, double amount) {
+        return type != null && addSkillExperience(type.identifier(), amount);
+    }
+
+    /** Persistence hook: unknown extension skills must survive while their optional mod is absent. */
+    public void loadSkillExperience(Identifier skillId, double amount) {
+        if (skillId != null && amount >= 0 && Double.isFinite(amount)) skillExperience.put(skillId, amount);
+    }
+
+    public java.util.Optional<NbtCompound> getModuleData(Identifier key) {
+        NbtCompound value = key == null ? null : moduleData.get(key);
+        return value == null ? java.util.Optional.empty() : java.util.Optional.of(value.copy());
+    }
+
+    public void setModuleData(Identifier key, NbtCompound value) {
+        if (key == null || value == null) throw new IllegalArgumentException("Module data key and value are required");
+        moduleData.put(key, value.copy());
+    }
+
+    public boolean removeModuleData(Identifier key) {
+        return key != null && moduleData.remove(key) != null;
+    }
+
+    public Map<Identifier, NbtCompound> getModuleDataSnapshot() {
+        Map<Identifier, NbtCompound> snapshot = new LinkedHashMap<>();
+        moduleData.forEach((key, value) -> snapshot.put(key, value.copy()));
+        return Collections.unmodifiableMap(snapshot);
     }
 
     public int getProfileVersion() { return profileVersion; }
