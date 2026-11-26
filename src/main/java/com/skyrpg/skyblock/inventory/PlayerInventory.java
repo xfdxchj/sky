@@ -14,7 +14,7 @@ import java.util.*;
 /** Logical SkyBlock inventory, separate from vanilla's inventory. */
 public final class PlayerInventory {
     public static final int CAPACITY = 36;
-    public static final int ACCESSORY_BAG_CAPACITY = 9;
+    public static final int ACCESSORY_BAG_CAPACITY = 18;
     private final Map<String, Integer> items = new LinkedHashMap<>();
     private final EnumMap<EquipmentSlot, String> equipment = new EnumMap<>(EquipmentSlot.class);
     private final List<String> accessoryBag = new ArrayList<>();
@@ -75,11 +75,11 @@ public final class PlayerInventory {
         return true;
     }
 
-    /** Moves one accessory from the logical inventory into the bag. Duplicate accessory IDs are rejected. */
+    /** Moves one accessory into the bag. Duplicate copies may be stored; line resolution prevents stacking. */
     public boolean addAccessory(String itemId) {
         ItemDefinition def = ItemRegistry.get(itemId).orElse(null);
         if (def == null || def.type() != ItemType.ACCESSORY || accessoryBag.size() >= ACCESSORY_BAG_CAPACITY
-                || accessoryBag.contains(def.id()) || getCount(def.id()) < 1) return false;
+                || getCount(def.id()) < 1) return false;
         if (!remove(def.id(), 1)) return false;
         accessoryBag.add(def.id());
         return true;
@@ -95,10 +95,26 @@ public final class PlayerInventory {
         return true;
     }
 
+    /** Resolves duplicate items and upgrade lines; only the highest rarity in each line is effective. */
+    public List<String> getEffectiveAccessories() {
+        Map<String, ItemDefinition> winners = new LinkedHashMap<>();
+        for (String id : accessoryBag) {
+            ItemDefinition candidate = ItemRegistry.get(id).orElse(null);
+            if (candidate == null || candidate.type() != ItemType.ACCESSORY) continue;
+            ItemDefinition current = winners.get(candidate.accessoryLine());
+            if (current == null || candidate.rarity().ordinal() > current.rarity().ordinal()
+                    || (candidate.rarity() == current.rarity()
+                    && candidate.accessoryPower() > current.accessoryPower())) {
+                winners.put(candidate.accessoryLine(), candidate);
+            }
+        }
+        return winners.values().stream().map(ItemDefinition::id).toList();
+    }
+
     public List<StatModifier> getStatModifiers() {
         List<StatModifier> result = new ArrayList<>();
         equipment.forEach((slot, id) -> addItemModifiers(result, "equipment:" + slot.id() + ":" + id, id));
-        for (String id : accessoryBag) addItemModifiers(result, "accessory:" + id, id);
+        for (String id : getEffectiveAccessories()) addItemModifiers(result, "accessory:" + id, id);
         return result;
     }
 
@@ -146,7 +162,7 @@ public final class PlayerInventory {
         for (int i = 0; i < accessories.size() && inventory.accessoryBag.size() < ACCESSORY_BAG_CAPACITY; i++) {
             String id = accessories.getString(i);
             ItemDefinition def = ItemRegistry.get(id).orElse(null);
-            if (def != null && def.type() == ItemType.ACCESSORY && !inventory.accessoryBag.contains(def.id())) {
+            if (def != null && def.type() == ItemType.ACCESSORY) {
                 inventory.accessoryBag.add(def.id());
             }
         }
