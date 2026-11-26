@@ -54,6 +54,7 @@ public final class SkyBlockWorldData extends PersistentState {
                 profile.setProfileVersion(PlayerProfile.CURRENT_VERSION); // P1 -> P2 schema migration is additive.
                 long coins = Math.max(0L, entry.getLong("coins"));
                 if (coins > 0) profile.addCoins(coins);
+                profile.setBankCoinsForLoad(Math.max(0L, entry.getLong("bankCoins")));
 
                 NbtCompound skills = entry.getCompound("skills");
                 for (String key : skills.getKeys()) {
@@ -91,6 +92,7 @@ public final class SkyBlockWorldData extends PersistentState {
             entry.putString("name", profile.getLastKnownName());
             entry.putInt("profileVersion", profile.getProfileVersion());
             entry.putLong("coins", profile.getCoins());
+            entry.putLong("bankCoins", profile.getBankCoins());
 
             NbtCompound skills = new NbtCompound();
             profile.getSkillExperience().forEach((type, xp) -> skills.putDouble(type.id(), xp));
@@ -104,7 +106,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 2);
+        nbt.putInt("dataVersion", 3);
         return nbt;
     }
 }
