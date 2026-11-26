@@ -56,8 +56,18 @@ public final class HubRegistry {
                 SkyBlockRPG.LOGGER.error("Failed to load Hub location data from {}", entry.getKey(), exception);
             }
         }
+        Map<String, HubLocationDefinition> validated = new LinkedHashMap<>(loaded);
+        for (HubLocationDefinition location : loaded.values()) {
+            if (!location.parentId().isBlank()
+                    && !loaded.containsKey(location.parentId().toLowerCase(Locale.ROOT))) {
+                SkyBlockRPG.LOGGER.error("Skipping Hub location '{}' because parent '{}' does not exist.",
+                        location.id(), location.parentId());
+                validated.remove(location.id().toLowerCase(Locale.ROOT));
+            }
+        }
+
         LOCATIONS.clear();
-        LOCATIONS.putAll(loaded);
+        LOCATIONS.putAll(validated);
         SkyBlockRPG.LOGGER.info("Loaded {} sourced Hub points of interest.", LOCATIONS.size());
     }
 
@@ -66,14 +76,17 @@ public final class HubRegistry {
     }
 
     public static Collection<HubLocationDefinition> all() {
-        return List.copyOf(LOCATIONS.values());
+        return LOCATIONS.values().stream()
+                .sorted(Comparator.comparing(HubLocationDefinition::id, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
     public static List<HubLocationDefinition> nearest(String dimension, double x, double y, double z, int limit) {
         if (limit < 1) return List.of();
         return LOCATIONS.values().stream()
                 .filter(location -> location.dimension().equals(dimension))
-                .sorted(Comparator.comparingDouble(location -> location.squaredDistance(x, y, z)))
+                .sorted(Comparator.comparingDouble((HubLocationDefinition location) -> location.squaredDistance(x, y, z))
+                        .thenComparing(HubLocationDefinition::id, String.CASE_INSENSITIVE_ORDER))
                 .limit(limit)
                 .toList();
     }
