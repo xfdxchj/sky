@@ -6,6 +6,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.skyrpg.skyblock.economy.CurrencyManager;
+import com.skyrpg.skyblock.economy.ShopOffer;
+import com.skyrpg.skyblock.economy.ShopRegistry;
+import com.skyrpg.skyblock.economy.ShopService;
 import com.skyrpg.skyblock.combat.MobDefinition;
 import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
@@ -144,6 +147,32 @@ public final class SkyBlockCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Attack living mobs while a SkyBlock weapon is equipped."), false);
                     return 1;
                 }))
+                .then(literal("shop")
+                        .executes(context -> {
+                            var offers = ShopRegistry.all();
+                            context.getSource().sendFeedback(() -> Text.literal("Registered shop offers: " + offers.size()), false);
+                            for (ShopOffer offer : offers) {
+                                ItemDefinition item = ItemRegistry.get(offer.itemId()).orElse(null);
+                                String itemName = item == null ? offer.itemId() : item.name();
+                                context.getSource().sendFeedback(() -> Text.literal(
+                                        offer.shopName() + " | " + offer.itemId() + " (" + itemName + ")"
+                                                + " | Buy: " + offer.buyPrice()
+                                                + " | Sell: " + (offer.canSell() ? offer.sellPrice() : "not accepted")), false);
+                            }
+                            return 1;
+                        })
+                        .then(literal("buy").then(argument("itemId", StringArgumentType.word())
+                                .executes(context -> trade(context.getSource(), true,
+                                        StringArgumentType.getString(context, "itemId"), 1))
+                                .then(argument("count", IntegerArgumentType.integer(1, 2304)).executes(context ->
+                                        trade(context.getSource(), true, StringArgumentType.getString(context, "itemId"),
+                                                IntegerArgumentType.getInteger(context, "count"))))))
+                        .then(literal("sell").then(argument("itemId", StringArgumentType.word())
+                                .executes(context -> trade(context.getSource(), false,
+                                        StringArgumentType.getString(context, "itemId"), 1))
+                                .then(argument("count", IntegerArgumentType.integer(1, 2304)).executes(context ->
+                                        trade(context.getSource(), false, StringArgumentType.getString(context, "itemId"),
+                                                IntegerArgumentType.getInteger(context, "count")))))))
                 .then(literal("mob")
                         .then(literal("list").executes(context -> {
                             var mobs = MobRegistry.all();
@@ -257,6 +286,20 @@ public final class SkyBlockCommands {
                     return 1;
                 })))
         );
+    }
+
+    private static int trade(ServerCommandSource source, boolean buying, String itemId, int count)
+            throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        var player = source.getPlayerOrThrow();
+        ShopService.TransactionResult result = buying
+                ? ShopService.buy(player, itemId, count)
+                : ShopService.sell(player, itemId, count);
+        if (!result.success()) {
+            source.sendError(Text.literal(result.message()));
+            return 0;
+        }
+        source.sendFeedback(() -> Text.literal(result.message()), false);
+        return 1;
     }
 
     private static int spawnMob(ServerCommandSource source, String mobId) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
