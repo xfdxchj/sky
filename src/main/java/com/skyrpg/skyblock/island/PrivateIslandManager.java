@@ -48,8 +48,9 @@ public final class PrivateIslandManager {
         }
 
         if (!volumeIsClear(world, centerX, centerZ)) {
+            data.skipToSlot(slot + 1);
             return new CreationResult(false, false,
-                    "The reserved sky volume is not clear. No island was created; choose another world or inspect the allocated area.", null);
+                    "The reserved sky volume is not clear. That allocation slot was skipped; run the create command again.", null);
         }
 
         double spawnX = centerX + 0.5;
@@ -69,7 +70,9 @@ public final class PrivateIslandManager {
 
         IslandManager.GenerationResult generated = IslandManager.generate(world, definition);
         if (!generated.success() || generated.placedBlocks() == 0) {
-            return new CreationResult(false, false, "Private island generation failed: " + generated.message(), null);
+            data.skipToSlot(slot + 1);
+            return new CreationResult(false, false, "Private island generation failed: " + generated.message()
+                    + " The allocation slot was skipped; run the create command again.", null);
         }
 
         PrivateIslandRecord record = new PrivateIslandRecord(
