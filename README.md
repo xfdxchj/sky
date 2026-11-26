@@ -139,7 +139,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Adds a persistent Bank balance beside the existing Purse balance in the same player profile.
 - Existing profiles migrate additively: missing Bank defaults to 0; existing Purse, skills, stats and inventory are preserved.
 - Deposit and withdrawal are atomic profile mutations with positive-amount, insufficient-funds and overflow checks.
-- Shop transactions continue to use Purse only. No interest, fees, limits, Banker NPC or GUI yet.
+- Shop transactions continue to use Purse only. No interest, fees, bank limits or bank GUI yet; the P4.3 Banker NPC is a command-driven interaction.
 - Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.0 economy and shop
@@ -148,5 +148,5 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Adds a JSON-driven General Store catalogue and server-side buy/sell transactions using the existing logical inventory and coin balance.
 - Transactions validate quantity, funds, inventory capacity and arithmetic overflow; failed paired mutations are rolled back.
 - Initial prices are explicitly marked as project test values, not verified Hypixel prices.
-- This milestone is command-driven. Physical NPC interaction, GUI, Bazaar, Auction House and bank/purse separation remain future work.
+- This milestone is command-driven. A basic NPC interaction foundation is added in P4.3; NPC GUI, Bazaar and Auction House remain future work.
 - Local Java 21 Gradle build and in-game verification are pending.
