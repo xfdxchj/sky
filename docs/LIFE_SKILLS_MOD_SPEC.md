@@ -28,7 +28,7 @@ Life Skills must not:
 
 - `SkillAPI`: register four namespaced skills and award/query XP/levels.
 - `PlayerDataAPI`: persist collection counters, unlocks and module statistics.
-- `StatAPI`: read Core's final Mining Speed/Fortune, Farming Fortune, Foraging Speed/Fortune, Fishing Speed, Sea Creature Chance and Wisdom stats.
+- `StatAPI`: read Core's final Mining Speed/Fortune, Farming Speed/Fortune, Foraging Speed/Fortune, Fishing Speed/Fortune, Sea Creature Chance and Wisdom stats.
 - `ItemAPI`: query definitions loaded from Core and Life Skills datapack resources.
 - `InventoryAPI`: query/add/remove items in the logical SkyBlock inventory.
 - `CurrencyAPI`: query and mutate Purse/Bank using Core managers.
