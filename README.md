@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.4 (dialogue and quest foundation; build/test pending)
+## Current milestone: P4.5 (GUI foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -60,6 +60,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock quest info <questId>`
 - `/skyblock quest accept <questId>`
 - `/skyblock quest abandon <questId>`
+- `/skyblock menu` (opens the SkyBlock GUI)
 - `/skyblock region list`
 - `/skyblock region here`
 - `/skyblock warp list`
@@ -116,6 +117,17 @@ This is the simplified melee core only. It does not yet include additive damage 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
 
+### P4.5 GUI foundation
+- Design: `docs/P4.5_GUI_FOUNDATION_DESIGN.md`
+- Test checklist: `docs/P4.5_GUI_FOUNDATION_TEST_PLAN.md`
+- Adds a reusable 27-slot server-authoritative menu ScreenHandler and client-side custom screen.
+- Adds a common ScreenHandlerType registration and client screen entrypoint; client sources under `src/client/java` are included in the Java source set.
+- Adds `/skyblock menu` with Profile, Bank, Quests and Shop pages.
+- Quest page can accept an unaccepted quest; profile and bank pages display current values; shop page displays the offer catalogue.
+- Menu actions are held per ScreenHandler instance; menu icons cannot be inserted or extracted as items.
+- Bank transfers and shop transactions remain command-based; this milestone establishes the UI framework, not complete interactive versions of every screen.
+- Local Java 21 Gradle build and in-game verification are pending.
+
 ### P4.4 dialogue and quest foundation
 - Design: `docs/P4.4_DIALOGUE_QUEST_DESIGN.md`
 - Test checklist: `docs/P4.4_DIALOGUE_QUEST_TEST_PLAN.md`
@@ -125,7 +137,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - NPC interactions advance matching active quests; completion grants configured Purse coins and optional skill XP exactly once.
 - Starter guide acts as a quest board; the sample `meet_the_banker` quest asks the player to speak with the Banker.
 - Dialogue is still plain chat text and quest interaction is command-driven. No branching dialogue GUI, clickable options, kill/item objectives, quest chains or tracking HUD yet.
-- Local Java 21 Gradle build and in-game verification are pending.
+- Local Java 21 Gradle build and in-game verification for P4.4 remain pending.
 
 ### P4.3 NPC interaction foundation
 - Design: `docs/P4.3_NPC_DESIGN.md`
