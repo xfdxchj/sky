@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.1 (bank and purse separation; build/test pending)
+## Current milestone: P4.2 (region and warp foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -53,6 +53,10 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock bank` (show Purse and Bank balances)
 - `/skyblock bank deposit <amount>`
 - `/skyblock bank withdraw <amount>`
+- `/skyblock region list`
+- `/skyblock region here`
+- `/skyblock warp list`
+- `/skyblock warp <warpId>`
 - `/skyblock skill <skill>`
 - `/skyblock skill <skill> add <amount>` (permission level 2)
 - `/skyblock shop` (list offers)
@@ -104,6 +108,16 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P4.2 region and warp foundation
+- Design: `docs/P4.2_REGION_WARP_DESIGN.md`
+- Test checklist: `docs/P4.2_REGION_WARP_TEST_PLAN.md`
+- Adds JSON-driven cuboid region definitions with dimension and priority-aware lookup.
+- Detects region entry server-side, reports first discovery and persists discovered region IDs in the existing player profile.
+- Adds JSON-driven warp destinations, dimension-aware teleportation and optional region-discovery unlock requirements.
+- Includes a clearly labelled project test region and test warp; these coordinates are not Hypixel map coordinates.
+- Region/warp registries load from resources at server start. No Hypixel island terrain, region map data, NPC UI or map assets are included yet.
+- Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.1 bank and purse separation
 - Design: `docs/P4.1_BANK_DESIGN.md`
