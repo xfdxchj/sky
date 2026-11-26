@@ -1,0 +1,14 @@
+{
+  "id": "farm",
+  "name": "Farm",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": 65,
+  "y": 71,
+  "z": -82,
+  "description": "Early Farming area north-east of Village.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Farm",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
