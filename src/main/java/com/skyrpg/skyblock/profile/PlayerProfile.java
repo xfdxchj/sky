@@ -8,6 +8,9 @@ import com.skyrpg.skyblock.stats.StatType;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
@@ -21,6 +24,7 @@ public final class PlayerProfile {
     private PlayerInventory inventory;
     private final Map<SkillType, Double> skillExperience;
     private int profileVersion;
+    private final Set<String> discoveredRegions = new LinkedHashSet<>();
 
     public PlayerProfile(UUID playerId, String playerName) {
         this.playerId = playerId;
@@ -66,6 +70,10 @@ public final class PlayerProfile {
         coins -= amount;
         return true;
     }
+
+    public boolean hasDiscoveredRegion(String regionId) { return discoveredRegions.contains(regionId); }
+    public boolean discoverRegion(String regionId) { return regionId != null && !regionId.isBlank() && discoveredRegions.add(regionId); }
+    public Set<String> getDiscoveredRegions() { return Collections.unmodifiableSet(discoveredRegions); }
 
     public PlayerStats getStats() { return stats; }
     public PlayerInventory getInventory() { return inventory; }
