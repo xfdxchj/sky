@@ -6,6 +6,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.combat.MobRegistry;
+import com.skyrpg.skyblock.item.ItemRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +29,11 @@ public final class SkyBlockRPG implements ModInitializer {
                 (dispatcher, registryAccess, environment) -> SkyBlockCommands.register(dispatcher)
         );
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server ->
-                LOGGER.info("SkyBlock RPG is active in world '{}'.",
-                        server.getSaveProperties().getLevelName())
-        );
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            MobRegistry.reload(server.getResourceManager());
+            ItemRegistry.reload(server.getResourceManager());
+            LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
+        });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
