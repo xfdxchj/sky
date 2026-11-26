@@ -19,3 +19,10 @@
 - Added manifest-driven native structure NBT import and placement.
 - Added rotation/mirror transforms, bounds checks and all-air paste safety.
 - Added structure commands and a project-authored test fixture.
+
+
+## P5.2
+- Added JSON-driven bridge and portal connection definitions linked to existing warp nodes.
+- Added a route adjacency query and operator-only bridge deck generation with full preflight safety checks.
+- Added proximity-gated portal travel through the existing warp manager.
+- Added starter connection fixtures and P5.2 design/test documentation.
