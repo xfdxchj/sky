@@ -14,6 +14,14 @@ This file separates official Hypixel data interfaces from community-maintained g
 
 The API documentation describes these endpoints as resources for SkyBlock items, collections and skills. The public resource list does not expose a complete mob catalogue with mob health, mob Defense, Combat XP and coin rewards. Do not infer missing mob values from item/collection endpoints.
 
+## Community data repositories
+
+### NotEnoughUpdates-REPO
+- Repository: https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO
+- License: MIT (check the repository's current LICENSE before reusing any assets or code).
+- The repository includes a `mobs/` directory, but inspected entries such as `mobs/ent.json` describe entity render/model modifiers and player skins rather than a complete authoritative combat-stat table.
+- Use NEU mob JSON as a reference for appearance/entity metadata and item repository formats; do not treat it as the source of HP, Damage, Defense, Combat XP or coin values unless an individual field is explicitly present.
+
 ## Community-maintained Hypixel SkyBlock Wiki references
 
 These are useful current references, but they are not official Hypixel API data and can be edited by the community.
@@ -25,11 +33,11 @@ These are useful current references, but they are not official Hypixel API data 
   - Base Crit Chance: 30%.
   - Base Crit Damage: 50%.
 - Zombie: https://hypixelskyblock.minecraft.wiki/w/Zombie
-  - Private Island Lv1 entry: 100 Health, 20 Damage, 5 Combat XP, 1 Coin.
+  - All 15 Private Island variant rows are imported as individual JSON records (ZOMBIE_1 through ZOMBIE_15), preserving the listed level, HP, Damage, Combat XP and coin values.
 - Skeleton: https://hypixelskyblock.minecraft.wiki/w/Skeleton
-  - Private Island Lv1 entry: 100 Health, 15 Damage, 5 Combat XP, 1 Coin.
+  - All 15 Private Island variant rows are imported as individual JSON records (SKELETON_1 through SKELETON_15).
 - Spider: https://hypixelskyblock.minecraft.wiki/w/Spider
-  - Private Island Lv3 entry: 120 Health, 35 Damage, 5 Combat XP, 1 Coin.
+  - All 15 Private Island variant rows are imported as individual JSON records (SPIDER_1 through SPIDER_15).
 - Graveyard: https://hypixelskyblock.minecraft.wiki/w/Graveyard
   - Graveyard Zombie: Lv1, 100 Health, 20 Damage, 5 Combat XP, 1 Coin.
   - Zombie Villager: Lv2, 120 Health, 24 Damage, 5 Combat XP, 1 Coin.
