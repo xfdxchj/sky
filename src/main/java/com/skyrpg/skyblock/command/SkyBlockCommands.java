@@ -29,6 +29,9 @@ import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.npc.NpcDefinition;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.npc.NpcRegistry;
+import com.skyrpg.skyblock.quest.QuestDefinition;
+import com.skyrpg.skyblock.quest.QuestManager;
+import com.skyrpg.skyblock.quest.QuestRegistry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -51,7 +54,7 @@ public final class SkyBlockCommands {
                     String worldName = source.getServer().getSaveProperties().getLevelName();
                     source.sendFeedback(() -> Text.literal("[SkyBlock RPG] Core loaded successfully."), false);
                     source.sendFeedback(() -> Text.literal("World: " + worldName), false);
-                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.3)"), false);
+                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.4)"), false);
                     return 1;
                 }))
                 .then(literal("profile").executes(context -> {
@@ -302,6 +305,59 @@ public final class SkyBlockCommands {
                         .then(literal("spawn").requires(source -> source.hasPermissionLevel(2))
                                 .then(argument("npcId", StringArgumentType.word()).executes(context ->
                                         spawnNpc(context.getSource(), StringArgumentType.getString(context, "npcId"))))))
+                .then(literal("quest")
+                        .then(literal("list").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            var profile = ProfileManager.get(player);
+                            context.getSource().sendFeedback(() -> Text.literal("SkyBlock Quests: " + QuestRegistry.all().size()), false);
+                            for (QuestDefinition quest : QuestRegistry.all()) {
+                                context.getSource().sendFeedback(() -> Text.literal(quest.id() + " | " + quest.title()
+                                        + " | " + QuestManager.status(profile, quest)), false);
+                            }
+                            return 1;
+                        }))
+                        .then(literal("info").then(argument("questId", StringArgumentType.word()).executes(context -> {
+                            String id = StringArgumentType.getString(context, "questId");
+                            QuestDefinition quest = QuestRegistry.get(id).orElse(null);
+                            if (quest == null) {
+                                context.getSource().sendError(Text.literal("Unknown quest: " + id));
+                                return 0;
+                            }
+                            var player = context.getSource().getPlayerOrThrow();
+                            var profile = ProfileManager.get(player);
+                            context.getSource().sendFeedback(() -> Text.literal(quest.title() + " [" + quest.id() + "]"), false);
+                            context.getSource().sendFeedback(() -> Text.literal(quest.description()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Objective: talk to " + quest.targetNpcId()
+                                    + " (" + profile.getQuestProgress(quest.id()) + "/" + quest.requiredCount() + ")"), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Status: " + QuestManager.status(profile, quest)), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Rewards: " + quest.rewardCoins() + " coins"
+                                    + (quest.rewardSkillXp() > 0 ? ", " + quest.rewardSkillXp() + " " + quest.rewardSkill().id() + " XP" : "")), false);
+                            return 1;
+                        })))
+                        .then(literal("accept").then(argument("questId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "questId");
+                            QuestManager.Result result = QuestManager.accept(player, id);
+                            switch (result) {
+                                case SUCCESS -> context.getSource().sendFeedback(() -> Text.literal("Quest accepted: " + id), false);
+                                case UNKNOWN_QUEST -> context.getSource().sendError(Text.literal("Unknown quest: " + id));
+                                case ALREADY_ACTIVE -> context.getSource().sendError(Text.literal("Quest is already active: " + id));
+                                case ALREADY_COMPLETED -> context.getSource().sendError(Text.literal("Quest already completed: " + id));
+                                default -> context.getSource().sendError(Text.literal("Could not accept quest: " + id));
+                            }
+                            return result == QuestManager.Result.SUCCESS ? 1 : 0;
+                        })))
+                        .then(literal("abandon").then(argument("questId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "questId");
+                            QuestManager.Result result = QuestManager.abandon(player, id);
+                            if (result == QuestManager.Result.SUCCESS) {
+                                context.getSource().sendFeedback(() -> Text.literal("Quest abandoned: " + id), false);
+                                return 1;
+                            }
+                            context.getSource().sendError(Text.literal("Quest is not active: " + id));
+                            return 0;
+                        }))))
                 .then(literal("warp")
                         .then(literal("list").executes(context -> {
                             var player = context.getSource().getPlayerOrThrow();
