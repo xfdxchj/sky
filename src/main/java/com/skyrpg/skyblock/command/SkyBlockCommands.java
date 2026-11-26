@@ -42,6 +42,7 @@ import com.skyrpg.skyblock.reforge.ReforgeManager;
 import com.skyrpg.skyblock.island.IslandDefinition;
 import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.island.IslandManager;
+import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.structure.StructureCommands;
 import com.skyrpg.skyblock.connection.ConnectionCommands;
 import com.skyrpg.skyblock.hub.HubCommands;
@@ -133,6 +134,43 @@ public final class SkyBlockCommands {
                                 return 0;
                             }
                             context.getSource().sendFeedback(() -> Text.literal("Visited island: " + island.name()), false);
+                            return 1;
+                        })))
+                        .then(literal("create").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            PrivateIslandManager.CreationResult result = PrivateIslandManager.create(player);
+                            if (!result.success()) {
+                                context.getSource().sendError(Text.literal(result.message()));
+                                return 0;
+                            }
+                            PrivateIslandManager.visitHome(player);
+                            context.getSource().sendFeedback(() -> Text.literal(result.message()
+                                    + " Your private island is at " + result.island().centerX() + ", "
+                                    + result.island().surfaceY() + ", " + result.island().centerZ() + "."), false);
+                            return 1;
+                        }))
+                        .then(literal("home").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            if (!PrivateIslandManager.visitHome(player)) {
+                                context.getSource().sendError(Text.literal("You do not have a private island yet. Use /skyblock island create."));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal("Returned to your Private Island."), false);
+                            return 1;
+                        }))
+                        .then(literal("private").then(literal("info").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            var island = PrivateIslandManager.get(player);
+                            if (island == null) {
+                                context.getSource().sendError(Text.literal("You do not have a private island yet."));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal("Private Island | Owner: "
+                                    + island.ownerId() + " | Dimension: " + island.dimension()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Center: " + island.centerX() + ", "
+                                    + island.surfaceY() + ", " + island.centerZ() + " | Radius: " + island.radius()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Spawn: " + island.spawnX() + ", "
+                                    + island.spawnY() + ", " + island.spawnZ()), false);
                             return 1;
                         }))))
                 .then(ConnectionCommands.command())
