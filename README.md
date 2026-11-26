@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P3.5 (core mob content; build/test pending)
+## Current milestone: P4.0 (economy and shop; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -52,6 +52,9 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock coins remove <amount>` (permission level 2)
 - `/skyblock skill <skill>`
 - `/skyblock skill <skill> add <amount>` (permission level 2)
+- `/skyblock shop` (list offers)
+- `/skyblock shop buy <itemId> [count]`
+- `/skyblock shop sell <itemId> [count]`
 - `/skyblock items`
 - `/skyblock item give <itemId> [count]` (permission level 2)
 - `/skyblock item info <itemId>`
@@ -98,3 +101,12 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P4.0 economy and shop
+- Design: `docs/P4.0_ECONOMY_SHOP_DESIGN.md`
+- Test checklist: `docs/P4.0_ECONOMY_SHOP_TEST_PLAN.md`
+- Adds a JSON-driven General Store catalogue and server-side buy/sell transactions using the existing logical inventory and coin balance.
+- Transactions validate quantity, funds, inventory capacity and arithmetic overflow; failed paired mutations are rolled back.
+- Initial prices are explicitly marked as project test values, not verified Hypixel prices.
+- This milestone is command-driven. Physical NPC interaction, GUI, Bazaar, Auction House and bank/purse separation remain future work.
+- Local Java 21 Gradle build and in-game verification are pending.
