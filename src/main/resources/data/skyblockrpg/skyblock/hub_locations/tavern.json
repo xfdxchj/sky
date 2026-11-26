@@ -1,0 +1,14 @@
+{
+  "id": "tavern",
+  "name": "Tavern",
+  "parent_id": "graveyard",
+  "category": "service",
+  "dimension": "minecraft:overworld",
+  "x": -82,
+  "y": 75,
+  "z": -129,
+  "description": "Graveyard sub-location containing the Bartender and Maddox.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Tavern",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
