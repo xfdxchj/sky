@@ -78,6 +78,17 @@ public final class SkyBlockWorldData extends PersistentState {
                 if (entry.contains("inventory", NbtElement.COMPOUND_TYPE)) {
                     profile.setInventory(com.skyrpg.skyblock.inventory.PlayerInventory.fromNbt(entry.getCompound("inventory")));
                 }
+                NbtList unlockedPowers = entry.getList("unlockedPowers", NbtElement.STRING_TYPE);
+                java.util.Set<String> unlocked = new java.util.LinkedHashSet<>();
+                for (int j = 0; j < unlockedPowers.size(); j++) unlocked.add(unlockedPowers.getString(j));
+                profile.loadPowerData(entry.getString("selectedPower"), unlocked);
+                NbtCompound tuning = entry.getCompound("tuningAllocations");
+                Map<StatType, Integer> tuningValues = new java.util.EnumMap<>(StatType.class);
+                for (String key : tuning.getKeys()) StatType.fromId(key).ifPresent(type -> {
+                    int points = tuning.getInt(key);
+                    if (points > 0) tuningValues.put(type, points);
+                });
+                profile.loadTuningAllocations(tuningValues);
 
                 NbtCompound stats = entry.getCompound("stats");
                 for (String key : stats.getKeys()) {
@@ -128,11 +139,18 @@ public final class SkyBlockWorldData extends PersistentState {
             profile.getStats().getBaseValues().forEach((type, value) -> stats.putDouble(type.id(), value));
             entry.put("stats", stats);
             entry.put("inventory", profile.getInventory().toNbt());
+            entry.putString("selectedPower", profile.getSelectedPower());
+            NbtList unlockedPowers = new NbtList();
+            profile.getUnlockedPowers().forEach(id -> unlockedPowers.add(NbtString.of(id)));
+            entry.put("unlockedPowers", unlockedPowers);
+            NbtCompound tuning = new NbtCompound();
+            profile.getTuningAllocations().forEach((type, points) -> tuning.putInt(type.id(), points));
+            entry.put("tuningAllocations", tuning);
 
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 6);
+        nbt.putInt("dataVersion", 7);
         return nbt;
     }
 }
