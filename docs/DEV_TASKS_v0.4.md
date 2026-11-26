@@ -53,7 +53,7 @@
 - [x] PlayerDataAPI 模块数据读写入口。
 - [x] 旧技能存档键迁移至 `skyblockrpg:<skill>`。
 - [x] 扩展模组缺席时保留其技能 XP 和模块数据。
-- [x] StatAPI：读取 Core 最终属性；增加 Foraging Speed / Fortune。
+- [x] StatAPI：读取 Core 最终属性；补齐 Farming Speed、Fishing Fortune、Foraging Speed / Fortune 等生活技能属性。
 - [x] ItemAPI：读取跨命名空间数据包物品定义。
 - [x] InventoryAPI：访问 Core 逻辑背包。
 - [x] CurrencyAPI：访问 Purse / Bank。
