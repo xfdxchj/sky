@@ -72,6 +72,8 @@ public final class MobRegistry {
     public static MobDefinition getAttackingMob(DamageSource source) {
         if (source == null) return UNREGISTERED;
         Entity attacker = source.getAttacker();
+        if (attacker instanceof ProjectileEntity projectile && projectile.getOwner() != null)
+            attacker = projectile.getOwner();
         if (attacker == null && source.getSource() instanceof ProjectileEntity projectile)
             attacker = projectile.getOwner();
         return attacker == null ? UNREGISTERED : get(attacker);
