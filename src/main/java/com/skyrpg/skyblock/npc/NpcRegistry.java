@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.skyrpg.skyblock.SkyBlockRPG;
 import com.skyrpg.skyblock.region.RegionRegistry;
+import com.skyrpg.skyblock.warp.WarpRegistry;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -41,6 +42,8 @@ public final class NpcRegistry {
                 if (!npc.requiredRegionId().isBlank()
                         && RegionRegistry.get(npc.requiredRegionId()).isEmpty())
                     throw new IllegalArgumentException("Unknown required region: " + npc.requiredRegionId());
+                if (npc.action().equals("warp") && WarpRegistry.get(npc.actionTarget()).isEmpty())
+                    throw new IllegalArgumentException("Unknown warp action target: " + npc.actionTarget());
                 String key = npc.id().toLowerCase(Locale.ROOT);
                 if (loaded.putIfAbsent(key, npc) != null)
                     throw new IllegalArgumentException("Duplicate NPC id: " + npc.id());
