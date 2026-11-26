@@ -1,0 +1,40 @@
+{
+  "id": "splitter_spider",
+  "name": "Splitter Spider",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:spider",
+  "level": 4,
+  "health": 180,
+  "damage": 30,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 6,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Splitter_Spider",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed Lv4 variant; spawns two Silverfish on death is not implemented yet; Defense is a project placeholder.",
+  "family_id": "splitter_spider",
+  "category": "hostile",
+  "mob_types": [
+    "arthropod"
+  ],
+  "area": "spider_den",
+  "drops": [
+    {
+      "item_id": "spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "string",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
