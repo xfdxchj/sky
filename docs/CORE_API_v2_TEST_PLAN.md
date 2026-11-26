@@ -14,7 +14,7 @@
 
 ## B. Stats
 
-1. Query Mining Speed, Mining Fortune, Farming Fortune, Foraging Speed, Foraging Fortune, Fishing Speed and Sea Creature Chance through StatAPI.
+1. Query Mining Speed/Fortune, Farming Speed/Fortune, Foraging Speed/Fortune, Fishing Speed/Fortune and Sea Creature Chance through StatAPI.
 2. Confirm values match Core's existing final-stat pipeline.
 3. Equip an existing Core test item and confirm its supported modifiers are reflected.
 4. Confirm the extension cannot mutate Core base stats through the public API.
