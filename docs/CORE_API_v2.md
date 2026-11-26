@@ -46,6 +46,8 @@ boolean registered = SkillAPI.registerSkill(
 );
 double xp = SkillAPI.getExperience(player, mining);
 int level = SkillAPI.getLevel(player, mining);
+double progress = SkillAPI.getProgress(player, mining); // 0.0..1.0
+double remaining = SkillAPI.getExperienceToNextLevel(player, mining);
 boolean awarded = SkillAPI.addExperience(player, mining, 25.0);
 ```
 
