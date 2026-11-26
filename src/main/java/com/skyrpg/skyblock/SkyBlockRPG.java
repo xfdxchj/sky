@@ -18,6 +18,7 @@ import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.structure.StructureRegistry;
 import com.skyrpg.skyblock.connection.ConnectionRegistry;
+import com.skyrpg.skyblock.hub.HubRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
@@ -54,6 +55,7 @@ public final class SkyBlockRPG implements ModInitializer {
             ShopRegistry.reload(server.getResourceManager());
             RegionRegistry.reload(server.getResourceManager());
             WarpRegistry.reload(server.getResourceManager());
+            HubRegistry.reload(server.getResourceManager());
             ConnectionRegistry.reload(server.getResourceManager());
             IslandRegistry.reload(server.getResourceManager());
             StructureRegistry.reload(server.getResourceManager());
@@ -84,6 +86,6 @@ public final class SkyBlockRPG implements ModInitializer {
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
         });
 
-        LOGGER.info("{} v{} initialized. P5.2 map connections are ready.", MOD_NAME, "0.1.0-alpha.3");
+        LOGGER.info("{} v{} initialized. P5.3 Hub location catalogue is ready.", MOD_NAME, "0.1.0-alpha.3");
     }
 }
