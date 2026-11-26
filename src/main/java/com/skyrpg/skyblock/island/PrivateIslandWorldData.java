@@ -39,6 +39,13 @@ public final class PrivateIslandWorldData extends PersistentState {
         return nextSlot;
     }
 
+    public void skipToSlot(int followingSlot) {
+        if (followingSlot > nextSlot) {
+            nextSlot = followingSlot;
+            markDirty();
+        }
+    }
+
     public void add(PrivateIslandRecord record, int followingSlot) {
         if (record == null) throw new IllegalArgumentException("record is required");
         islands.put(record.ownerId(), record);
