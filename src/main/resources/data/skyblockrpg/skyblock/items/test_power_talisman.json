@@ -1,0 +1,13 @@
+{
+  "id": "test_power_talisman",
+  "name": "Test Power Talisman",
+  "rarity": "COMMON",
+  "type": "ACCESSORY",
+  "accessory_line": "test_power_line",
+  "max_stack_size": 1,
+  "stats": {
+    "strength": 5,
+    "health": 10
+  },
+  "lore": ["Project test fixture. Not a verified Hypixel item or stat line."]
+}

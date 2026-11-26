@@ -1,0 +1,40 @@
+{
+  "id": "skeleton_10",
+  "name": "Skeleton (Private Island)",
+  "entity_type": "",
+  "level": 7,
+  "health": 351,
+  "damage": 45,
+  "defense": 0,
+  "coin_reward": 2,
+  "combat_xp_reward": 10,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Skeleton",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Exact SKELETON_10 Private Island variant row. Defense is not listed and remains a project placeholder.",
+  "family_id": "skeleton",
+  "category": "hostile",
+  "mob_types": [
+    "skeletal"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "bone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "bone_dye",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 3.3333333333333335e-7,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ],
+  "spawn_entity_type": "minecraft:skeleton"
+}

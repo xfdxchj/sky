@@ -1,0 +1,12 @@
+{
+  "id": "starter_guide",
+  "name": "Island Guide",
+  "entity_type": "minecraft:villager",
+  "required_region_id": "starter_test_area",
+  "interaction_radius": 4.5,
+  "dialogue": [
+    "Welcome to your island.",
+    "Discover regions to unlock their warp points."
+  ],
+  "action": "quest_board"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "test_fierce",
+  "name": "Test Fierce",
+  "allowed_slots": ["weapon"],
+  "cost": 500,
+  "stats": {
+    "strength": 8,
+    "crit_chance": 2,
+    "crit_damage": 8
+  },
+  "test_fixture": true
+}

@@ -1,0 +1,15 @@
+{
+  "shop_id": "general_store",
+  "name": "General Store",
+  "price_source": "project_test_values",
+  "offers": [
+    { "item_id": "training_sword", "buy_price": 100, "sell_price": 50 },
+    { "item_id": "iron_helmet", "buy_price": 80, "sell_price": 40 },
+    { "item_id": "iron_chestplate", "buy_price": 120, "sell_price": 60 },
+    { "item_id": "iron_leggings", "buy_price": 100, "sell_price": 50 },
+    { "item_id": "iron_boots", "buy_price": 70, "sell_price": 35 },
+    { "item_id": "talisman_of_health", "buy_price": 250, "sell_price": 0 },
+    { "item_id": "golden_apple", "buy_price": 100, "sell_price": 50 },
+    { "item_id": "enchanted_iron", "buy_price": 1000, "sell_price": 500 }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "starter_bridge_fixture",
+  "name": "Starter Bridge (Fixture)",
+  "type": "bridge",
+  "dimension": "minecraft:overworld",
+  "start_x": 0.5,
+  "start_y": 100,
+  "start_z": 0.5,
+  "end_x": 30.5,
+  "end_y": 100,
+  "end_z": 0.5,
+  "width": 3,
+  "block_id": "minecraft:oak_planks",
+  "source_warp_id": "starter_island_spawn",
+  "target_warp_id": "starter_outpost_fixture",
+  "activation_radius": 4,
+  "test_fixture": true
+}

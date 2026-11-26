@@ -1,24 +1,59 @@
 package com.skyrpg.skyblock.item;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.skyrpg.skyblock.SkyBlockRPG;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
 import com.skyrpg.skyblock.stats.StatType;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Identifier;
+import java.io.Reader;
 import java.util.*;
 
-/** Initial built-in item catalogue. Definitions will move to data resources in a later stage. */
 public final class ItemRegistry {
     private static final Map<String, ItemDefinition> ITEMS = new LinkedHashMap<>();
-    static {
-        register(new ItemDefinition("training_sword", "Training Sword", ItemRarity.COMMON, ItemType.WEAPON, EquipmentSlot.WEAPON, 1, Map.of(StatType.DAMAGE, 10.0, StatType.STRENGTH, 10.0, StatType.CRIT_CHANCE, 25.0, StatType.CRIT_DAMAGE, 50.0), List.of("A basic weapon for new adventurers.")));
-        register(new ItemDefinition("iron_helmet", "Iron Helmet", ItemRarity.COMMON, ItemType.ARMOR, EquipmentSlot.HELMET, 1, Map.of(StatType.HEALTH, 15.0, StatType.DEFENSE, 10.0), List.of("A simple iron helmet.")));
-        register(new ItemDefinition("iron_chestplate", "Iron Chestplate", ItemRarity.COMMON, ItemType.ARMOR, EquipmentSlot.CHESTPLATE, 1, Map.of(StatType.HEALTH, 30.0, StatType.DEFENSE, 20.0), List.of("A simple iron chestplate.")));
-        register(new ItemDefinition("iron_leggings", "Iron Leggings", ItemRarity.COMMON, ItemType.ARMOR, EquipmentSlot.LEGGINGS, 1, Map.of(StatType.HEALTH, 20.0, StatType.DEFENSE, 15.0), List.of("A simple pair of iron leggings.")));
-        register(new ItemDefinition("iron_boots", "Iron Boots", ItemRarity.COMMON, ItemType.ARMOR, EquipmentSlot.BOOTS, 1, Map.of(StatType.HEALTH, 10.0, StatType.DEFENSE, 5.0), List.of("A simple pair of iron boots.")));
-        register(new ItemDefinition("talisman_of_health", "Talisman of Health", ItemRarity.UNCOMMON, ItemType.ACCESSORY, EquipmentSlot.ACCESSORY, 1, Map.of(StatType.HEALTH, 25.0), List.of("An accessory that grants additional health.")));
-        register(new ItemDefinition("enchanted_iron", "Enchanted Iron", ItemRarity.UNCOMMON, ItemType.MATERIAL, null, 64, Map.of(), List.of("A refined crafting material.")));
-        register(new ItemDefinition("golden_apple", "Golden Apple", ItemRarity.UNCOMMON, ItemType.CONSUMABLE, null, 16, Map.of(), List.of("A consumable item. Use is not implemented in P2.")));
-    }
     private ItemRegistry() {}
-    public static void register(ItemDefinition definition) { ITEMS.put(definition.id(), definition); }
+
+    public static void reload(ResourceManager manager) {
+        Map<String, ItemDefinition> loaded = new LinkedHashMap<>();
+        Map<Identifier, Resource> resources = manager.findResources("skyblock/items", id -> id.getNamespace().equals("skyblockrpg") && id.getPath().endsWith(".json"));
+        for (var entry : resources.entrySet()) {
+            try (Reader reader = entry.getValue().getReader()) {
+                JsonObject j = JsonParser.parseReader(reader).getAsJsonObject();
+                String id = required(j,"id");
+                ItemRarity rarity = ItemRarity.valueOf(required(j,"rarity").toUpperCase(Locale.ROOT));
+                ItemType type = ItemType.valueOf(required(j,"type").toUpperCase(Locale.ROOT));
+                String slotId = optional(j,"equipment_slot","");
+                EquipmentSlot slot = slotId.isBlank() ? null : EquipmentSlot.fromId(slotId).orElseThrow(() -> new IllegalArgumentException("Unknown slot: "+slotId));
+                int max = j.has("max_stack_size") ? j.get("max_stack_size").getAsInt() : 1;
+                Map<StatType,Double> stats = new EnumMap<>(StatType.class);
+                if (j.has("stats") && j.get("stats").isJsonObject()) for (var stat : j.getAsJsonObject("stats").entrySet()) {
+                    StatType key = StatType.fromId(stat.getKey()).orElseThrow(() -> new IllegalArgumentException("Unknown stat: "+stat.getKey()));
+                    stats.put(key,stat.getValue().getAsDouble());
+                }
+                List<String> lore = new ArrayList<>();
+                if (j.has("lore") && j.get("lore").isJsonArray()) j.getAsJsonArray("lore").forEach(line -> lore.add(line.getAsString()));
+                String accessoryLine = optional(j, "accessory_line", id);
+                boolean dungeonAccessory = j.has("dungeon_accessory") && j.get("dungeon_accessory").getAsBoolean();
+                int accessoryPowerOverride = j.has("accessory_power") ? j.get("accessory_power").getAsInt() : -1;
+                boolean reforgeable = j.has("reforgeable") ? j.get("reforgeable").getAsBoolean() : slot != null;
+                if (accessoryPowerOverride < -1) throw new IllegalArgumentException("Invalid accessory_power override");
+                ItemDefinition definition = new ItemDefinition(id,optional(j,"name",id),rarity,type,slot,max,stats,lore,
+                        accessoryLine,dungeonAccessory,accessoryPowerOverride,reforgeable);
+                if (loaded.putIfAbsent(id.toLowerCase(Locale.ROOT),definition) != null) throw new IllegalArgumentException("Duplicate item id: "+id);
+            } catch (Exception e) {
+                SkyBlockRPG.LOGGER.error("Failed to load item data from {}",entry.getKey(),e);
+            }
+        }
+        ITEMS.clear(); ITEMS.putAll(loaded);
+        SkyBlockRPG.LOGGER.info("Loaded {} SkyBlock item definitions.",ITEMS.size());
+    }
     public static Optional<ItemDefinition> get(String id) { return Optional.ofNullable(ITEMS.get(id == null ? "" : id.toLowerCase(Locale.ROOT))); }
     public static Collection<ItemDefinition> all() { return Collections.unmodifiableCollection(ITEMS.values()); }
+    private static String required(JsonObject j,String k) {
+        if (!j.has(k) || j.get(k).isJsonNull()) throw new IllegalArgumentException("Missing "+k);
+        return j.get(k).getAsString();
+    }
+    private static String optional(JsonObject j,String k,String d) { return j.has(k) && !j.get(k).isJsonNull() ? j.get(k).getAsString() : d; }
 }

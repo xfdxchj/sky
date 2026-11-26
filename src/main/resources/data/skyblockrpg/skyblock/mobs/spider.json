@@ -1,0 +1,37 @@
+{
+  "id": "private_island_spider",
+  "name": "Private Island Spider (starter analogue)",
+  "entity_type": "minecraft:spider",
+  "level": 3,
+  "health": 120,
+  "damage": 35,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 5,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Spider",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Exact Private Island SPIDER_1 row: Lv3, 120 Health, 35 Damage, 5 Combat XP, 1 Coin. Defense is not listed and remains a project placeholder.",
+  "family_id": "spider",
+  "category": "hostile",
+  "mob_types": [
+    "arthropod"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "string",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    }
+  ]
+}

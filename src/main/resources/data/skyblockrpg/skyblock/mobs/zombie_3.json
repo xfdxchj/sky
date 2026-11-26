@@ -1,0 +1,56 @@
+{
+  "id": "zombie_3",
+  "name": "Zombie (Private Island)",
+  "entity_type": "",
+  "level": 3,
+  "health": 132,
+  "damage": 26,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 5,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Zombie",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Exact ZOMBIE_3 Private Island variant row. Defense is not listed by the source and remains a project placeholder.",
+  "family_id": "zombie",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "rotten_flesh",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "poisonous_potato",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.05,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "potato",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.025,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "carrot",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.025,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ],
+  "spawn_entity_type": "minecraft:zombie"
+}

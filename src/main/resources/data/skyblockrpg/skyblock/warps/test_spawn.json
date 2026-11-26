@@ -1,0 +1,12 @@
+{
+  "id": "test_spawn",
+  "name": "Test Spawn",
+  "dimension": "minecraft:overworld",
+  "x": 0.5,
+  "y": 80.0,
+  "z": 0.5,
+  "yaw": 0.0,
+  "pitch": 0.0,
+  "required_region_id": "starter_test_area",
+  "description": "Project test destination; not a Hypixel coordinate."
+}

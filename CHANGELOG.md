@@ -13,3 +13,16 @@
 ## P3 - Initial combat prototype
 - Added Damage stat, training sword, damage formula, mob metadata and combat command.
 - Initial implementation used a client-side attack callback incorrectly; superseded by P3.1.
+
+
+## P5.1
+- Added manifest-driven native structure NBT import and placement.
+- Added rotation/mirror transforms, bounds checks and all-air paste safety.
+- Added structure commands and a project-authored test fixture.
+
+
+## P5.2
+- Added JSON-driven bridge and portal connection definitions linked to existing warp nodes.
+- Added a route adjacency query and operator-only bridge deck generation with full preflight safety checks.
+- Added proximity-gated portal travel through the existing warp manager.
+- Added starter connection fixtures and P5.2 design/test documentation.

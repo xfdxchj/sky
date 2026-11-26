@@ -16,6 +16,12 @@ loom {
     }
 }
 
+sourceSets {
+    main {
+        java.srcDir 'src/client/java'
+    }
+}
+
 repositories {
     // Fabric Loom already configures the Minecraft and Fabric repositories.
 }

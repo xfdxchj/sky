@@ -1,0 +1,45 @@
+{
+  "id": "crypt_ghoul",
+  "name": "Crypt Ghoul",
+  "entity_type": "",
+  "level": 33,
+  "health": 2000,
+  "damage": 350,
+  "defense": 0,
+  "coin_reward": 11,
+  "combat_xp_reward": 49,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Crypt_Ghoul",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Exact current Wiki listed stats and rewards; Defense is not listed and remains unknown/project default 0.",
+  "family_id": "crypt_ghoul",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "crypts",
+  "drops": [
+    {
+      "item_id": "rotten_flesh",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "ghoul_pet_epic",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.00003,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "ghoul_pet_legendary",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.00001,
+      "drop_type": "item"
+    }
+  ],
+  "spawn_entity_type": "minecraft:zombie"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "iron_chestplate",
+  "name": "Iron Chestplate",
+  "rarity": "COMMON",
+  "type": "ARMOR",
+  "max_stack_size": 1,
+  "stats": {
+    "health": 30,
+    "defense": 20
+  },
+  "lore": [
+    "A simple iron chestplate."
+  ],
+  "equipment_slot": "chestplate"
+}

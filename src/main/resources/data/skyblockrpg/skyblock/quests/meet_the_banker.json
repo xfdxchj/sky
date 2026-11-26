@@ -1,0 +1,11 @@
+{
+  "id": "meet_the_banker",
+  "title": "A Safe Place for Your Coins",
+  "description": "Speak with the Banker in the starter area.",
+  "objective_type": "talk_to_npc",
+  "target_npc_id": "starter_banker",
+  "required_count": 1,
+  "reward_coins": 100,
+  "reward_skill": "social",
+  "reward_skill_xp": 25
+}

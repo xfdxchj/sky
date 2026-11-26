@@ -15,6 +15,9 @@
   "entrypoints": {
     "main": [
       "com.skyrpg.skyblock.SkyBlockRPG"
+    ],
+    "client": [
+      "com.skyrpg.skyblock.client.SkyBlockGuiClient"
     ]
   },
   "depends": {

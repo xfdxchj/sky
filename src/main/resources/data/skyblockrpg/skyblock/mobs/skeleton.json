@@ -1,0 +1,37 @@
+{
+  "id": "private_island_skeleton",
+  "name": "Private Island Skeleton (starter analogue)",
+  "entity_type": "minecraft:skeleton",
+  "level": 1,
+  "health": 100,
+  "damage": 15,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 5,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Skeleton",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed Private Island Lv1 HP/Damage/XP/Coins; Defense 0 remains a project placeholder.",
+  "family_id": "skeleton",
+  "category": "hostile",
+  "mob_types": [
+    "skeletal"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "bone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "bone_dye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 3.33333333e-7,
+      "drop_type": "item"
+    }
+  ]
+}

@@ -4,8 +4,26 @@ import com.skyrpg.skyblock.command.SkyBlockCommands;
 import com.skyrpg.skyblock.config.SkyBlockConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.combat.MobRegistry;
+import com.skyrpg.skyblock.item.ItemRegistry;
+import com.skyrpg.skyblock.accessory.PowerRegistry;
+import com.skyrpg.skyblock.reforge.ReforgeRegistry;
+import com.skyrpg.skyblock.economy.ShopRegistry;
+import com.skyrpg.skyblock.region.RegionRegistry;
+import com.skyrpg.skyblock.region.RegionManager;
+import com.skyrpg.skyblock.warp.WarpRegistry;
+import com.skyrpg.skyblock.island.IslandRegistry;
+import com.skyrpg.skyblock.structure.StructureRegistry;
+import com.skyrpg.skyblock.connection.ConnectionRegistry;
+import com.skyrpg.skyblock.npc.NpcRegistry;
+import com.skyrpg.skyblock.npc.NpcManager;
+import com.skyrpg.skyblock.quest.QuestRegistry;
+import com.skyrpg.skyblock.gui.SkyBlockGui;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +40,43 @@ public final class SkyBlockRPG implements ModInitializer {
     @Override
     public void onInitialize() {
         SkyBlockConfig.load();
+        SkyBlockGui.register();
 
         CommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess, environment) -> SkyBlockCommands.register(dispatcher)
         );
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server ->
-                LOGGER.info("SkyBlock RPG is active in world '{}'.",
-                        server.getSaveProperties().getLevelName())
-        );
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            MobRegistry.reload(server.getResourceManager());
+            ItemRegistry.reload(server.getResourceManager());
+            PowerRegistry.reload(server.getResourceManager());
+            ReforgeRegistry.reload(server.getResourceManager());
+            ShopRegistry.reload(server.getResourceManager());
+            RegionRegistry.reload(server.getResourceManager());
+            WarpRegistry.reload(server.getResourceManager());
+            ConnectionRegistry.reload(server.getResourceManager());
+            IslandRegistry.reload(server.getResourceManager());
+            StructureRegistry.reload(server.getResourceManager());
+            NpcRegistry.reload(server.getResourceManager());
+            QuestRegistry.reload(server.getResourceManager());
+            LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
+        });
+
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                RegionManager.tick(player);
+            }
+        });
+
+        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (world.isClient || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer)
+                    || serverPlayer.isSpectator()) return ActionResult.PASS;
+            return NpcManager.interact(serverPlayer, entity) ? ActionResult.SUCCESS : ActionResult.PASS;
+        });
+
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> RegionManager.remove(handler.getPlayer()));
+
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> RegionManager.clear());
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
@@ -38,6 +84,6 @@ public final class SkyBlockRPG implements ModInitializer {
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
         });
 
-        LOGGER.info("{} v{} initialized. P3 combat mixin is ready.", MOD_NAME, "0.1.0-alpha.3");
+        LOGGER.info("{} v{} initialized. P5.2 map connections are ready.", MOD_NAME, "0.1.0-alpha.3");
     }
 }

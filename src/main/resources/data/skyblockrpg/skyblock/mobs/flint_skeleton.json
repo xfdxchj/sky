@@ -1,0 +1,64 @@
+{
+  "id": "flint_skeleton",
+  "name": "Flint Skeleton",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:skeleton",
+  "level": 3,
+  "health": 100,
+  "damage": 35,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 5,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Flint_Skeleton",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed values; respawn-from-bone behavior is not implemented; Defense is a project placeholder.",
+  "family_id": "flint_skeleton",
+  "category": "hostile",
+  "mob_types": [
+    "skeletal"
+  ],
+  "area": "spider_den",
+  "drops": [
+    {
+      "item_id": "bone",
+      "min_count": 2,
+      "max_count": 4,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "flint",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "enchanted_bone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.02,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "enchanted_flint",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "bone_dye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 3.3333333333333335e-7,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "starter_outpost_fixture",
+  "name": "Starter Outpost (Fixture)",
+  "dimension": "minecraft:overworld",
+  "x": 30.5,
+  "y": 101,
+  "z": 0.5,
+  "yaw": 90,
+  "pitch": 0,
+  "required_region_id": "",
+  "description": "Project test endpoint for the starter bridge and portal."
+}

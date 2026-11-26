@@ -1,0 +1,16 @@
+{
+  "id": "starter_marker",
+  "name": "Starter Marker (Fixture)",
+  "template": "skyblockrpg:starter_marker",
+  "dimension": "minecraft:overworld",
+  "origin_x": 0,
+  "origin_y": 200,
+  "origin_z": 0,
+  "rotation": "none",
+  "mirror": "none",
+  "max_blocks": 9,
+  "source": "SkyBlock RPG project test fixture",
+  "source_url": "",
+  "license": "Project-authored test data",
+  "test_fixture": true
+}

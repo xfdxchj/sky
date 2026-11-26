@@ -6,6 +6,7 @@ import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.PersistentState;
 
@@ -51,9 +52,20 @@ public final class SkyBlockWorldData extends PersistentState {
             try {
                 UUID uuid = UUID.fromString(entry.getString("uuid"));
                 PlayerProfile profile = new PlayerProfile(uuid, entry.getString("name"));
-                profile.setProfileVersion(PlayerProfile.CURRENT_VERSION); // P1 -> P2 schema migration is additive.
+                profile.setProfileVersion(PlayerProfile.CURRENT_VERSION); // Older profile schemas migrate additively to the current schema.
                 long coins = Math.max(0L, entry.getLong("coins"));
                 if (coins > 0) profile.addCoins(coins);
+                profile.setBankCoinsForLoad(Math.max(0L, entry.getLong("bankCoins")));
+                NbtList discovered = entry.getList("discoveredRegions", NbtElement.STRING_TYPE);
+                for (int j = 0; j < discovered.size(); j++) profile.discoverRegion(discovered.getString(j));
+
+                NbtList activeQuests = entry.getList("activeQuests", NbtElement.COMPOUND_TYPE);
+                for (int j = 0; j < activeQuests.size(); j++) {
+                    NbtCompound quest = activeQuests.getCompound(j);
+                    profile.loadQuestProgress(quest.getString("id"), quest.getInt("progress"));
+                }
+                NbtList completedQuests = entry.getList("completedQuests", NbtElement.STRING_TYPE);
+                for (int j = 0; j < completedQuests.size(); j++) profile.loadCompletedQuest(completedQuests.getString(j));
 
                 NbtCompound skills = entry.getCompound("skills");
                 for (String key : skills.getKeys()) {
@@ -66,6 +78,17 @@ public final class SkyBlockWorldData extends PersistentState {
                 if (entry.contains("inventory", NbtElement.COMPOUND_TYPE)) {
                     profile.setInventory(com.skyrpg.skyblock.inventory.PlayerInventory.fromNbt(entry.getCompound("inventory")));
                 }
+                NbtList unlockedPowers = entry.getList("unlockedPowers", NbtElement.STRING_TYPE);
+                java.util.Set<String> unlocked = new java.util.LinkedHashSet<>();
+                for (int j = 0; j < unlockedPowers.size(); j++) unlocked.add(unlockedPowers.getString(j));
+                profile.loadPowerData(entry.getString("selectedPower"), unlocked);
+                NbtCompound tuning = entry.getCompound("tuningAllocations");
+                Map<StatType, Integer> tuningValues = new java.util.EnumMap<>(StatType.class);
+                for (String key : tuning.getKeys()) StatType.fromId(key).ifPresent(type -> {
+                    int points = tuning.getInt(key);
+                    if (points > 0) tuningValues.put(type, points);
+                });
+                profile.loadTuningAllocations(tuningValues);
 
                 NbtCompound stats = entry.getCompound("stats");
                 for (String key : stats.getKeys()) {
@@ -91,6 +114,22 @@ public final class SkyBlockWorldData extends PersistentState {
             entry.putString("name", profile.getLastKnownName());
             entry.putInt("profileVersion", profile.getProfileVersion());
             entry.putLong("coins", profile.getCoins());
+            entry.putLong("bankCoins", profile.getBankCoins());
+            NbtList discovered = new NbtList();
+            profile.getDiscoveredRegions().forEach(id -> discovered.add(NbtString.of(id)));
+            entry.put("discoveredRegions", discovered);
+
+            NbtList activeQuests = new NbtList();
+            profile.getActiveQuests().forEach((id, progress) -> {
+                NbtCompound quest = new NbtCompound();
+                quest.putString("id", id);
+                quest.putInt("progress", progress);
+                activeQuests.add(quest);
+            });
+            entry.put("activeQuests", activeQuests);
+            NbtList completedQuests = new NbtList();
+            profile.getCompletedQuests().forEach(id -> completedQuests.add(NbtString.of(id)));
+            entry.put("completedQuests", completedQuests);
 
             NbtCompound skills = new NbtCompound();
             profile.getSkillExperience().forEach((type, xp) -> skills.putDouble(type.id(), xp));
@@ -100,11 +139,18 @@ public final class SkyBlockWorldData extends PersistentState {
             profile.getStats().getBaseValues().forEach((type, value) -> stats.putDouble(type.id(), value));
             entry.put("stats", stats);
             entry.put("inventory", profile.getInventory().toNbt());
+            entry.putString("selectedPower", profile.getSelectedPower());
+            NbtList unlockedPowers = new NbtList();
+            profile.getUnlockedPowers().forEach(id -> unlockedPowers.add(NbtString.of(id)));
+            entry.put("unlockedPowers", unlockedPowers);
+            NbtCompound tuning = new NbtCompound();
+            profile.getTuningAllocations().forEach((type, points) -> tuning.putInt(type.id(), points));
+            entry.put("tuningAllocations", tuning);
 
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 2);
+        nbt.putInt("dataVersion", 7);
         return nbt;
     }
 }

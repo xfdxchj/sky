@@ -1,0 +1,32 @@
+{
+  "id": "zealot",
+  "name": "Zealot",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:enderman",
+  "level": 73,
+  "health": 13000,
+  "damage": 1250,
+  "defense": 0,
+  "coin_reward": 24,
+  "combat_xp_reward": 109,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Zealot",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed values; neutral/aggro and teleport behavior, Special Zealot roll and Dragon event spawning are not implemented; Defense is a project placeholder.",
+  "family_id": "zealot",
+  "category": "hostile",
+  "mob_types": [
+    "ender"
+  ],
+  "area": "the_end",
+  "drops": [
+    {
+      "item_id": "ender_pearl",
+      "min_count": 2,
+      "max_count": 4,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}

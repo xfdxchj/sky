@@ -1,0 +1,11 @@
+{
+  "id": "test_titanic",
+  "name": "Test Titanic",
+  "allowed_slots": ["helmet", "chestplate", "leggings", "boots"],
+  "cost": 500,
+  "stats": {
+    "health": 20,
+    "defense": 10
+  },
+  "test_fixture": true
+}

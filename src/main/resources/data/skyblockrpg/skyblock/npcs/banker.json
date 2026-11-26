@@ -1,0 +1,11 @@
+{
+  "id": "starter_banker",
+  "name": "Banker",
+  "entity_type": "minecraft:villager",
+  "required_region_id": "starter_test_area",
+  "interaction_radius": 4.5,
+  "dialogue": [
+    "Keep your coins safe in the Bank."
+  ],
+  "action": "bank"
+}

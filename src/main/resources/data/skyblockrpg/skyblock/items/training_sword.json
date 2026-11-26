@@ -1,0 +1,17 @@
+{
+  "id": "training_sword",
+  "name": "Training Sword",
+  "rarity": "COMMON",
+  "type": "WEAPON",
+  "max_stack_size": 1,
+  "stats": {
+    "damage": 10,
+    "strength": 10,
+    "crit_chance": 25,
+    "crit_damage": 50
+  },
+  "lore": [
+    "A basic weapon for new adventurers."
+  ],
+  "equipment_slot": "weapon"
+}

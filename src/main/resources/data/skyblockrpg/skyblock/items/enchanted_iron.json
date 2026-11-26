@@ -1,0 +1,11 @@
+{
+  "id": "enchanted_iron",
+  "name": "Enchanted Iron",
+  "rarity": "UNCOMMON",
+  "type": "MATERIAL",
+  "max_stack_size": 64,
+  "stats": {},
+  "lore": [
+    "A refined crafting material."
+  ]
+}

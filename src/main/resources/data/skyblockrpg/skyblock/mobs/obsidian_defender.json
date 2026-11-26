@@ -1,0 +1,73 @@
+{
+  "id": "obsidian_defender",
+  "name": "Obsidian Defender",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:wither_skeleton",
+  "level": 44,
+  "health": 10000,
+  "damage": 200,
+  "defense": 0,
+  "coin_reward": 14,
+  "combat_xp_reward": 66,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Obsidian_Defender",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed values; wither effect, knockback immunity and armor/helmet visuals are not implemented; Defense is a project placeholder.",
+  "family_id": "obsidian_defender",
+  "category": "hostile",
+  "mob_types": [
+    "ender",
+    "wither"
+  ],
+  "area": "the_end",
+  "drops": [
+    {
+      "item_id": "obsidian",
+      "min_count": 6,
+      "max_count": 7,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "enchanted_obsidian",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "ender_belt",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "obsidian_chestplate",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.001,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "bone_dye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 3.3333333333333335e-7,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "pearlescent_dye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1e-7,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}

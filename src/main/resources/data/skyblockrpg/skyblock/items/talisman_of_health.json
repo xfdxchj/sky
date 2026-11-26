@@ -1,0 +1,14 @@
+{
+  "id": "talisman_of_health",
+  "name": "Talisman of Health",
+  "rarity": "UNCOMMON",
+  "type": "ACCESSORY",
+  "max_stack_size": 1,
+  "stats": {
+    "health": 25
+  },
+  "lore": [
+    "An accessory that grants additional health."
+  ],
+  "equipment_slot": "accessory"
+}

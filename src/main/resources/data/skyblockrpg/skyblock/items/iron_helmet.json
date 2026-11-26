@@ -1,0 +1,15 @@
+{
+  "id": "iron_helmet",
+  "name": "Iron Helmet",
+  "rarity": "COMMON",
+  "type": "ARMOR",
+  "max_stack_size": 1,
+  "stats": {
+    "health": 15,
+    "defense": 10
+  },
+  "lore": [
+    "A simple iron helmet."
+  ],
+  "equipment_slot": "helmet"
+}

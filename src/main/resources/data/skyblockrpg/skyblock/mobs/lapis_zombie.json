@@ -1,0 +1,56 @@
+{
+  "id": "lapis_zombie",
+  "name": "Lapis Zombie",
+  "entity_type": "",
+  "level": 6,
+  "health": 200,
+  "damage": 50,
+  "defense": 0,
+  "coin_reward": 2,
+  "combat_xp_reward": 9,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Lapis_Zombie",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current listed stats and explicit drop chances; Defense not listed.",
+  "family_id": "lapis_zombie",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "deep_caverns_lapis_quarry",
+  "drops": [
+    {
+      "item_id": "rotten_flesh",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "lapis_armor_piece",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "lapis_crystal",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "exp_share_core",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0001,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ],
+  "spawn_entity_type": "minecraft:zombie"
+}

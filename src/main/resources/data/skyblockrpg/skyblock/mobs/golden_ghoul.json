@@ -1,0 +1,46 @@
+{
+  "id": "golden_ghoul",
+  "name": "Golden Ghoul",
+  "entity_type": "",
+  "level": 65,
+  "health": 20000,
+  "damage": 500,
+  "defense": 0,
+  "coin_reward": 21,
+  "combat_xp_reward": 97,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Crypts",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current Crypts location table lists Lv65, 20,000 HP, 500 Damage, 97 Combat XP and 21 coins; Defense is not listed.",
+  "family_id": "golden_ghoul",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "crypts",
+  "drops": [
+    {
+      "item_id": "gold_ingot",
+      "min_count": 1,
+      "max_count": 10,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "rotten_flesh",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "golden_powder",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
+    }
+  ],
+  "spawn_entity_type": "minecraft:zombie"
+}

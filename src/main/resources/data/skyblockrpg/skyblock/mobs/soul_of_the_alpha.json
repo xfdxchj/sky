@@ -1,0 +1,73 @@
+{
+  "id": "soul_of_the_alpha",
+  "name": "Soul of the Alpha",
+  "entity_type": "",
+  "level": 90,
+  "health": 31150,
+  "damage": 1425,
+  "defense": 0,
+  "coin_reward": 30,
+  "combat_xp_reward": 135,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Soul_of_the_Alpha",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current listed stats and explicit drop chances; Defense not listed.",
+  "family_id": "soul_of_the_alpha",
+  "category": "hostile",
+  "mob_types": [
+    "animal",
+    "arcane"
+  ],
+  "area": "the_park_howling_cave",
+  "drops": [
+    {
+      "item_id": "jungle_log",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "weak_wolf_catalyst",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00089,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "travel_scroll_howling_cave",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00035,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "foraging_exp_boost_epic",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0001,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "hound_pet_epic",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00003,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "hound_pet_legendary",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00001,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ],
+  "spawn_entity_type": "minecraft:wolf"
+}

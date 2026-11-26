@@ -1,0 +1,40 @@
+{
+  "id": "dasher_spider",
+  "name": "Dasher Spider",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:spider",
+  "level": 5,
+  "health": 170,
+  "damage": 55,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 7,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Dasher_Spider",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed Lv5 variant; Defense is an explicit project placeholder, not a verified Hypixel value.",
+  "family_id": "dasher_spider",
+  "category": "hostile",
+  "mob_types": [
+    "arthropod"
+  ],
+  "area": "spider_den",
+  "drops": [
+    {
+      "item_id": "string",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.5,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
