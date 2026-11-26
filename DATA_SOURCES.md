@@ -108,3 +108,20 @@ Source: https://hypixelskyblock.minecraft.wiki/w/Mobs (Mob Levels section; curre
 - Kuudra: https://hypixelskyblock.minecraft.wiki/w/Kuudra
 
 A coverage inventory and staged import priorities are maintained in `docs/P3.4.1_MOB_CATALOGUE_EXPANSION.md`. The 58 current mob JSON files are only the starter subset and must not be reported as complete SkyBlock coverage.
+
+## P3.5 imported Spider's Den and The End combat data
+
+The following entries were added from the current community-maintained Hypixel SkyBlock Wiki snapshot dated 2026-11-26. Values are direct wiki-listed values; Defense remains 0 only as a clearly disclosed project placeholder because these pages do not publish mob Defense.
+
+- Dasher Spider: https://hypixelskyblock.minecraft.wiki/w/Dasher_Spider — Lv5, 170 HP, 55 Damage, 7 Combat XP, 1 Coin.
+- Splitter Spider: https://hypixelskyblock.minecraft.wiki/w/Splitter_Spider — Lv4, 180 HP, 30 Damage, 6 Combat XP, 1 Coin. Its Silverfish-on-death behavior is not implemented.
+- Voracious Spider: https://hypixelskyblock.minecraft.wiki/w/Voracious_Spider — Lv9, 300 HP, 80 Damage, 13 Combat XP, 3 Coins.
+- Rain Slime: https://hypixelskyblock.minecraft.wiki/w/Rain_Slime — Lv6, 200 HP, 50 Damage, 9 Combat XP, 2 Coins. Rain/time spawning is not implemented.
+- Flint Skeleton: https://hypixelskyblock.minecraft.wiki/w/Flint_Skeleton — Lv3, 100 HP, 35 Damage, 5 Combat XP, 1 Coin. Its bone-based respawn behavior is not implemented.
+- The End Enderman: https://hypixelskyblock.minecraft.wiki/w/Enderman — Lv45 (4,500 HP / 500 Damage / 67 Combat XP / 15 Coins), Lv51 (6,000 / 600 / 76 / 17), Lv59 (9,000 / 700 / 88 / 19).
+- Zealot: https://hypixelskyblock.minecraft.wiki/w/Zealot — Lv73, 13,000 HP, 1,250 Damage, 109 Combat XP, 24 Coins. Special Zealot rolls and neutral/teleport behavior are not implemented.
+- Zealot Bruiser: https://hypixelskyblock.minecraft.wiki/w/Zealot_Bruiser — Lv115, 65,000 HP, 2,500 Damage, 172 Combat XP, 38 Coins.
+- Obsidian Defender: https://hypixelskyblock.minecraft.wiki/w/Obsidian_Defender — Lv44, 10,000 HP, 200 Damage, 66 Combat XP, 14 Coins. Wither effect and knockback immunity are not implemented.
+- Seer: https://hypixelskyblock.minecraft.wiki/w/Mobs — Lv55, 9,500 HP, 500 Damage, 82 Combat XP, 18 Coins (Mobs table).
+
+All added records are explicit-spawn-capable vanilla stand-ins through `spawn_entity_type`; this field is separate from `entity_type`, which remains the fallback mapping for naturally encountered vanilla entities. These entries are not yet naturally spawned by region tables.
