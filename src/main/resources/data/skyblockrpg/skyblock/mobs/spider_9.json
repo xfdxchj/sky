@@ -35,5 +35,6 @@
       "chance_known": true,
       "drop_type": "item"
     }
-  ]
+  ],
+  "spawn_entity_type": "minecraft:spider"
 }
