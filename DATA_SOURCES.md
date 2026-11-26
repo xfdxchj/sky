@@ -36,8 +36,9 @@ These are useful current references, but they are not official Hypixel API data 
 ## Project-only placeholders
 
 - `training_sword` is a test item, not a Hypixel item.
-- Vanilla Zombie/Skeleton/Spider entities are temporary stand-ins. Their Minecraft health is not scaled to the Hypixel mob values above.
-- Mob Defense is currently 0 because no validated Defense value is being assigned to these test stand-ins.
+- Vanilla Zombie/Skeleton/Spider entities are temporary stand-ins. Their Minecraft health is not scaled to the reference Hypixel mob values above.
+- P3.2 stores starter mob reference values in `src/main/resources/data/skyblockrpg/skyblock/mobs/`. Zombie and Skeleton use their listed Private Island Lv1 values; Spider uses the minimum of the documented range pending exact row verification.
+- Mob Defense is 0 as an explicit project placeholder; it is not presented as a verified Hypixel stat.
 - Unregistered mobs receive no coins or Combat XP. This prevents accidental farming rewards from villagers, animals and unrelated entities.
 
 ## Data policy for future stages
