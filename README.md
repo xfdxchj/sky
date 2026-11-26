@@ -57,12 +57,21 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock item info <itemId>`
 - `/skyblock mob list`
 - `/skyblock mob info <mobId>`
+- `/skyblock mob spawn <mobId>` (permission level 2; development/test spawn)
 - `/skyblock inventory`
 - `/skyblock equipment`
 - `/skyblock equip <itemId>`
 - `/skyblock unequip <slot>`
 
-### P3.5 core mob content\n- Design: `docs/P3.5_DESIGN.md`\n- Test checklist: `docs/P3.5_TEST_PLAN.md`\n- Adds 12 sourced Spider's Den and The End definitions, increasing the catalogue from 58 to 70 records.\n- Adds `spawn_entity_type` and per-entity command-tag identity so multiple SkyBlock mob definitions can share one vanilla stand-in without colliding in the entity-type fallback map.\n- `/skyblock mob spawn <mobId>` creates a tagged stand-in with a `[LvX] Name` label and routes attacks/HP through the selected definition.\n- This is explicit test spawning only; natural region spawns, loot rolls and unique AI are not implemented yet.\n\n### P3.4 mob catalogue and incoming damage
+### P3.5 core mob content
+- Design: `docs/P3.5_DESIGN.md`
+- Test checklist: `docs/P3.5_TEST_PLAN.md`
+- Adds 12 sourced Spider's Den and The End definitions, increasing the catalogue from 58 to 70 records.
+- Adds `spawn_entity_type` and per-entity command-tag identity so multiple SkyBlock mob definitions can share one vanilla stand-in without colliding in the entity-type fallback map.
+- `/skyblock mob spawn <mobId>` creates a tagged stand-in with a `[LvX] Name` label and routes attacks/HP through the selected definition.
+- This is explicit test spawning only; natural region spawns, loot rolls and unique AI are not implemented yet.
+
+### P3.4 mob catalogue and incoming damage
 - Design: `docs/P3.4_DESIGN.md`
 - Test checklist: `docs/P3.4_TEST_PLAN.md`
 - 58 sourced mob records are currently included: 15 level variants each for Private Island Zombie, Skeleton and Spider, plus 13 Graveyard/Crypts/Ruins/The Park/Deep Caverns examples. Five vanilla entity mappings are active; additional records can now be explicitly spawned through tagged per-instance identities.
@@ -85,7 +94,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 - Mob Defense remains unknown/project-default for the sourced entries because the cited Wiki pages do not publish a Defense value. The custom HP pool is authoritative for the SkyBlock weapon melee pipeline only; environmental damage and attacks from other vanilla entities still use vanilla health and can bypass the custom pool.
 - No custom mob entity types, unique AI, natural spawn tables, boss phases, abilities, ranged weapons, attack-speed timing, Ferocity, enchantments, reforges or elemental damage yet. Mob drop JSON is catalogue data only; drops are not yet granted on kill.
 - The logical SkyBlock inventory still has no custom GUI and is not rendered as vanilla item stacks.
-- Full Fabric Gradle build and in-game behavior for P3.4 must be verified in the local project environment.
+- Full Fabric Gradle build and in-game behavior for P3.4/P3.5 must be verified in the local project environment.
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
