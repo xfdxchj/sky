@@ -1,0 +1,14 @@
+{
+  "id": "weather_station",
+  "name": "Weather Station",
+  "parent_id": "mountain",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": 1,
+  "y": 180,
+  "z": 58,
+  "description": "Weather Station at the top of the Mountain.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Weather_Station",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
