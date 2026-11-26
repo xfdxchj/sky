@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.skill.SkillRegistry;
 import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.accessory.PowerRegistry;
@@ -41,6 +42,7 @@ public final class SkyBlockRPG implements ModInitializer {
     @Override
     public void onInitialize() {
         SkyBlockConfig.load();
+        SkillRegistry.registerBuiltins();
         SkyBlockGui.register();
 
         CommandRegistrationCallback.EVENT.register(
