@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.6 (equipment and accessory bag; build/test pending)
+## Current milestone: P4.7 (Accessory Power foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -117,6 +117,20 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P4.7 Accessory Power, Powers, Power Stones and Tuning
+- Design: `docs/P4.7_ACCESSORY_POWER_SYSTEM_DESIGN.md`
+- Test checklist: `docs/P4.7_ACCESSORY_POWER_SYSTEM_TEST_PLAN.md`
+- Uses current Accessory Power terminology and rarity values.
+- Accessory Bag capacity is 18 by default, reflecting the additional default slots described in the 0.27.3 release-candidate notes.
+- Item definitions support accessory upgrade lines; only the highest-ranked accessory in a line contributes stats and Accessory Power.
+- Power definitions are JSON-driven. Fortuitous and Pretty are starter Powers; Forceful is included as a Power Stone unlock fixture.
+- Nine matching Power Stones unlock a non-starter Power.
+- Selected Power stats scale with the Accessory Power multiplier.
+- Tuning Points are granted at one per 10 Accessory Power and allocations are persisted.
+- Commands: `/skyblock accessory power`, `/skyblock accessory power select <powerId>`, `/skyblock accessory power unlock <powerId>`, `/skyblock accessory tuning`, `/skyblock accessory tuning set <stat> <points>`.
+- Tuning point values and full current-game parity still require in-game verification; Enrichments and dungeon runtime integration are deferred.
+- Profile/world data schema advances to 7. Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.6 equipment, accessories and stat aggregation
 - Design: `docs/P4.6_EQUIPMENT_ACCESSORY_STATS_DESIGN.md`
