@@ -92,3 +92,19 @@ Source: https://hypixelskyblock.minecraft.wiki/w/Mobs (Mob Levels section; curre
 5. Store source URL, retrieval timestamp, source version / game update and confidence alongside imported data.
 6. A missing drop probability is represented with `chance_known: false`; never guess it or treat it as a guaranteed drop.
 7. Wiki pages may change without an API version. Retain the retrieval date and, where useful, relevant changelog references.
+
+## Bestiary coverage benchmark and activity-specific sources
+
+- Bestiary: https://hypixelskyblock.minecraft.wiki/w/Bestiary
+  - The current community-wiki page states that Bestiary tracks kills for 360 mobs across SkyBlock. Treat this as a coverage benchmark, not as 360 distinct vanilla entity types or 360 ordinary hostile combat definitions. Families can contain multiple named mobs and variants.
+  - The page organizes tracked mobs by area/family, making it a useful checklist for catalogue coverage. Some entries are passive, event-specific, instanced, or activity-specific and should not automatically enter the hostile combat bridge.
+- Slayer: https://hypixelskyblock.minecraft.wiki/w/Slayer
+  - Current tracks include Zombie, Spider, Wolf, Enderman, Vampire and Blaze. Slayer bosses, tier variants and minibosses require separate quest, phase, reward and loot-pool data; they should not be represented as ordinary mobs only.
+- Sea Creatures: https://hypixelskyblock.minecraft.wiki/w/Sea_Creatures
+  - The page lists fishing level requirements, base weights/chances, mob types and special requirements. Store these as fishing/activity data, not as generic spawn chance or drop chance.
+- Pests: https://hypixelskyblock.minecraft.wiki/w/Pests
+  - Pest entries have crop associations, spawn/capture behavior and their own drops. Keep these in a pest activity profile.
+- Catacombs: https://hypixelskyblock.minecraft.wiki/w/Catacombs
+- Kuudra: https://hypixelskyblock.minecraft.wiki/w/Kuudra
+
+A coverage inventory and staged import priorities are maintained in `docs/P3.4.1_MOB_CATALOGUE_EXPANSION.md`. The 58 current mob JSON files are only the starter subset and must not be reported as complete SkyBlock coverage.
