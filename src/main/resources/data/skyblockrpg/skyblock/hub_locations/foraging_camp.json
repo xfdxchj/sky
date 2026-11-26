@@ -1,0 +1,14 @@
+{
+  "id": "foraging_camp",
+  "name": "Foraging Camp",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": -128,
+  "y": 74,
+  "z": -33,
+  "description": "Foraging-focused Hub area and route toward The Park.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Foraging_Camp",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
