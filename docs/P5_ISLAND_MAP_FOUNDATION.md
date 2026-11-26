@@ -23,6 +23,15 @@ Move from abstract region/warp coordinates to a map model that can describe and 
 - Entity placement is disabled; a tiny project-authored NBT marker is included for testing.
 - Direct .schem parsing and actual Hypixel map assets remain deferred.
 
+## Implemented in P5.2
+
+- JSON-driven bridge and portal connection definitions link existing source and destination warp nodes.
+- Bridge geometry is validated against its warp endpoints; portal entrances are validated against the source warp and activation radius.
+- Operator-triggered bridge deck construction performs complete all-air preflight and checks world height, world border and a strict block-count limit.
+- Portal travel is proximity-gated and delegates destination checks and discovery requirements to WarpManager.
+- Connection route queries expose inbound/outbound adjacency between warp nodes.
+- Starter bridge, portal and outpost entries are project test fixtures, not Hypixel map coordinates. Physical portal blocks/effects and shortest-path navigation remain deferred.
+
 ## Commands
 
 - `/skyblock map` — report map format version, loaded island count and current dimension.
@@ -46,6 +55,6 @@ Do not label generated fixture terrain as Hypixel geometry. Actual Hub, Private 
 
 - Direct Sponge/WorldEdit .schem parsing and bulk conversion tooling (native structure NBT placement is implemented in P5.1).
 - Island protection and build permissions.
-- Portal links, island-to-island route graph and map GUI.
+- Physical portal blocks, particles/sounds, island protection and map GUI.
 - Actual Hypixel terrain/building assets and verified region coordinates.
 - Per-world map version migration and asset pack update tooling.
