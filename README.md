@@ -73,7 +73,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 ### P3 limitations
 - Combat interception currently applies to melee attacks against living non-player entities while a registered SkyBlock weapon is equipped.
 - Vanilla entities remain temporary stand-ins for SkyBlock mobs. P3.3 adds independent persistent HP pools, but does not add custom entity classes or AI.
-- Starter mob attributes are placeholders pending source verification; vanilla entity health remains independent of reference SkyBlock HP.
+- Starter mob attributes remain subject to source verification. The custom HP pool is authoritative for the SkyBlock weapon melee pipeline only; environmental damage and attacks from other vanilla entities still use vanilla health and can bypass the custom pool.
 - No custom mob entity types, AI, spawn tables, boss phases, abilities, ranged weapons, attack-speed timing, Ferocity, enchantments, reforges or elemental damage yet.
 - The logical SkyBlock inventory still has no custom GUI and is not rendered as vanilla item stacks.
 - Full Fabric Gradle build and in-game behavior for P3.3 must be verified in the local project environment.
