@@ -7,7 +7,7 @@
 1. Start a world with Core only; confirm startup succeeds.
 2. Load a dependent test mod and register `skyblock_life:mining`, `fishing`, `farming`, `foraging`.
 3. Verify duplicate skill registration returns false.
-4. Award XP using SkillAPI; query level and XP.
+4. Award XP using SkillAPI; query level, total XP, within-level progress and XP remaining to next level.
 5. Write separate NBT compounds under all four Life Skills keys.
 6. Stop/restart the world and verify values persist.
 7. Remove Life Skills, load/save the world, reinstall Life Skills and verify its data remains.
