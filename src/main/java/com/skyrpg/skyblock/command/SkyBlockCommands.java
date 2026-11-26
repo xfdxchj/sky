@@ -162,7 +162,7 @@ public final class SkyBlockCommands {
                             context.getSource().sendFeedback(() -> Text.literal("HP " + mob.health() + " | Damage " + mob.damage() + " | Defense " + mob.defense()), false);
                             context.getSource().sendFeedback(() -> Text.literal("Rewards: " + mob.coinReward() + " coins, " + mob.combatXpReward() + " Combat XP"), false);
                             context.getSource().sendFeedback(() -> Text.literal("Entity mapping: " + (mob.entityType().isBlank() ? "none" : mob.entityType())), false);
-                            context.getSource().sendFeedback(() -> Text.literal("Source: " + mob.sourceType() + " | " + mob.confidence()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Source: " + mob.sourceType() + " | " + mob.confidence() + (mob.sourceUrl().isBlank() ? "" : " | " + mob.sourceUrl())), false);
                             return 1;
                         }))))
                 .then(literal("items").executes(context -> {
