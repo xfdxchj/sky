@@ -16,9 +16,9 @@ import com.skyrpg.skyblock.item.ItemDefinition;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.profile.PlayerProfile;
 import com.skyrpg.skyblock.profile.ProfileManager;
-import com.skyrpg.skyblock.skill.SkillDefinition;
 import com.skyrpg.skyblock.skill.SkillManager;
 import com.skyrpg.skyblock.skill.SkillType;
+import com.skyrpg.skyblock.skill.SkillRegistry;
 import com.skyrpg.skyblock.stats.StatType;
 import com.skyrpg.skyblock.region.RegionDefinition;
 import com.skyrpg.skyblock.region.RegionManager;
@@ -209,16 +209,16 @@ public final class SkyBlockCommands {
                         .executes(context -> {
                             var player = context.getSource().getPlayerOrThrow();
                             String id = StringArgumentType.getString(context, "skill");
-                            var type = SkillType.fromId(id);
-                            if (type.isEmpty()) {
+                            var definition = SkillRegistry.resolve(id).orElse(null);
+                            if (definition == null) {
                                 context.getSource().sendError(Text.literal("Unknown skill: " + id));
                                 return 0;
                             }
-                            double xp = SkillManager.getExperience(player, type.get());
-                            int level = SkillDefinition.levelFromTotalXp(xp);
-                            double progress = SkillDefinition.progressInLevel(xp) * 100.0;
+                            double xp = SkillManager.getExperience(player, definition.id());
+                            int level = definition.levelFromTotalXp(xp);
+                            double progress = definition.progressInLevel(xp) * 100.0;
                             context.getSource().sendFeedback(() -> Text.literal(
-                                    type.get().id() + " | Level " + level + " | XP " + xp
+                                    definition.id() + " | Level " + level + " | XP " + xp
                                             + " | Progress " + String.format("%.1f", progress) + "%"), false);
                             return 1;
                         })
@@ -226,19 +226,19 @@ public final class SkyBlockCommands {
                                 .then(argument("amount", DoubleArgumentType.doubleArg(0.000001)).executes(context -> {
                                     var player = context.getSource().getPlayerOrThrow();
                                     String id = StringArgumentType.getString(context, "skill");
-                                    var type = SkillType.fromId(id);
-                                    if (type.isEmpty()) {
+                                    var definition = SkillRegistry.resolve(id).orElse(null);
+                                    if (definition == null) {
                                         context.getSource().sendError(Text.literal("Unknown skill: " + id));
                                         return 0;
                                     }
                                     double amount = DoubleArgumentType.getDouble(context, "amount");
-                                    if (!SkillManager.addExperience(player, type.get(), amount)) {
+                                    if (!SkillManager.addExperience(player, definition.id(), amount)) {
                                         context.getSource().sendError(Text.literal("Could not add skill XP."));
                                         return 0;
                                     }
-                                    int level = SkillManager.getLevel(player, type.get());
+                                    int level = SkillManager.getLevel(player, definition.id());
                                     context.getSource().sendFeedback(() -> Text.literal(
-                                            "Added " + amount + " " + type.get().id()
+                                            "Added " + amount + " " + definition.id()
                                                     + " XP. Current level: " + level), false);
                                     return 1;
                                 })))))
