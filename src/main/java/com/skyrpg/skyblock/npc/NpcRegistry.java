@@ -10,6 +10,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,9 +30,10 @@ public final class NpcRegistry {
             try (Reader reader = entry.getValue().getReader()) {
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
                 String id = required(json, "id");
-                List<String> dialogue = json.has("dialogue") && json.get("dialogue").isJsonArray()
-                        ? json.getAsJsonArray("dialogue").asList().stream().map(element -> element.getAsString()).toList()
-                        : List.of();
+                List<String> dialogue = new ArrayList<>();
+                if (json.has("dialogue") && json.get("dialogue").isJsonArray()) {
+                    json.getAsJsonArray("dialogue").forEach(line -> dialogue.add(line.getAsString()));
+                }
                 NpcDefinition npc = new NpcDefinition(
                         id, optional(json, "name", id), optional(json, "entity_type", "minecraft:villager"),
                         optional(json, "required_region_id", ""),
