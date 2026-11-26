@@ -1,0 +1,40 @@
+{
+  "id": "voracious_spider",
+  "name": "Voracious Spider",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:spider",
+  "level": 9,
+  "health": 300,
+  "damage": 80,
+  "defense": 0,
+  "coin_reward": 3,
+  "combat_xp_reward": 13,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Voracious_Spider",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed Lv9 variant; Defense is a project placeholder.",
+  "family_id": "voracious_spider",
+  "category": "hostile",
+  "mob_types": [
+    "arthropod"
+  ],
+  "area": "spider_den",
+  "drops": [
+    {
+      "item_id": "string",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.1,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
