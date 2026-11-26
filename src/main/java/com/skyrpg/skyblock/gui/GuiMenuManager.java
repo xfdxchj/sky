@@ -1,6 +1,7 @@
 package com.skyrpg.skyblock.gui;
 
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.inventory.EquipmentSlot;
 import com.skyrpg.skyblock.quest.QuestDefinition;
 import com.skyrpg.skyblock.quest.QuestManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
