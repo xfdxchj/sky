@@ -1,6 +1,6 @@
 package com.skyrpg.skyblock.profile;
 
-import com.skyrpg.skyblock.skill.SkillType;
+import net.minecraft.util.Identifier;
 import com.skyrpg.skyblock.stats.StatType;
 import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
@@ -69,10 +69,19 @@ public final class SkyBlockWorldData extends PersistentState {
 
                 NbtCompound skills = entry.getCompound("skills");
                 for (String key : skills.getKeys()) {
-                    SkillType.fromId(key).ifPresent(type -> {
+                    Identifier skillId = parseStoredIdentifier(key, "skyblockrpg");
+                    if (skillId != null) {
                         double xp = skills.getDouble(key);
-                        if (xp > 0 && Double.isFinite(xp)) profile.addSkillExperience(type, xp);
-                    });
+                        if (xp >= 0 && Double.isFinite(xp)) profile.loadSkillExperience(skillId, xp);
+                    }
+                }
+
+                NbtCompound moduleData = entry.getCompound("moduleData");
+                for (String key : moduleData.getKeys()) {
+                    Identifier dataId = Identifier.tryParse(key);
+                    if (dataId != null && moduleData.contains(key, NbtElement.COMPOUND_TYPE)) {
+                        profile.setModuleData(dataId, moduleData.getCompound(key));
+                    }
                 }
 
                 if (entry.contains("inventory", NbtElement.COMPOUND_TYPE)) {
@@ -105,6 +114,11 @@ public final class SkyBlockWorldData extends PersistentState {
         return data;
     }
 
+    private static Identifier parseStoredIdentifier(String raw, String legacyNamespace) {
+        if (raw == null || raw.isBlank()) return null;
+        return Identifier.tryParse(raw.contains(":") ? raw : legacyNamespace + ":" + raw);
+    }
+
     @Override
     public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         NbtList list = new NbtList();
@@ -132,8 +146,12 @@ public final class SkyBlockWorldData extends PersistentState {
             entry.put("completedQuests", completedQuests);
 
             NbtCompound skills = new NbtCompound();
-            profile.getSkillExperience().forEach((type, xp) -> skills.putDouble(type.id(), xp));
+            profile.getSkillExperience().forEach((skillId, xp) -> skills.putDouble(skillId.toString(), xp));
             entry.put("skills", skills);
+
+            NbtCompound moduleData = new NbtCompound();
+            profile.getModuleDataSnapshot().forEach((dataId, value) -> moduleData.put(dataId.toString(), value.copy()));
+            entry.put("moduleData", moduleData);
 
             NbtCompound stats = new NbtCompound();
             profile.getStats().getBaseValues().forEach((type, value) -> stats.putDouble(type.id(), value));
@@ -150,7 +168,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 7);
+        nbt.putInt("dataVersion", 8);
         return nbt;
     }
 }
