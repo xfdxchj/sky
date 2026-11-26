@@ -11,7 +11,6 @@ public final class SkyBlockHandledScreen extends HandledScreen<SkyBlockScreenHan
         super(handler, inventory, title);
         backgroundWidth = 176;
         backgroundHeight = 90;
-        playerInventoryTitle = null;
     }
 
     @Override

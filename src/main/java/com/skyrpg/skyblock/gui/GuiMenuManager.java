@@ -187,7 +187,7 @@ public final class GuiMenuManager {
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.YELLOW));
         if (lore.length > 0) {
             stack.set(DataComponentTypes.LORE, new LoreComponent(
-                    java.util.Arrays.stream(lore).map(Text::literal).toList()));
+                    java.util.Arrays.stream(lore).<Text>map(Text::literal).toList()));
         }
         inventory.setStack(slot, stack);
     }

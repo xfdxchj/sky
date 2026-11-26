@@ -58,7 +58,11 @@ public final class SkyBlockRPG implements ModInitializer {
             LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
         });
 
-        ServerTickEvents.END_PLAYER_TICK.register(RegionManager::tick);
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                RegionManager.tick(player);
+            }
+        });
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (world.isClient || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer)
