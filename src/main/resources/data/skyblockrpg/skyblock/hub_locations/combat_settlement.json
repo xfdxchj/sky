@@ -1,0 +1,14 @@
+{
+  "id": "combat_settlement",
+  "name": "Combat Settlement",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": -51,
+  "y": 69,
+  "z": -77,
+  "description": "Hub district focused on Combat and several related services.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Combat_Settlement",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
