@@ -1,0 +1,51 @@
+{
+  "id": "graveyard_zombie",
+  "name": "Graveyard Zombie",
+  "entity_type": "",
+  "level": 1,
+  "health": 100,
+  "damage": 20,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 5,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Graveyard",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Exact listed stats from Graveyard location mob table; Defense is not listed and remains unknown/project default 0.",
+  "family_id": "zombie",
+  "category": "hostile",
+  "mob_types": [
+    "undead"
+  ],
+  "area": "graveyard",
+  "drops": [
+    {
+      "item_id": "rotten_flesh",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "potato",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.05,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "carrot",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.05,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "poisonous_potato",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.05,
+      "drop_type": "item"
+    }
+  ]
+}
