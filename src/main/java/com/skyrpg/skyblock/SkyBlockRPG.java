@@ -10,6 +10,7 @@ import com.skyrpg.skyblock.profile.ProfileManager;
 import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.accessory.PowerRegistry;
+import com.skyrpg.skyblock.reforge.ReforgeRegistry;
 import com.skyrpg.skyblock.economy.ShopRegistry;
 import com.skyrpg.skyblock.region.RegionRegistry;
 import com.skyrpg.skyblock.region.RegionManager;
@@ -46,6 +47,7 @@ public final class SkyBlockRPG implements ModInitializer {
             MobRegistry.reload(server.getResourceManager());
             ItemRegistry.reload(server.getResourceManager());
             PowerRegistry.reload(server.getResourceManager());
+            ReforgeRegistry.reload(server.getResourceManager());
             ShopRegistry.reload(server.getResourceManager());
             RegionRegistry.reload(server.getResourceManager());
             WarpRegistry.reload(server.getResourceManager());
