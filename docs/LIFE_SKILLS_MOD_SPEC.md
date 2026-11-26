@@ -2,16 +2,12 @@
 
 **Mod ID:** `skyblock_life`  
 **Required dependency:** `skyblockrpg`  
-**Target:** Minecraft 1.21.1 / Fabric / Java 21
+**Target:** Minecraft 1.21.1 / Fabric / Java 21  
+**Core API contract:** [CORE_API_v2.md](CORE_API_v2.md)
 
 ## 1. Positioning
 
-Life Skills is an optional gameplay extension of SkyBlock RPG Core, not a standalone game or a peer to Core. Core remains the primary mod and owns the shared game systems. Life Skills supplies four concrete gameplay families:
-
-1. Mining
-2. Fishing
-3. Farming
-4. Foraging
+Life Skills is an optional gameplay extension of SkyBlock RPG Core, not a standalone game or peer product. Core remains the primary mod and owns shared game systems. Life Skills supplies Mining, Fishing, Farming and Foraging.
 
 Installing Core alone must remain fully functional. Installing Life Skills adds these four gameplay families.
 
@@ -19,39 +15,56 @@ Installing Core alone must remain fully functional. Installing Life Skills adds 
 
 Life Skills owns concrete life-skill mechanics, resource definitions, tools, drop tables, special events, area-specific rules, collections/statistics and life-skill content.
 
-Core owns player UUID/profile, persistence container, Purse/Bank, common stats, common skill XP/levels, item and equipment foundations, rewards, quest framework, GUI foundations and shared event infrastructure.
+Core owns player UUID/profile, persistence, Purse/Bank, shared stats, skill XP/levels, item/equipment foundations, reward operations, quest framework and GUI foundations.
 
 Life Skills must not:
-- Modify Core source.
-- Copy Core managers or create a second profile/economy/skill system.
+- Modify Core source or copy Core managers.
+- Create a second profile, economy or skill progression system.
 - Write directly into Core profile internals.
 - Depend on Core internal implementation classes where a public API exists.
-- Assume planned APIs exist before they are released.
+- Assume an API exists unless it is listed as available in `CORE_API_v2.md`.
 
-When a required API is missing, submit an API request and use a temporary adapter only inside Life Skills. Do not patch Core independently.
+## 3. Required Core APIs
 
-## 3. Skill identifiers and player data
+- `SkillAPI`: register four namespaced skills and award/query XP/levels.
+- `PlayerDataAPI`: persist collection counters, unlocks and module statistics.
+- `StatAPI`: read Core's final Mining Speed/Fortune, Farming Fortune, Foraging Speed/Fortune, Fishing Speed, Sea Creature Chance and Wisdom stats.
+- `ItemAPI`: query definitions loaded from Core and Life Skills datapack resources.
+- `InventoryAPI`: query/add/remove items in the logical SkyBlock inventory.
+- `CurrencyAPI`: query and mutate Purse/Bank using Core managers.
+- `RewardAPI`: grant items, coins and skill XP.
 
-Register these namespaced skills through Core API:
-
-| Skill | ID |
-|---|---|
-| Mining | `skyblock_life:mining` |
-| Fishing | `skyblock_life:fishing` |
-| Farming | `skyblock_life:farming` |
-| Foraging | `skyblock_life:foraging` |
-
-Use `SkillAPI` for registration, XP, level and progress calculations. Skill definitions must contain an explicit XP curve. Do not label placeholder curves as Hypixel data.
-
-Use `PlayerDataAPI` for extension data. Recommended keys:
+Example skill IDs:
 - `skyblock_life:mining`
 - `skyblock_life:fishing`
 - `skyblock_life:farming`
 - `skyblock_life:foraging`
 
-Store counters, collection progress, unlocks and module-specific statistics under these keys. Do not store a duplicate skill XP/level value; Core is authoritative for that.
+Do not duplicate skill XP/level in Life Skills data. Core is authoritative.
 
-## 4. Mining
+## 4. Item definitions
+
+Place extension item JSON under:
+
+```text
+src/main/resources/data/skyblock_life/skyblock/items/<path>.json
+```
+
+The item definition ID must use the namespace `skyblock_life:`. Core scans all namespaces for `skyblock/items/*.json` when the server starts. Query definitions through ItemAPI after server resource loading; do not assume they are available during `onInitialize`.
+
+Supported item stats are the current Core `StatType` enum values. Life Skills cannot add arbitrary StatType values or write transient stat modifiers in API v2. New shared stats or modifier sources must be requested from the Core maintainer.
+
+## 5. Player data
+
+Use one PlayerDataAPI key per skill family:
+- `skyblock_life:mining`
+- `skyblock_life:fishing`
+- `skyblock_life:farming`
+- `skyblock_life:foraging`
+
+Store counters, collection progress, unlocks and module-specific statistics. Core owns persistence and retains these keys while the optional module is absent.
+
+## 6. Mining
 
 ### First playable scope
 - Mining XP events.
@@ -70,31 +83,30 @@ Store counters, collection progress, unlocks and module-specific statistics unde
 - Area NPCs, quests and collection rewards.
 - Tool abilities, upgrades and enchantment integration.
 
-A mining event should validate the target and tool, resolve mining completion, calculate base drops and Fortune, issue rewards through Core when its reward/item APIs are available, award Mining XP, update module data and emit a module event. Prevent duplicate reward processing.
+Validate target and tool, resolve mining completion, calculate base drops and Fortune, grant rewards through RewardAPI, award Mining XP, update module data and prevent duplicate processing.
 
-## 5. Fishing
+## 7. Fishing
 
 ### First playable scope
-- Fishing XP events and fishing state.
+- Fishing XP and fishing state.
 - Fish definitions and weighted drop tables.
 - Rod and bait definitions.
-- Fishing Speed.
-- Sea Creature Chance and special catch outcomes.
+- Fishing Speed and Sea Creature Chance.
 - Sea Creature registration/spawn integration.
 - Fishing statistics and persistence.
 
 ### Later scope
 - Biome/region fishing tables.
-- Weather and time conditions.
+- Weather/time conditions.
 - Rare fish, special creatures and bestiary.
 - Fishing events, NPCs, quests and equipment progression.
 
-Do not merely award XP from vanilla fishing loot. Establish a SkyBlock-style independent catch resolver. Special creatures should reuse Core combat/mob systems when supported rather than implementing a second generic combat engine.
+Use an independent SkyBlock-style catch resolver, not merely vanilla fishing loot. Special creatures should reuse Core combat/mob systems where supported.
 
-## 6. Farming
+## 8. Farming
 
 ### First playable scope
-- Farming XP events.
+- Farming XP.
 - Crop definitions and registry.
 - Growth/harvest state.
 - Farming Fortune and drop calculation.
@@ -105,15 +117,14 @@ Do not merely award XP from vanilla fishing loot. Establish a SkyBlock-style ind
 ### Later scope
 - Dedicated farm areas and layouts.
 - Crop-specific tools and bonuses.
-- Orders, contests and farm NPCs.
-- Special crops and automation integrations.
+- Orders, contests, farm NPCs and special crops.
 
-The harvest pipeline must distinguish player harvest from machine/automation changes, prevent duplicate rewards and avoid block-update duplication exploits. Support efficient continuous harvesting rather than treating every crop as an isolated vanilla break.
+Distinguish player harvest from automation, prevent duplicate rewards and support efficient continuous harvesting.
 
-## 7. Foraging
+## 9. Foraging
 
 ### First playable scope
-- Foraging XP events.
+- Foraging XP.
 - Tree/log type definitions.
 - Wood drop tables and Fortune.
 - Foraging tool definitions.
@@ -125,115 +136,37 @@ The harvest pipeline must distinguish player harvest from machine/automation cha
 - Tree-specific tool abilities.
 - Foraging collections, NPCs, quests and events.
 
-Do not award Foraging XP indiscriminately for every vanilla log broken by machines or unrelated mods. Define the eligible player action and tree validation rules.
+Do not award XP indiscriminately for every vanilla log broken by machines or unrelated mods.
 
-## 8. Shared Life Skills architecture
+## 10. Shared architecture and event handling
 
-Recommended package layout:
+Use data-driven JSON definitions for resources, fish, crops, trees, tools and drop tables. Keep Mining Fortune, Farming Fortune and Foraging Fortune separate. Fishing uses its own stats such as Fishing Speed and Sea Creature Chance.
 
-```text
-com.example.skyblocklife
-├── api
-├── common
-│   ├── registry
-│   ├── drop
-│   ├── fortune
-│   └── event
-├── mining
-├── fishing
-├── farming
-└── foraging
-```
+For block breaking, harvesting and vanilla fishing hooks, use Fabric server-side callbacks and validate action/world state. API v2 does not publish a generic Core gameplay event bus or quest-objective callback; maintain a Life Skills-local event model until that contract is released.
 
-Use data-driven definitions (JSON) for resources, fish, crops, trees, tools, drop tables and progression rewards wherever practical. Every definition needs a stable namespaced ID and schema validation.
+## 11. Data sources
 
-Fortune is not one universal stat. Keep Mining Fortune, Farming Fortune and Foraging Fortune semantically separate. Fishing uses its own relevant stats such as Fishing Speed and Sea Creature Chance. Request Core Stat API support before trying to register custom stat types.
+Mark each dataset as Official, Community Wiki, Community-maintained, Project fixture, Project custom design or Unverified hypothesis. Record source URL, retrieval date and confidence. Never present guessed values as verified Hypixel data.
 
-## 9. Data sources
+## 12. Delivery phases
 
-Reference current Hypixel SkyBlock behavior. Mark every data set as one of:
-- Official source.
-- Community Wiki.
-- Community-maintained data.
-- Project fixture.
-- Project custom design.
-- Unverified hypothesis.
+- **L0 — Project shell:** Fabric project, hard Core dependency, independent build and test plan.
+- **L1 — Core integration:** register four skills; use PlayerDataAPI, StatAPI, ItemAPI, InventoryAPI, CurrencyAPI and RewardAPI; verify Core-only and Core-plus-Life-Skills.
+- **L2 — Shared foundation:** drop tables, Fortune resolver, JSON validation and common reward flow.
+- **L3 — Mining vertical slice:** one resource area, ores, pickaxe, requirements, drops, XP and persistence.
+- **L4 — Fishing vertical slice:** one location, rod, bait, fish, one special creature, rewards and persistence.
+- **L5 — Farming vertical slice:** crop growth, harvest, Fortune, XP and duplicate-reward protection.
+- **L6 — Foraging vertical slice:** tree types, tools, drops, XP and persistence.
+- **L7 — Content expansion:** more areas, resources, gear, collections, NPCs, quests and events.
+- **L8 — Integration:** compatibility, save migration, optional-mod removal/reinstall, server authority, performance and exploit tests.
 
-Record source URL, retrieval date and confidence where possible. Do not present guessed values as official. When reliable current data is unavailable, implement configurable mechanics and clearly mark the values provisional.
+## 13. Acceptance criteria
 
-## 10. Delivery phases
-
-### L0 — Project shell
-- Fabric project and mod metadata.
-- Hard dependency on `skyblockrpg`.
-- Independent build.
-- Package layout, README and test plan.
-- No gameplay content required yet.
-
-### L1 — Core integration
-- Register four skills through SkillAPI.
-- Use PlayerDataAPI for module data.
-- Verify startup ordering and namespaced commands.
-- Verify Core-only and Core-plus-Life-Skills loading.
-- Submit missing API requirements; do not invent unavailable APIs.
-
-### L2 — Shared gameplay foundation
-- Drop table framework.
-- Fortune resolver.
-- Skill event/reward pipeline.
-- JSON definition loader and validation.
-- Shared data persistence helpers.
-
-### L3 — Mining vertical slice
-- One resource area, several ores, a basic pickaxe, tool requirements, XP and drops.
-- Complete a playable end-to-end loop before expanding content.
-
-### L4 — Fishing vertical slice
-- One fishing location, rod, bait, several fish and one special creature.
-- Complete catch, reward, XP and save/load loop.
-
-### L5 — Farming vertical slice
-- A small crop set, growth, harvest, Fortune and XP.
-- Verify continuous harvest and duplicate-reward protection.
-
-### L6 — Foraging vertical slice
-- Several tree types, tools, drop and XP rules.
-- Verify eligible player actions and persistence.
-
-### L7 — Content expansion
-- More areas, resources, gear, collections, NPC content, quests and events based on verified reference data.
-
-### L8 — Integration and stability
-- Core compatibility, save migration, optional-mod removal/reinstall, multiplayer/server authority, performance and exploit tests.
-
-## 11. Acceptance criteria
-
-Initial L1 acceptance:
-- Life Skills compiles independently.
-- Loading without Core fails with a clear dependency error.
-- Loading with Core succeeds.
-- All four skill IDs register without modifying Core.
-- Skill XP and levels are read/written through SkillAPI.
-- Module data persists through PlayerDataAPI.
-- Core retains extension data while Life Skills is absent.
-
-Each playable skill later requires:
-- Valid action and tool checks.
-- Correct XP and level progression.
-- Correct base and bonus drops.
-- Correct collection/statistics updates.
-- No duplicate reward exploit.
-- Save/reload correctness.
-- No direct mutation of Core internals.
-
-## 12. Required deliverables
-
-- Complete source and Gradle project.
-- Mod metadata and dependency declaration.
-- JSON schemas/sample data.
-- API integration notes.
-- Design and test plans.
-- Build/test results.
-- Known limitations and outstanding Core API requests.
-
-Core is the authoritative owner of shared game rules. Life Skills is responsible only for the four life-skill gameplay extensions.
+- Life Skills compiles independently and hard-depends on Core.
+- All four namespaced skills register without modifying Core.
+- Skill XP/levels use SkillAPI.
+- All extension data uses PlayerDataAPI and survives Core saves.
+- Extension item JSON definitions load from the Life Skills namespace and resolve through ItemAPI.
+- Inventory, currency and rewards use the published Core APIs.
+- No direct mutation of Core profile internals.
+- Each playable skill passes action validation, XP/drop/fortune, duplicate-reward, save/reload and capacity tests.
