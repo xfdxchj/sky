@@ -16,6 +16,7 @@ import com.skyrpg.skyblock.region.RegionRegistry;
 import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.island.IslandRegistry;
+import com.skyrpg.skyblock.structure.StructureRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
@@ -53,6 +54,7 @@ public final class SkyBlockRPG implements ModInitializer {
             RegionRegistry.reload(server.getResourceManager());
             WarpRegistry.reload(server.getResourceManager());
             IslandRegistry.reload(server.getResourceManager());
+            StructureRegistry.reload(server.getResourceManager());
             NpcRegistry.reload(server.getResourceManager());
             QuestRegistry.reload(server.getResourceManager());
             LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
