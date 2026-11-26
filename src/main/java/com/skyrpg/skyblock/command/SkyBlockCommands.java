@@ -98,6 +98,40 @@ public final class SkyBlockCommands {
                                             "Removed " + amount + " coins. Balance: " + total), false);
                                     return 1;
                                 }))))
+                .then(literal("bank")
+                        .executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            PlayerProfile profile = ProfileManager.get(player);
+                            context.getSource().sendFeedback(() -> Text.literal(
+                                    "Bank | Purse: " + profile.getCoins() + " coins | Bank: " + profile.getBankCoins() + " coins"), false);
+                            return 1;
+                        })
+                        .then(literal("deposit").then(argument("amount", LongArgumentType.longArg(1)).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            long amount = LongArgumentType.getLong(context, "amount");
+                            PlayerProfile profile = ProfileManager.get(player);
+                            if (!profile.depositCoins(amount)) {
+                                context.getSource().sendError(Text.literal("Deposit failed: insufficient purse balance or bank balance limit reached."));
+                                return 0;
+                            }
+                            ProfileManager.markChanged(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Deposited " + amount
+                                    + " coins. Purse: " + profile.getCoins() + " | Bank: " + profile.getBankCoins()), false);
+                            return 1;
+                        }))))
+                        .then(literal("withdraw").then(argument("amount", LongArgumentType.longArg(1)).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            long amount = LongArgumentType.getLong(context, "amount");
+                            PlayerProfile profile = ProfileManager.get(player);
+                            if (!profile.withdrawCoins(amount)) {
+                                context.getSource().sendError(Text.literal("Withdrawal failed: insufficient bank balance or purse balance limit reached."));
+                                return 0;
+                            }
+                            ProfileManager.markChanged(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Withdrew " + amount
+                                    + " coins. Purse: " + profile.getCoins() + " | Bank: " + profile.getBankCoins()), false);
+                            return 1;
+                        }))))
                 .then(literal("skill").then(argument("skill", StringArgumentType.word())
                         .executes(context -> {
                             var player = context.getSource().getPlayerOrThrow();
