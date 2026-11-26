@@ -51,6 +51,14 @@ public final class ConnectionRegistry {
                 if (type == ConnectionDefinition.Type.BRIDGE
                         && !target.dimension().equals(definition.dimension()))
                     throw new IllegalArgumentException("Bridge endpoints must be in the same dimension");
+                if (type == ConnectionDefinition.Type.BRIDGE
+                        && (!near(definition.startX(), definition.startY(), definition.startZ(), source, 8.0)
+                        || !near(definition.endX(), definition.endY(), definition.endZ(), target, 8.0)))
+                    throw new IllegalArgumentException("Bridge geometry endpoints must be within 8 blocks of their linked warps");
+                if (type == ConnectionDefinition.Type.PORTAL
+                        && !near(definition.startX(), definition.startY(), definition.startZ(), source,
+                        definition.activationRadius()))
+                    throw new IllegalArgumentException("Portal entrance must be within activation_radius of its source warp");
                 if (type == ConnectionDefinition.Type.BRIDGE) {
                     Identifier blockId = Identifier.tryParse(definition.blockId());
                     if (blockId == null || !Registries.BLOCK.containsId(blockId))
@@ -82,6 +90,13 @@ public final class ConnectionRegistry {
                 .filter(connection -> connection.sourceWarpId().equalsIgnoreCase(warpId)
                         || connection.targetWarpId().equalsIgnoreCase(warpId))
                 .toList();
+    }
+
+    private static boolean near(double x, double y, double z, WarpDefinition warp, double radius) {
+        double dx = x - warp.x();
+        double dy = y - warp.y();
+        double dz = z - warp.z();
+        return dx * dx + dy * dy + dz * dz <= radius * radius;
     }
 
     private static String required(JsonObject json, String key) {
