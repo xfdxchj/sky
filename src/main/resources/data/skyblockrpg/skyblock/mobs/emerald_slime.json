@@ -1,0 +1,39 @@
+{
+  "id": "emerald_slime",
+  "name": "Emerald Slime",
+  "entity_type": "",
+  "level": 4,
+  "health": 80,
+  "damage": 70,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 6,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Cubic_%28Mob_Type%29",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Stats and reward row are listed in the Cubic mob-type table; Defense not listed. Drop probability for Exp Share Core is not specified in this source.",
+  "family_id": "emerald_slime",
+  "category": "hostile",
+  "mob_types": [
+    "cubic"
+  ],
+  "area": "deep_caverns_slimehill",
+  "drops": [
+    {
+      "item_id": "slimeball",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "exp_share_core",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0,
+      "chance_known": false,
+      "drop_type": "item"
+    }
+  ]
+}
