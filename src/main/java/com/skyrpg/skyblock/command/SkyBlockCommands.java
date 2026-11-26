@@ -513,8 +513,13 @@ public final class SkyBlockCommands {
                                 context.getSource().sendError(Text.literal("Unlocking " + id + " requires 9x " + power.powerStoneItemId()));
                                 return 0;
                             }
-                            if (!profile.unlockPower(id) || !inventory.remove(power.powerStoneItemId(), 9)) {
-                                context.getSource().sendError(Text.literal("Could not unlock power; no items were consumed."));
+                            if (!inventory.remove(power.powerStoneItemId(), 9)) {
+                                context.getSource().sendError(Text.literal("Could not consume the required Power Stones."));
+                                return 0;
+                            }
+                            if (!profile.unlockPower(id)) {
+                                inventory.add(power.powerStoneItemId(), 9);
+                                context.getSource().sendError(Text.literal("Could not unlock power; the Power Stones were returned."));
                                 return 0;
                             }
                             ProfileManager.markChanged(player);
