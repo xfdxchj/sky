@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.8 (Reforge foundation; build/test pending)
+## Current milestone: P5.0 (Island map foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -117,6 +117,16 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P5.0 Island map and floating-island foundation
+- Design: `docs/P5_ISLAND_MAP_FOUNDATION.md`
+- Test checklist: `docs/P5_ISLAND_MAP_TEST_PLAN.md`
+- Adds JSON island manifests under `data/skyblockrpg/skyblock/islands/*.json`, linked to existing region and warp definitions.
+- Adds an operator-triggered procedural floating-island generator with configurable footprint, height, thickness and block palette. It preserves existing non-air blocks and checks world border, build height and a generation-size safety cap.
+- Adds `/skyblock map`, `/skyblock island list|info <id>|generate <id>|visit <id>`.
+- The included `starter_island_fixture` is only a development fixture; it is not Hypixel Private Island or Hub geometry. No terrain is generated automatically when a world opens.
+- Structure/schematic import, island protection, actual Hypixel map assets, portals and map GUI remain deferred.
+- Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.8 Basic Reforge foundation
 - Design: `docs/P4.8_REFORGE_SYSTEM_DESIGN.md`
