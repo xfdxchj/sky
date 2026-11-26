@@ -157,7 +157,7 @@ These coordinates were read from the community-maintained Wiki on 2026-11-27 and
 
 ### Current Hub asset/version caveat
 
-The Hub was redesigned in the 0.24.2 update in February 2026, including location moves and visual updates. Hypixel SkyBlock's current client requirement has since moved beyond the project's Minecraft 1.21.1 target (the Wiki overview reports Minecraft 26.1+ as of 2026-08-18). Do not assume a current Hub world download is directly compatible with this project's runtime.
+The Hub was redesigned in the 0.24.2 update in February 2026, including location moves and visual updates. Hypixel SkyBlock's current client requirement has since moved beyond the project's Minecraft 1.21.1 target (the community Wiki overview reports Minecraft 26.1+ as of 2026-08-18: https://hypixelskyblock.minecraft.wiki/w/SkyBlock). Do not assume a current Hub world download is directly compatible with this project's runtime.
 
 Public GitHub research found older Hub recreation/world references, but no current Hub asset with clearly scoped redistribution permission:
 - https://github.com/CarsCupcake/SkyblockRemake includes an older Hub world archive in an AGPL-3.0 code repository; the repository license alone does not establish a separate license for Hypixel-derived world assets.
