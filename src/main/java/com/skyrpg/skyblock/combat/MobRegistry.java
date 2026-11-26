@@ -16,7 +16,7 @@ import java.util.*;
 
 public final class MobRegistry {
     private static final MobDefinition UNREGISTERED = new MobDefinition(
-            "unregistered", "Unregistered Creature", "", 0, 0, 0, 0, 0, 0,
+            "unregistered", "Unregistered Creature", "", "", 0, 0, 0, 0, 0, 0,
             "project-placeholder", "", "", "none", "unregistered", "unknown",
             List.of(), "unknown", List.of());
     private static final Map<String, MobDefinition> DEFINITIONS = new LinkedHashMap<>();
@@ -44,7 +44,7 @@ public final class MobRegistry {
                                 number(d,"chance",0.0), bool(d,"chance_known",d.has("chance")), optional(d,"drop_type","item")));
                     }
                 }
-                MobDefinition d = new MobDefinition(id, optional(j,"name",id), optional(j,"entity_type",""),
+                MobDefinition d = new MobDefinition(id, optional(j,"name",id), optional(j,"entity_type",""), optional(j,"spawn_entity_type",""),
                     integer(j,"level",0), number(j,"health",0), number(j,"damage",0), number(j,"defense",0),
                     longNumber(j,"coin_reward",0), number(j,"combat_xp_reward",0),
                     optional(j,"source_type","unknown"), optional(j,"source_url",""),
@@ -64,8 +64,21 @@ public final class MobRegistry {
         SkyBlockRPG.LOGGER.info("Loaded {} SkyBlock mob definitions ({} entity mappings).",
                 DEFINITIONS.size(), ENTITY_TYPES.size());
     }
+    private static final String ENTITY_TAG_PREFIX = "skyblockrpg_mob_";
+
+    public static String entityTag(String mobId) {
+        return ENTITY_TAG_PREFIX + mobId.toLowerCase(Locale.ROOT);
+    }
+
     public static MobDefinition get(Entity entity) {
         if (entity == null) return UNREGISTERED;
+        for (String tag : entity.getCommandTags()) {
+            if (tag.startsWith(ENTITY_TAG_PREFIX)) {
+                String mobId = tag.substring(ENTITY_TAG_PREFIX.length());
+                MobDefinition tagged = DEFINITIONS.get(mobId.toLowerCase(Locale.ROOT));
+                if (tagged != null) return tagged;
+            }
+        }
         String id = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
         return ENTITY_TYPES.getOrDefault(id, UNREGISTERED);
     }
