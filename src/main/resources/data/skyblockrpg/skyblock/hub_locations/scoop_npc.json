@@ -1,0 +1,14 @@
+{
+  "id": "scoop_npc",
+  "name": "Scoop (NPC position)",
+  "parent_id": "mountain",
+  "category": "npc",
+  "dimension": "minecraft:overworld",
+  "x": -53.5,
+  "y": 169,
+  "z": 70.5,
+  "description": "Current published position for Scoop on the Mountain. This is a coordinate reference only, not an NPC spawn instruction.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Scoop",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
