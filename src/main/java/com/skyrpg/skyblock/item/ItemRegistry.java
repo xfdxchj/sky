@@ -21,9 +21,18 @@ public final class ItemRegistry {
         for (var entry : resources.entrySet()) {
             try (Reader reader = entry.getValue().getReader()) {
                 JsonObject j = JsonParser.parseReader(reader).getAsJsonObject();
-                String rawId = required(j,"id");
-                String id = entry.getKey().getNamespace().equals("skyblockrpg") || rawId.contains(":")
-                        ? rawId : entry.getKey().getNamespace() + ":" + rawId;
+                String rawId = required(j,"id").trim();
+                String resourceNamespace = entry.getKey().getNamespace();
+                String id;
+                if (rawId.contains(":")) {
+                    Identifier parsedId = Identifier.tryParse(rawId);
+                    if (parsedId == null || !parsedId.getNamespace().equals(resourceNamespace)) {
+                        throw new IllegalArgumentException("Item ID must belong to its data-pack namespace: " + rawId);
+                    }
+                    id = parsedId.toString();
+                } else {
+                    id = resourceNamespace.equals("skyblockrpg") ? rawId : resourceNamespace + ":" + rawId;
+                }
                 ItemRarity rarity = ItemRarity.valueOf(required(j,"rarity").toUpperCase(Locale.ROOT));
                 ItemType type = ItemType.valueOf(required(j,"type").toUpperCase(Locale.ROOT));
                 String slotId = optional(j,"equipment_slot","");
