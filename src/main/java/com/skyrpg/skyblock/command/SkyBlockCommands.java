@@ -166,7 +166,7 @@ public final class SkyBlockCommands {
                             context.getSource().sendFeedback(() -> Text.literal(mob.displayName() + " [" + mob.id() + "] | Lv" + mob.level()), false);
                             context.getSource().sendFeedback(() -> Text.literal("HP " + mob.health() + " | Damage " + mob.damage() + " | Defense " + mob.defense()), false);
                             context.getSource().sendFeedback(() -> Text.literal("Rewards: " + mob.coinReward() + " coins, " + mob.combatXpReward() + " Combat XP"), false);
-                            context.getSource().sendFeedback(() -> Text.literal("Entity mapping: " + (mob.entityType().isBlank() ? "none" : mob.entityType())), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Entity mapping: " + (mob.entityType().isBlank() ? "none" : mob.entityType()) + " | Spawn type: " + (mob.spawnEntityType().isBlank() ? "none" : mob.spawnEntityType())), false);
                             context.getSource().sendFeedback(() -> Text.literal("Family: " + mob.familyId() + " | Category: " + mob.category()), false);
                             context.getSource().sendFeedback(() -> Text.literal("Area: " + mob.area() + " | Types: " + String.join(", ", mob.mobTypes())), false);
                             context.getSource().sendFeedback(() -> Text.literal("Drops: " + mob.drops().size()), false);
