@@ -1,0 +1,44 @@
+{
+  "id": "wolf",
+  "name": "Wolf",
+  "entity_type": "minecraft:wolf",
+  "level": 11,
+  "health": 500,
+  "damage": 75,
+  "defense": 0,
+  "coin_reward": 3,
+  "combat_xp_reward": 16,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Ruins",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current Ruins table after 2026-10-06 changes; Defense is not listed.",
+  "family_id": "wolf",
+  "category": "hostile",
+  "mob_types": [
+    "animal"
+  ],
+  "area": "ruins",
+  "drops": [
+    {
+      "item_id": "bone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "hound_pet_legendary",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.00001,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "hound_pet_epic",
+      "min_count": 0,
+      "max_count": 1,
+      "chance": 0.00003,
+      "drop_type": "item"
+    }
+  ]
+}
