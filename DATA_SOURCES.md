@@ -164,3 +164,24 @@ Public GitHub research found older Hub recreation/world references, but no curre
 - https://github.com/SadanMasterMode/SkyblockCreation-World is a small-scale recreation and has no declared repository license.
 
 No external Hub world, schematic or NBT asset has been copied into this project.
+
+
+Additional P5.3 Hub references added on 2026-11-27:
+
+- Farm: https://hypixelskyblock.minecraft.wiki/w/Farm — 65, 71, -82.
+- Combat Settlement: https://hypixelskyblock.minecraft.wiki/w/Combat_Settlement — -51, 69, -77.
+- Wilderness: https://hypixelskyblock.minecraft.wiki/w/Wilderness — 106, 66, 118.
+- Ruins: https://hypixelskyblock.minecraft.wiki/w/Ruins — -200, 90, 40.
+- Mountain: https://hypixelskyblock.minecraft.wiki/w/Mountain — -12, 151, 44.
+- Graveyard: https://hypixelskyblock.minecraft.wiki/w/Graveyard — -99, 71, -54.
+- Foraging Camp: https://hypixelskyblock.minecraft.wiki/w/Foraging_Camp — -128, 74, -33.
+- Crypts: https://hypixelskyblock.minecraft.wiki/w/Crypts — -146, 57, -100.
+- Tavern: https://hypixelskyblock.minecraft.wiki/w/Tavern — -82, 75, -129.
+- Rabbit House: https://hypixelskyblock.minecraft.wiki/w/Rabbit_House — 65, 68, 7.
+- Museum: https://hypixelskyblock.minecraft.wiki/w/Museum — -73, 76, 80.
+- Weather Station: https://hypixelskyblock.minecraft.wiki/w/Weather_Station — 1, 180, 58.
+- Angler Angus: https://hypixelskyblock.minecraft.wiki/w/Angler_Angus — 125.5, 70, -67.5.
+- Scoop: https://hypixelskyblock.minecraft.wiki/w/Scoop — -53.5, 169, 70.5.
+- Tavern Bartender and Maddox positions: https://hypixelskyblock.minecraft.wiki/w/Tavern — -83.5, 74, -135.5 and -83.5, 68, -129.5.
+
+These are all community-wiki coordinate references, not official API records. NPC coordinates remain metadata only until a separate, verified NPC placement and terrain pass.
