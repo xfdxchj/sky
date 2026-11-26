@@ -125,3 +125,18 @@ The following entries were added from the current community-maintained Hypixel S
 - Seer: https://hypixelskyblock.minecraft.wiki/w/Mobs — Lv55, 9,500 HP, 500 Damage, 82 Combat XP, 18 Coins (Mobs table).
 
 All added records are explicit-spawn-capable vanilla stand-ins through `spawn_entity_type`; this field is separate from `entity_type`, which remains the fallback mapping for naturally encountered vanilla entities. These entries are not yet naturally spawned by region tables.
+
+
+## P4.8 Reforge mechanics reference
+
+- Reforges: https://hypixelskyblock.minecraft.wiki/w/Reforges
+  - Current page describes one replaceable reforge per eligible item; stats apply while holding/wearing the item.
+  - Basic reforge rolls choose uniformly among compatible reforges.
+  - Basic reforge cost is 500 coins, independent of item rarity.
+  - Accessory reforging was replaced by Accessory Powers in 0.13; do not import legacy accessory reforges as current mechanics.
+- October 6, 2026 update: https://hypixelskyblock.minecraft.wiki/w/Changelog/2026/October_6
+  - Confirms the current basic reforge cost of 500 coins and advanced Reforge Stone costs by stone rarity.
+- Reforge Stones: https://hypixelskyblock.minecraft.wiki/w/Reforge_Stones
+  - Advanced reforges are applied through an anvil or The Hex and use stone-rarity-based costs; full stone data is deferred.
+
+These are community-maintained Wiki references, not official Hypixel API data. The P4.8 `test_fierce` and `test_titanic` values are project-only test fixtures and are not copied from the Wiki's live reforge tables.
