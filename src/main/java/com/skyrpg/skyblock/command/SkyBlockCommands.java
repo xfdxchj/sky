@@ -60,7 +60,7 @@ public final class SkyBlockCommands {
                     String worldName = source.getServer().getSaveProperties().getLevelName();
                     source.sendFeedback(() -> Text.literal("[SkyBlock RPG] Core loaded successfully."), false);
                     source.sendFeedback(() -> Text.literal("World: " + worldName), false);
-                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.5)"), false);
+                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.6)"), false);
                     return 1;
                 }))
                 .then(literal("profile").executes(context -> {
