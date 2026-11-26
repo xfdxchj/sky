@@ -37,9 +37,10 @@ public final class ItemRegistry {
                 String accessoryLine = optional(j, "accessory_line", id);
                 boolean dungeonAccessory = j.has("dungeon_accessory") && j.get("dungeon_accessory").getAsBoolean();
                 int accessoryPowerOverride = j.has("accessory_power") ? j.get("accessory_power").getAsInt() : -1;
+                boolean reforgeable = j.has("reforgeable") ? j.get("reforgeable").getAsBoolean() : slot != null;
                 if (accessoryPowerOverride < -1) throw new IllegalArgumentException("Invalid accessory_power override");
                 ItemDefinition definition = new ItemDefinition(id,optional(j,"name",id),rarity,type,slot,max,stats,lore,
-                        accessoryLine,dungeonAccessory,accessoryPowerOverride);
+                        accessoryLine,dungeonAccessory,accessoryPowerOverride,reforgeable);
                 if (loaded.putIfAbsent(id.toLowerCase(Locale.ROOT),definition) != null) throw new IllegalArgumentException("Duplicate item id: "+id);
             } catch (Exception e) {
                 SkyBlockRPG.LOGGER.error("Failed to load item data from {}",entry.getKey(),e);
