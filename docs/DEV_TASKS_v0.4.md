@@ -44,20 +44,27 @@
 
 ---
 
-## 2.1 M1：Core 扩展 API（新增）
+## 2.1 M1：Core 扩展 API（Life Skills 接入）
 
-**目标：** 让附属模组安全注册技能，并把扩展数据保存在 Core 玩家档案中。
+**目标：** 让附属模组使用 Core 现有玩家、技能、属性、物品、经济和奖励系统，而不复制主体系统。
 
 - [x] Namespaced 技能注册与 XP 曲线定义。
 - [x] SkillAPI 注册、查询、等级和经验入口。
 - [x] PlayerDataAPI 模块数据读写入口。
 - [x] 旧技能存档键迁移至 `skyblockrpg:<skill>`。
 - [x] 扩展模组缺席时保留其技能 XP 和模块数据。
+- [x] StatAPI：读取 Core 最终属性；增加 Foraging Speed / Fortune。
+- [x] ItemAPI：读取跨命名空间数据包物品定义。
+- [x] InventoryAPI：访问 Core 逻辑背包。
+- [x] CurrencyAPI：访问 Purse / Bank。
+- [x] RewardAPI：发放物品、金币和技能经验。
+- [x] 更新 Life Skills 接口合约与测试计划。
 - [ ] 用户本地 Gradle build 与 Core-only 游戏验证。
-- [ ] 最小测试扩展 Mod 验证注册顺序与依赖加载。
-- [ ] 后续发布 StatAPI、ItemAPI、CurrencyAPI、RewardAPI、QuestAPI 和事件 API。
+- [ ] 最小测试扩展 Mod 验证四技能注册、物品数据包加载和奖励流程。
 
-**验收：** 见 `CORE_API_v1_TEST_PLAN.md`。
+**明确延期：** 任意 StatType 动态注册、属性修正写入 API、ItemInstance、原子多奖励事务、Quest Objective 和通用事件总线。不得把未发布接口写进 Life Skills 的编译依赖。
+
+**验收：** 见 `CORE_API_v2_TEST_PLAN.md`.
 
 ## 3. P1：玩家系统完善
 
