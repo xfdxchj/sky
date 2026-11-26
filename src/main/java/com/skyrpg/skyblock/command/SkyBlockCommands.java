@@ -426,6 +426,46 @@ public final class SkyBlockCommands {
                             () -> Text.literal(id + " x" + count), false));
                     return 1;
                 }))
+                .then(literal("accessory")
+                        .then(literal("list").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            var inventory = ProfileManager.get(player).getInventory();
+                            context.getSource().sendFeedback(() -> Text.literal("Accessory Bag: "
+                                    + inventory.getAccessoryBag().size() + "/" + com.skyrpg.skyblock.inventory.PlayerInventory.ACCESSORY_BAG_CAPACITY), false);
+                            if (inventory.getAccessoryBag().isEmpty()) {
+                                context.getSource().sendFeedback(() -> Text.literal("(empty)"), false);
+                            }
+                            for (String id : inventory.getAccessoryBag()) {
+                                ItemDefinition item = ItemRegistry.get(id).orElse(null);
+                                context.getSource().sendFeedback(() -> Text.literal(id
+                                        + (item == null ? "" : " | " + item.name())), false);
+                            }
+                            return 1;
+                        }))
+                        .then(literal("add").then(argument("itemId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "itemId");
+                            var inventory = ProfileManager.get(player).getInventory();
+                            if (!inventory.addAccessory(id)) {
+                                context.getSource().sendError(Text.literal("Cannot add accessory. Check that it is an accessory in your inventory, not already in the bag, and that the bag has space."));
+                                return 0;
+                            }
+                            ProfileManager.markChanged(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Added " + id + " to your Accessory Bag."), false);
+                            return 1;
+                        })))
+                        .then(literal("remove").then(argument("itemId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "itemId");
+                            var inventory = ProfileManager.get(player).getInventory();
+                            if (!inventory.removeAccessory(id)) {
+                                context.getSource().sendError(Text.literal("Cannot remove accessory. Check the item id and available inventory space."));
+                                return 0;
+                            }
+                            ProfileManager.markChanged(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Removed " + id + " from your Accessory Bag."), false);
+                            return 1;
+                        }))))
                 .then(literal("equipment").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     var equipment = ProfileManager.get(player).getInventory().getEquipment();
