@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "skyblockrpg",
+  "version": "${version}",
+  "name": "SkyBlock RPG",
+  "description": "A single-player Hypixel SkyBlock-inspired RPG experience for Minecraft.",
+  "authors": [
+    "SkyBlock RPG Team"
+  ],
+  "contact": {
+    "sources": ""
+  },
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.skyrpg.skyblock.SkyBlockRPG"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "mixins": [
+    "skyblockrpg.mixins.json"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "refmap": "skyblock-rpg-refmap.json",
+  "package": "com.skyrpg.skyblock.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
