@@ -6,6 +6,7 @@ import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.PersistentState;
 
@@ -54,7 +55,7 @@ public final class SkyBlockWorldData extends PersistentState {
                 profile.setProfileVersion(PlayerProfile.CURRENT_VERSION); // P1 -> P2 schema migration is additive.
                 long coins = Math.max(0L, entry.getLong("coins"));
                 if (coins > 0) profile.addCoins(coins);
-                profile.setBankCoinsForLoad(Math.max(0L, entry.getLong("bankCoins")));
+                profile.setBankCoinsForLoad(Math.max(0L, entry.getLong("bankCoins")));\n                NbtList discovered = entry.getList("discoveredRegions", NbtElement.STRING_TYPE);\n                for (int j = 0; j < discovered.size(); j++) profile.discoverRegion(discovered.getString(j));
 
                 NbtCompound skills = entry.getCompound("skills");
                 for (String key : skills.getKeys()) {
@@ -92,7 +93,7 @@ public final class SkyBlockWorldData extends PersistentState {
             entry.putString("name", profile.getLastKnownName());
             entry.putInt("profileVersion", profile.getProfileVersion());
             entry.putLong("coins", profile.getCoins());
-            entry.putLong("bankCoins", profile.getBankCoins());
+            entry.putLong("bankCoins", profile.getBankCoins());\n            NbtList discovered = new NbtList();\n            profile.getDiscoveredRegions().forEach(id -> discovered.add(NbtString.of(id)));\n            entry.put("discoveredRegions", discovered);
 
             NbtCompound skills = new NbtCompound();
             profile.getSkillExperience().forEach((type, xp) -> skills.putDouble(type.id(), xp));
@@ -106,7 +107,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 3);
+        nbt.putInt("dataVersion", 4);
         return nbt;
     }
 }
