@@ -1,0 +1,12 @@
+{
+  "id": "starter_island_fixture",
+  "name": "Starter Island Fixture",
+  "dimension": "minecraft:overworld",
+  "min_x": -42,
+  "min_y": 80,
+  "min_z": -36,
+  "max_x": 42,
+  "max_y": 110,
+  "max_z": 36,
+  "priority": 10
+}
