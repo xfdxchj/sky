@@ -1,29 +1,60 @@
 package com.skyrpg.skyblock.combat;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.skyrpg.skyblock.SkyBlockRPG;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registries;
-import java.util.Locale;
-import java.util.Map;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Identifier;
+import java.io.Reader;
+import java.util.*;
 
-/**
- * Temporary vanilla-entity to SkyBlock starter-mob mapping.
- * Reward values are based on the lowest listed Hypixel Private Island variants where available;
- * this is not a complete Hypixel mob catalogue or a claim that vanilla mobs have matching levels.
- */
 public final class MobRegistry {
-    private static final MobDefinition UNREGISTERED =
-            new MobDefinition("unregistered", "Unregistered Creature", 0.0, 0L, 0.0);
-
-    private static final Map<String, MobDefinition> DEFINITIONS = Map.of(
-            "zombie", new MobDefinition("zombie", "Private Island Zombie (Lv1 data)", 0.0, 1L, 5.0),
-            "skeleton", new MobDefinition("skeleton", "Private Island Skeleton (Lv1 data)", 0.0, 1L, 5.0),
-            "spider", new MobDefinition("spider", "Private Island Spider (minimum-tier data)", 0.0, 1L, 5.0)
-    );
-
+    private static final MobDefinition UNREGISTERED = new MobDefinition("unregistered", "Unregistered Creature", "", 0, 0, 0, 0, 0, 0, "project-placeholder", "", "", "none");
+    private static final Map<String, MobDefinition> DEFINITIONS = new LinkedHashMap<>();
+    private static final Map<String, MobDefinition> ENTITY_TYPES = new HashMap<>();
     private MobRegistry() {}
 
-    public static MobDefinition get(Entity entity) {
-        String id = Registries.ENTITY_TYPE.getId(entity.getType()).getPath().toLowerCase(Locale.ROOT);
-        return DEFINITIONS.getOrDefault(id, UNREGISTERED);
+    public static void reload(ResourceManager manager) {
+        Map<String, MobDefinition> loaded = new LinkedHashMap<>();
+        Map<String, MobDefinition> byEntity = new HashMap<>();
+        Map<Identifier, Resource> resources = manager.findResources("skyblock/mobs", id -> id.getNamespace().equals("skyblockrpg") && id.getPath().endsWith(".json"));
+        for (var entry : resources.entrySet()) {
+            try (Reader reader = entry.getValue().getReader()) {
+                JsonObject j = JsonParser.parseReader(reader).getAsJsonObject();
+                String id = required(j, "id");
+                MobDefinition d = new MobDefinition(id, optional(j,"name",id), optional(j,"entity_type",""),
+                    integer(j,"level",0), number(j,"health",0), number(j,"damage",0), number(j,"defense",0),
+                    longNumber(j,"coin_reward",0), number(j,"combat_xp_reward",0),
+                    optional(j,"source_type","unknown"), optional(j,"source_url",""),
+                    optional(j,"retrieved_at",""), optional(j,"confidence","unverified"));
+                if (loaded.putIfAbsent(d.id(), d) != null) throw new IllegalArgumentException("Duplicate mob id: " + d.id());
+                if (!d.entityType().isBlank() && byEntity.putIfAbsent(d.entityType(), d) != null)
+                    throw new IllegalArgumentException("Duplicate entity mapping: " + d.entityType());
+            } catch (Exception e) {
+                SkyBlockRPG.LOGGER.error("Failed to load mob data from {}", entry.getKey(), e);
+            }
+        }
+        DEFINITIONS.clear(); DEFINITIONS.putAll(loaded);
+        ENTITY_TYPES.clear(); ENTITY_TYPES.putAll(byEntity);
+        SkyBlockRPG.LOGGER.info("Loaded {} SkyBlock mob definitions.", DEFINITIONS.size());
     }
+    public static MobDefinition get(Entity entity) {
+        String id = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
+        return ENTITY_TYPES.getOrDefault(id, UNREGISTERED);
+    }
+    public static Optional<MobDefinition> getById(String id) {
+        return Optional.ofNullable(DEFINITIONS.get(id == null ? "" : id.toLowerCase(Locale.ROOT)));
+    }
+    public static Collection<MobDefinition> all() { return Collections.unmodifiableCollection(DEFINITIONS.values()); }
+    private static String required(JsonObject j,String k) {
+        if (!j.has(k) || j.get(k).isJsonNull()) throw new IllegalArgumentException("Missing " + k);
+        return j.get(k).getAsString();
+    }
+    private static String optional(JsonObject j,String k,String d) { return j.has(k) && !j.get(k).isJsonNull() ? j.get(k).getAsString() : d; }
+    private static int integer(JsonObject j,String k,int d) { return j.has(k) ? j.get(k).getAsInt() : d; }
+    private static long longNumber(JsonObject j,String k,long d) { return j.has(k) ? j.get(k).getAsLong() : d; }
+    private static double number(JsonObject j,String k,double d) { return j.has(k) ? j.get(k).getAsDouble() : d; }
 }
