@@ -35,5 +35,6 @@
       "chance_known": false,
       "drop_type": "item"
     }
-  ]
+  ],
+  "spawn_entity_type": "minecraft:slime"
 }
