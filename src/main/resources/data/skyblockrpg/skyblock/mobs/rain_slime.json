@@ -1,0 +1,32 @@
+{
+  "id": "rain_slime",
+  "name": "Rain Slime",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:slime",
+  "level": 6,
+  "health": 200,
+  "damage": 50,
+  "defense": 0,
+  "coin_reward": 2,
+  "combat_xp_reward": 9,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Rain_Slime",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed values; rain/time spawn conditions are not implemented yet; Defense is a project placeholder.",
+  "family_id": "rain_slime",
+  "category": "hostile",
+  "mob_types": [
+    "cubic"
+  ],
+  "area": "spider_den",
+  "drops": [
+    {
+      "item_id": "slimeball",
+      "min_count": 3,
+      "max_count": 5,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
