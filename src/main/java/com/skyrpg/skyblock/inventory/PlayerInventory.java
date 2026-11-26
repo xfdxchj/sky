@@ -56,15 +56,9 @@ public final class PlayerInventory {
 
     public boolean equip(String itemId) {
         ItemDefinition def = ItemRegistry.get(itemId).orElse(null);
-        if (def == null || !def.isEquippable() || def.equipmentSlot() == EquipmentSlot.ACCESSORY
-                || getCount(def.id()) < 1) return false;
+        if (def == null || !def.isEquippable() || getCount(def.id()) < 1) return false;
         EquipmentSlot slot = def.equipmentSlot();
         String previous = equipment.get(slot);
-        if (previous != null && getUsedSlots() >= CAPACITY) {
-            int currentCount = getCount(previous);
-            int max = ItemRegistry.get(previous).map(ItemDefinition::maxStackSize).orElse(1);
-            if (currentCount == 0 && max <= 1) return false;
-        }
         if (!remove(def.id(), 1)) return false;
         if (previous != null && !add(previous, 1)) {
             add(def.id(), 1);
