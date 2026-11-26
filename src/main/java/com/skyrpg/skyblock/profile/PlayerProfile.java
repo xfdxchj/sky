@@ -126,7 +126,17 @@ public final class PlayerProfile {
     public int getAccessoryPower() { return AccessoryPowerManager.getAccessoryPower(inventory, false); }
     public String getSelectedPower() { return selectedPower; }
     public Set<String> getUnlockedPowers() { return Collections.unmodifiableSet(unlockedPowers); }
-    public Map<StatType, Integer> getTuningAllocations() { return Collections.unmodifiableMap(tuningAllocations); }
+    public Map<StatType, Integer> getTuningAllocations() {
+        Map<StatType, Integer> effective = new EnumMap<>(StatType.class);
+        int remaining = AccessoryPowerManager.getTuningPoints(getAccessoryPower());
+        for (StatType type : StatType.values()) {
+            int stored = tuningAllocations.getOrDefault(type, 0);
+            int accepted = Math.min(stored, remaining);
+            if (accepted > 0) effective.put(type, accepted);
+            remaining -= accepted;
+        }
+        return Collections.unmodifiableMap(effective);
+    }
 
     public boolean selectPower(String powerId) {
         String id = powerId == null ? "" : powerId.trim().toLowerCase(java.util.Locale.ROOT);
@@ -155,7 +165,7 @@ public final class PlayerProfile {
 
     public boolean setTuningPoints(StatType stat, int points) {
         if (!AccessoryPowerManager.isTunable(stat) || points < 0) return false;
-        int usedOther = tuningAllocations.entrySet().stream()
+        int usedOther = getTuningAllocations().entrySet().stream()
                 .filter(entry -> entry.getKey() != stat).mapToInt(Map.Entry::getValue).sum();
         if (usedOther + points > AccessoryPowerManager.getTuningPoints(getAccessoryPower())) return false;
         if (points == 0) tuningAllocations.remove(stat); else tuningAllocations.put(stat, points);
@@ -175,13 +185,13 @@ public final class PlayerProfile {
         }
     }
 
-    public int getUsedTuningPoints() { return tuningAllocations.values().stream().mapToInt(Integer::intValue).sum(); }
+    public int getUsedTuningPoints() { return getTuningAllocations().values().stream().mapToInt(Integer::intValue).sum(); }
 
     public double getFinalStat(StatType type) {
         java.util.List<StatModifier> modifiers = new java.util.ArrayList<>(inventory.getStatModifiers());
         int ap = getAccessoryPower();
         modifiers.addAll(AccessoryPowerManager.getPowerModifiers(selectedPower, ap));
-        int tuning = tuningAllocations.getOrDefault(type, 0);
+        int tuning = getTuningAllocations().getOrDefault(type, 0);
         double tuningValue = AccessoryPowerManager.tuningValue(type) * tuning;
         if (tuningValue != 0) modifiers.add(new StatModifier("accessory_tuning:" + type.id(), type,
                 tuningValue, StatModifier.Operation.ADDITIVE));
