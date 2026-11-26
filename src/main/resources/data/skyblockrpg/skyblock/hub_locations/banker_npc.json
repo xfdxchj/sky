@@ -1,0 +1,14 @@
+{
+  "id": "banker_npc",
+  "name": "Banker (NPC position)",
+  "parent_id": "bank",
+  "category": "npc",
+  "dimension": "minecraft:overworld",
+  "x": -29.5,
+  "y": 72.0,
+  "z": -38.0,
+  "description": "Published reference position for the Banker NPC; not yet an NPC spawn instruction.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Bank",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
