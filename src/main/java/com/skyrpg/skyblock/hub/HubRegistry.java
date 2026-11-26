@@ -20,8 +20,6 @@ import java.util.Optional;
 
 public final class HubRegistry {
     private static final Map<String, HubLocationDefinition> LOCATIONS = new LinkedHashMap<>();
-    private static String catalogVersion = "unknown";
-
     private HubRegistry() {}
 
     public static void reload(ResourceManager manager) {
