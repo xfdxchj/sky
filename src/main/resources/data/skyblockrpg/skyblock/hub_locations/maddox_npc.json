@@ -1,0 +1,14 @@
+{
+  "id": "maddox_npc",
+  "name": "Maddox the Slayer (NPC position)",
+  "parent_id": "tavern",
+  "category": "npc",
+  "dimension": "minecraft:overworld",
+  "x": -83.5,
+  "y": 68,
+  "z": -129.5,
+  "description": "Published NPC reference position in the Tavern basement. This is a coordinate reference only, not an NPC spawn instruction.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Tavern",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
