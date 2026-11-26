@@ -9,6 +9,9 @@ import com.skyrpg.skyblock.profile.ProfileManager;
 import com.skyrpg.skyblock.region.RegionDefinition;
 import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpManager;
+import com.skyrpg.skyblock.quest.QuestDefinition;
+import com.skyrpg.skyblock.quest.QuestManager;
+import com.skyrpg.skyblock.quest.QuestRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -52,6 +55,7 @@ public final class NpcManager {
 
         player.sendMessage(Text.literal("§e[NPC] " + npc.displayName()), false);
         for (String line : npc.dialogue()) player.sendMessage(Text.literal(line), false);
+        QuestManager.onNpcTalk(player, npc.id());
         runAction(player, npc);
         return true;
     }
@@ -75,6 +79,13 @@ public final class NpcManager {
             case "warp" -> {
                 WarpManager.WarpResult result = WarpManager.teleport(player, npc.actionTarget());
                 player.sendMessage(Text.literal(result.message()), false);
+            }
+            case "quest_board" -> {
+                player.sendMessage(Text.literal("Available quests:"), false);
+                for (QuestDefinition quest : QuestRegistry.all()) {
+                    player.sendMessage(Text.literal("- " + quest.title() + " [" + QuestManager.status(profile, quest) + "]"
+                            + " | /skyblock quest accept " + quest.id()), false);
+                }
             }
             default -> { }
         }
