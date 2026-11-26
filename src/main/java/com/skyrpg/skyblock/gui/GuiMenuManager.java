@@ -6,12 +6,12 @@ import com.skyrpg.skyblock.quest.QuestManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
 import com.skyrpg.skyblock.economy.ShopOffer;
 import com.skyrpg.skyblock.economy.ShopRegistry;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -124,6 +124,10 @@ public final class GuiMenuManager {
     private static void set(SimpleInventory inventory, int slot, Item item, String name, String... lore) {
         ItemStack stack = new ItemStack(item);
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.YELLOW));
+        if (lore.length > 0) {
+            stack.set(DataComponentTypes.LORE, new LoreComponent(
+                    java.util.Arrays.stream(lore).map(Text::literal).toList()));
+        }
         inventory.setStack(slot, stack);
     }
 }
