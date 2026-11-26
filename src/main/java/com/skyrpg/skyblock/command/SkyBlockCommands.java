@@ -18,6 +18,11 @@ import com.skyrpg.skyblock.skill.SkillManager;
 import com.skyrpg.skyblock.skill.SkillType;
 import com.skyrpg.skyblock.stats.StatType;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import net.minecraft.text.Text;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -170,7 +175,11 @@ public final class SkyBlockCommands {
                                             + " | Chance: " + (drop.chanceKnown() ? String.format("%.6f%%", drop.chance() * 100.0) : "unknown")), false));
                             context.getSource().sendFeedback(() -> Text.literal("Source: " + mob.sourceType() + " | " + mob.confidence() + (mob.sourceUrl().isBlank() ? "" : " | " + mob.sourceUrl())), false);
                             return 1;
-                        }))))
+                        })))
+                        .then(literal("spawn").requires(source -> source.hasPermissionLevel(2))
+                                .then(argument("mobId", StringArgumentType.word()).executes(context ->
+                                        spawnMob(context.getSource(), StringArgumentType.getString(context, "mobId")))))
+                )
                 .then(literal("items").executes(context -> {
                     for (ItemDefinition item : ItemRegistry.all()) {
                         context.getSource().sendFeedback(() -> Text.literal(
@@ -248,6 +257,47 @@ public final class SkyBlockCommands {
                     return 1;
                 })))
         );
+    }
+
+    private static int spawnMob(ServerCommandSource source, String mobId) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        var player = source.getPlayerOrThrow();
+        MobDefinition mob = MobRegistry.getById(mobId).orElse(null);
+        if (mob == null) {
+            source.sendError(Text.literal("Unknown SkyBlock mob: " + mobId));
+            return 0;
+        }
+        if (mob.spawnEntityType().isBlank()) {
+            source.sendError(Text.literal("Mob has no spawn entity configured: " + mob.id()));
+            return 0;
+        }
+        Identifier entityId = Identifier.tryParse(mob.spawnEntityType());
+        if (entityId == null) {
+            source.sendError(Text.literal("Invalid spawn entity type: " + mob.spawnEntityType()));
+            return 0;
+        }
+        EntityType<?> type = Registries.ENTITY_TYPE.getOrEmpty(entityId).orElse(null);
+        if (type == null) {
+            source.sendError(Text.literal("Unknown Minecraft entity type: " + entityId));
+            return 0;
+        }
+        Entity entity = type.create(player.getServerWorld());
+        if (!(entity instanceof LivingEntity living)) {
+            source.sendError(Text.literal("Configured entity is not a living entity: " + entityId));
+            return 0;
+        }
+        var position = player.getPos().add(player.getRotationVec(1.0F).multiply(2.0));
+        entity.refreshPositionAndAngles(position.x, position.y, position.z, player.getYaw(), 0.0F);
+        entity.addCommandTag(MobRegistry.entityTag(mob.id()));
+        entity.setCustomName(Text.literal("[Lv" + mob.level() + "] " + mob.displayName()));
+        entity.setCustomNameVisible(true);
+        living.setHealth(living.getMaxHealth());
+        if (!player.getServerWorld().spawnEntity(entity)) {
+            source.sendError(Text.literal("Could not spawn mob: " + mob.id()));
+            return 0;
+        }
+        source.sendFeedback(() -> Text.literal("Spawned " + mob.displayName() + " [Lv" + mob.level()
+                + "] with " + mob.health() + " SkyBlock HP. Tag: " + MobRegistry.entityTag(mob.id())), false);
+        return 1;
     }
 
     private static int giveItem(ServerCommandSource source, String itemId, int count) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
