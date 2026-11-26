@@ -42,7 +42,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 | P2 物品与装备 | 🟡 基础已有 | JSON 物品定义、逻辑背包、装备、饰品包、Power、Tuning、Reforge 基础存在；物品实例、附魔、原版物品注册和完整 Tooltip 未完成 |
 | P3 战斗与怪物 | 🟡 基础已有 | 伤害计算、怪物 JSON、独立怪物 HP、玩家受伤桥接和手动生成存在；掉落闭环、自然刷怪、AI 与完整战斗反馈未完成 |
 | P4 成长与解锁 | 🟡 基础已有 | NPC、任务基础、对话和 GUI 框架存在；Collections、配方、Bestiary 和完整目标类型未完成 |
-| P5 世界与地图 | 🟡 框架与目录已有 | 区域、Warp、岛屿、NBT 结构导入、桥梁和传送路线已有；P5.3 已建立 9 个有来源的 Hub POI 坐标记录与查询命令；真实地形、建筑、NPC 实体布置、区域边界和私人岛完整玩法仍未完成 |
+| P5 世界与地图 | 🟡 框架与目录已有 | 区域、Warp、岛屿、NBT 结构导入、桥梁和传送路线已有；P5.3 已建立 25 个有来源的 Hub POI 坐标记录与查询命令；真实地形、建筑、NPC 实体布置、区域边界和私人岛完整玩法仍未完成 |
 | P6 生活职业 | ⬜ 未开始 | Mining、Farming、Fishing、Foraging 的完整循环未实现 |
 | P7 自动化与经济扩展 | 🟡 经济基础已有 | Purse、Bank、商店已有；Minion、仓库扩展和单机市场模拟未完成 |
 | P8 Slayer 与 Boss | ⬜ 未开始 | 尚无完整 Slayer 任务和 Boss 战斗闭环 |
@@ -108,7 +108,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `IslandRegistry`、`IslandManager`：岛屿定义、测试岛生成与访问。
 - `StructureRegistry`、`StructureImportManager`：原生结构 NBT 导入和放置。
 - `ConnectionRegistry`、`ConnectionManager`：桥梁与传送路线定义、桥面生成和入口距离校验。
-- `HubLocationDefinition`、`HubRegistry`：9 个有来源的 Hub 地点/NPC 参考坐标；`HubCommands` 提供列表、详情、定位和最近点查询。
+- `HubLocationDefinition`、`HubRegistry`：25 个有来源的 Hub 地点/NPC 参考坐标；`HubCommands` 提供列表、详情、定位和最近点查询。
 
 **边界：** 当前 starter island、marker、bridge、portal、outpost 都是项目测试 fixture，不是 Hypixel 地图坐标或官方地图资产。
 
@@ -143,7 +143,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - NPC 分支对话与交互 GUI。
 
 ### P5 世界与地图
-- P5.3 已完成 Hub POI 数据模型、9 条有来源的坐标记录和列表/详情/定位/最近点命令；这只是地图数据基础。
+- P5.3 已完成 Hub POI 数据模型、25 条有来源的坐标记录和列表/详情/定位/最近点命令；这只是地图数据基础。
 - Hub 真实地形与建筑结构、Region 实际边界、NPC 实体放置、商店与 Warp 绑定仍未完成。
 - Private Island 的玩家绑定、建造权限、边界、扩建和存档隔离仍未完成。
 - 地图资源来源、许可、版本、坐标变换和完整性检查仍需完善。
