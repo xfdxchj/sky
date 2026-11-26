@@ -157,7 +157,7 @@ public final class SkyBlockCommands {
                                 context.getSource().sendFeedback(() -> Text.literal(
                                         offer.shopName() + " | " + offer.itemId() + " (" + itemName + ")"
                                                 + " | Buy: " + offer.buyPrice()
-                                                + " | Sell: " + (offer.canSell() ? offer.sellPrice() : "not accepted")), false);
+                                                + " | Sell: " + (offer.canSell() ? Long.toString(offer.sellPrice()) : "not accepted")), false);
                             }
                             return 1;
                         })
