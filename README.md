@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.3 (NPC interaction foundation; build/test pending)
+## Current milestone: P4.4 (dialogue and quest foundation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -56,6 +56,10 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock npc list`
 - `/skyblock npc info <npcId>`
 - `/skyblock npc spawn <npcId>` (permission level 2; development/test spawn)
+- `/skyblock quest list`
+- `/skyblock quest info <questId>`
+- `/skyblock quest accept <questId>`
+- `/skyblock quest abandon <questId>`
 - `/skyblock region list`
 - `/skyblock region here`
 - `/skyblock warp list`
@@ -112,6 +116,17 @@ This is the simplified melee core only. It does not yet include additive damage 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
 
+### P4.4 dialogue and quest foundation
+- Design: `docs/P4.4_DIALOGUE_QUEST_DESIGN.md`
+- Test checklist: `docs/P4.4_DIALOGUE_QUEST_TEST_PLAN.md`
+- Adds JSON-driven quest definitions with a first objective type: talk to a configured NPC.
+- Adds persistent active/completed quest state and objective progress to player profiles; older saves migrate additively to schema version 5.
+- Adds quest list, info, accept and abandon commands.
+- NPC interactions advance matching active quests; completion grants configured Purse coins and optional skill XP exactly once.
+- Starter guide acts as a quest board; the sample `meet_the_banker` quest asks the player to speak with the Banker.
+- Dialogue is still plain chat text and quest interaction is command-driven. No branching dialogue GUI, clickable options, kill/item objectives, quest chains or tracking HUD yet.
+- Local Java 21 Gradle build and in-game verification are pending.
+
 ### P4.3 NPC interaction foundation
 - Design: `docs/P4.3_NPC_DESIGN.md`
 - Test checklist: `docs/P4.3_NPC_TEST_PLAN.md`
@@ -121,7 +136,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Server-side right-click interaction suppresses vanilla trading for tagged NPCs and supports guide dialogue plus existing Bank, Shop catalogue and Warp entry points.
 - Includes three starter test NPC definitions; they are fixtures, not verified Hypixel NPC placements or dialogue.
 - No custom NPC models/skins, GUI dialogue choices, quest engine, natural placement or schedules yet.
-- Local Java 21 Gradle build and in-game verification are pending.
+- Local Java 21 Gradle build and in-game verification for P4.3 remain pending.
 
 ### P4.2 region and warp foundation
 - Design: `docs/P4.2_REGION_WARP_DESIGN.md`
