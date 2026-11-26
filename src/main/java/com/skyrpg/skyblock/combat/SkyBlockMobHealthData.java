@@ -41,6 +41,8 @@ public final class SkyBlockMobHealthData extends PersistentState {
         return state.current();
     }
 
+    public MobHealth getState(LivingEntity entity) { return mobs.get(entity.getUuid()); }
+
     public void setCurrent(LivingEntity entity, MobDefinition definition, double current) {
         MobHealth old = mobs.get(entity.getUuid());
         double maximum = old != null && old.mobId().equals(definition.id())
