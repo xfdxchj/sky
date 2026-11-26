@@ -1,0 +1,14 @@
+{
+  "id": "museum",
+  "name": "Museum",
+  "parent_id": "village",
+  "category": "service",
+  "dimension": "minecraft:overworld",
+  "x": -73,
+  "y": 76,
+  "z": 80,
+  "description": "Village location for item donations and Museum progression.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Museum",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
