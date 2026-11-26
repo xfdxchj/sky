@@ -24,7 +24,7 @@ The API documentation describes these endpoints as resources for SkyBlock items,
 
 ## Community-maintained Hypixel SkyBlock Wiki references
 
-These are useful current references, but they are not official Hypixel API data and can be edited by the community.
+These are useful current references, but they are not official Hypixel API data and can be edited by the community. Some pages explicitly warn that recently added or changing content may be incomplete or inaccurate; treat imported rows as sourced community data, not guaranteed ground truth.
 
 - Melee damage calculation: https://hypixelskyblock.minecraft.wiki/w/Damage_Calculation
   - Simplified melee core: `(5 + WeaponDamage) * (1 + Strength / 100) * (1 + CritDamage / 100)` on a critical hit, before additional multipliers and target mitigation.
