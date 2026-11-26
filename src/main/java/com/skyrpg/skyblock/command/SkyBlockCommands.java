@@ -33,6 +33,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.text.Text;
@@ -488,6 +489,7 @@ public final class SkyBlockCommands {
         entity.setCustomNameVisible(true);
         entity.setInvulnerable(true);
         entity.setSilent(true);
+        if (entity instanceof MobEntity mobEntity) mobEntity.setAiDisabled(true);
         if (!player.getServerWorld().spawnEntity(entity)) {
             source.sendError(Text.literal("Could not spawn NPC: " + npc.id()));
             return 0;
