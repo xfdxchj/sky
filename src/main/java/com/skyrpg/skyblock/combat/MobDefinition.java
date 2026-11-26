@@ -1,12 +1,26 @@
 package com.skyrpg.skyblock.combat;
 
-/** Combat metadata layered over vanilla entities; does not replace their AI or model. */
-public record MobDefinition(String id, String displayName, double defense, long coinReward, double combatXpReward) {
+public record MobDefinition(
+        String id, String displayName, String entityType, int level,
+        double health, double damage, double defense, long coinReward,
+        double combatXpReward, String sourceType, String sourceUrl,
+        String retrievedAt, String confidence) {
     public MobDefinition {
         if (id == null || id.isBlank()) throw new IllegalArgumentException("Mob id cannot be blank");
         if (displayName == null || displayName.isBlank()) displayName = id;
-        defense = Double.isFinite(defense) ? Math.max(0.0, defense) : 0.0;
+        entityType = entityType == null ? "" : entityType;
+        level = Math.max(0, level);
+        health = nonNegative(health);
+        damage = nonNegative(damage);
+        defense = nonNegative(defense);
         coinReward = Math.max(0L, coinReward);
-        combatXpReward = Double.isFinite(combatXpReward) ? Math.max(0.0, combatXpReward) : 0.0;
+        combatXpReward = nonNegative(combatXpReward);
+        sourceType = sourceType == null ? "unknown" : sourceType;
+        sourceUrl = sourceUrl == null ? "" : sourceUrl;
+        retrievedAt = retrievedAt == null ? "" : retrievedAt;
+        confidence = confidence == null ? "unverified" : confidence;
+    }
+    private static double nonNegative(double value) {
+        return Double.isFinite(value) ? Math.max(0.0, value) : 0.0;
     }
 }
