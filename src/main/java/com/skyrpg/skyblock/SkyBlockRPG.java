@@ -15,6 +15,7 @@ import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.npc.NpcManager;
+import com.skyrpg.skyblock.quest.QuestRegistry;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -45,6 +46,7 @@ public final class SkyBlockRPG implements ModInitializer {
             RegionRegistry.reload(server.getResourceManager());
             WarpRegistry.reload(server.getResourceManager());
             NpcRegistry.reload(server.getResourceManager());
+            QuestRegistry.reload(server.getResourceManager());
             LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
         });
 
