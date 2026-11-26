@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.0 (economy and shop; build/test pending)
+## Current milestone: P4.1 (bank and purse separation; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -50,6 +50,9 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock coins`
 - `/skyblock coins add <amount>` (permission level 2)
 - `/skyblock coins remove <amount>` (permission level 2)
+- `/skyblock bank` (show Purse and Bank balances)
+- `/skyblock bank deposit <amount>`
+- `/skyblock bank withdraw <amount>`
 - `/skyblock skill <skill>`
 - `/skyblock skill <skill> add <amount>` (permission level 2)
 - `/skyblock shop` (list offers)
@@ -101,6 +104,15 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P4.1 bank and purse separation
+- Design: `docs/P4.1_BANK_DESIGN.md`
+- Test checklist: `docs/P4.1_BANK_TEST_PLAN.md`
+- Adds a persistent Bank balance beside the existing Purse balance in the same player profile.
+- Existing profiles migrate additively: missing Bank defaults to 0; existing Purse, skills, stats and inventory are preserved.
+- Deposit and withdrawal are atomic profile mutations with positive-amount, insufficient-funds and overflow checks.
+- Shop transactions continue to use Purse only. No interest, fees, limits, Banker NPC or GUI yet.
+- Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.0 economy and shop
 - Design: `docs/P4.0_ECONOMY_SHOP_DESIGN.md`
