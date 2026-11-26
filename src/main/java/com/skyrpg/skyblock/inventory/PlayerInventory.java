@@ -2,21 +2,26 @@ package com.skyrpg.skyblock.inventory;
 
 import com.skyrpg.skyblock.item.ItemDefinition;
 import com.skyrpg.skyblock.item.ItemRegistry;
+import com.skyrpg.skyblock.item.ItemType;
 import com.skyrpg.skyblock.stats.StatModifier;
 import com.skyrpg.skyblock.stats.StatType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import java.util.*;
 
-/** Logical SkyBlock inventory, intentionally separate from vanilla's 36-slot inventory. */
+/** Logical SkyBlock inventory, separate from vanilla's inventory. */
 public final class PlayerInventory {
     public static final int CAPACITY = 36;
+    public static final int ACCESSORY_BAG_CAPACITY = 9;
     private final Map<String, Integer> items = new LinkedHashMap<>();
     private final EnumMap<EquipmentSlot, String> equipment = new EnumMap<>(EquipmentSlot.class);
+    private final List<String> accessoryBag = new ArrayList<>();
 
     public Map<String, Integer> getItems() { return Collections.unmodifiableMap(items); }
     public Map<EquipmentSlot, String> getEquipment() { return Collections.unmodifiableMap(equipment); }
+    public List<String> getAccessoryBag() { return Collections.unmodifiableList(accessoryBag); }
     public int getCount(String itemId) { return items.getOrDefault(itemId, 0); }
     public int getUsedSlots() {
         int slots = 0;
@@ -51,9 +56,15 @@ public final class PlayerInventory {
 
     public boolean equip(String itemId) {
         ItemDefinition def = ItemRegistry.get(itemId).orElse(null);
-        if (def == null || !def.isEquippable() || getCount(def.id()) < 1) return false;
+        if (def == null || !def.isEquippable() || def.equipmentSlot() == EquipmentSlot.ACCESSORY
+                || getCount(def.id()) < 1) return false;
         EquipmentSlot slot = def.equipmentSlot();
         String previous = equipment.get(slot);
+        if (previous != null && getUsedSlots() >= CAPACITY) {
+            int currentCount = getCount(previous);
+            int max = ItemRegistry.get(previous).map(ItemDefinition::maxStackSize).orElse(1);
+            if (currentCount == 0 && max <= 1) return false;
+        }
         if (!remove(def.id(), 1)) return false;
         if (previous != null && !add(previous, 1)) {
             add(def.id(), 1);
@@ -64,28 +75,59 @@ public final class PlayerInventory {
     }
 
     public boolean unequip(EquipmentSlot slot) {
+        if (slot == EquipmentSlot.ACCESSORY) return false;
         String itemId = equipment.get(slot);
-        if (itemId == null) return false;
-        if (!add(itemId, 1)) return false;
+        if (itemId == null || !add(itemId, 1)) return false;
         equipment.remove(slot);
+        return true;
+    }
+
+    /** Moves one accessory from the logical inventory into the bag. Duplicate accessory IDs are rejected. */
+    public boolean addAccessory(String itemId) {
+        ItemDefinition def = ItemRegistry.get(itemId).orElse(null);
+        if (def == null || def.type() != ItemType.ACCESSORY || accessoryBag.size() >= ACCESSORY_BAG_CAPACITY
+                || accessoryBag.contains(def.id()) || getCount(def.id()) < 1) return false;
+        if (!remove(def.id(), 1)) return false;
+        accessoryBag.add(def.id());
+        return true;
+    }
+
+    /** Returns an accessory to the logical inventory; the bag is unchanged if inventory insertion fails. */
+    public boolean removeAccessory(String itemId) {
+        int index = accessoryBag.indexOf(itemId);
+        if (index < 0 || !add(itemId, 1)) return false;
+        accessoryBag.remove(index);
         return true;
     }
 
     public List<StatModifier> getStatModifiers() {
         List<StatModifier> result = new ArrayList<>();
-        equipment.forEach((slot, id) -> ItemRegistry.get(id).ifPresent(def ->
-                def.stats().forEach((stat, amount) -> result.add(new StatModifier("equipment:" + id, stat, amount, StatModifier.Operation.ADDITIVE)))));
+        equipment.forEach((slot, id) -> addItemModifiers(result, "equipment:" + slot.id() + ":" + id, id));
+        for (String id : accessoryBag) addItemModifiers(result, "accessory:" + id, id);
         return result;
+    }
+
+    private static void addItemModifiers(List<StatModifier> result, String source, String id) {
+        ItemRegistry.get(id).ifPresent(def -> def.stats().forEach((stat, amount) ->
+                result.add(new StatModifier(source, stat, amount, StatModifier.Operation.ADDITIVE))));
     }
 
     public NbtCompound toNbt() {
         NbtCompound nbt = new NbtCompound();
         NbtList itemList = new NbtList();
-        items.forEach((id, count) -> { NbtCompound entry = new NbtCompound(); entry.putString("id", id); entry.putInt("count", count); itemList.add(entry); });
+        items.forEach((id, count) -> {
+            NbtCompound entry = new NbtCompound();
+            entry.putString("id", id);
+            entry.putInt("count", count);
+            itemList.add(entry);
+        });
         nbt.put("items", itemList);
         NbtCompound equipped = new NbtCompound();
         equipment.forEach((slot, id) -> equipped.putString(slot.id(), id));
         nbt.put("equipment", equipped);
+        NbtList accessories = new NbtList();
+        accessoryBag.forEach(id -> accessories.add(NbtString.of(id)));
+        nbt.put("accessoryBag", accessories);
         return nbt;
     }
 
@@ -94,14 +136,24 @@ public final class PlayerInventory {
         NbtList list = nbt.getList("items", NbtElement.COMPOUND_TYPE);
         for (int i = 0; i < list.size(); i++) {
             NbtCompound entry = list.getCompound(i);
-            String id = entry.getString("id"); int count = entry.getInt("count");
+            String id = entry.getString("id");
+            int count = entry.getInt("count");
             if (count > 0) inventory.add(id, count);
         }
         NbtCompound equipped = nbt.getCompound("equipment");
         for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot == EquipmentSlot.ACCESSORY) continue;
             String id = equipped.getString(slot.id());
             ItemDefinition def = ItemRegistry.get(id).orElse(null);
             if (def != null && def.isEquippable() && def.equipmentSlot() == slot) inventory.equipment.put(slot, id);
+        }
+        NbtList accessories = nbt.getList("accessoryBag", NbtElement.STRING_TYPE);
+        for (int i = 0; i < accessories.size() && inventory.accessoryBag.size() < ACCESSORY_BAG_CAPACITY; i++) {
+            String id = accessories.getString(i);
+            ItemDefinition def = ItemRegistry.get(id).orElse(null);
+            if (def != null && def.type() == ItemType.ACCESSORY && !inventory.accessoryBag.contains(def.id())) {
+                inventory.accessoryBag.add(def.id());
+            }
         }
         return inventory;
     }
