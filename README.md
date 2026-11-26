@@ -67,7 +67,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 - Design: `docs/P3.5_DESIGN.md`
 - Test checklist: `docs/P3.5_TEST_PLAN.md`
 - Adds 12 sourced Spider's Den and The End definitions, increasing the catalogue from 58 to 70 records.
-- Adds `spawn_entity_type` and per-entity command-tag identity so multiple SkyBlock mob definitions can share one vanilla stand-in without colliding in the entity-type fallback map.
+- Adds `spawn_entity_type` to all 70 records and per-entity command-tag identity so multiple SkyBlock mob definitions can share one vanilla stand-in without colliding in the entity-type fallback map. This includes explicit spawning of the 15-level Private Island Zombie/Skeleton/Spider variants and the 12 new records.
 - `/skyblock mob spawn <mobId>` creates a tagged stand-in with a `[LvX] Name` label and routes attacks/HP through the selected definition.
 - This is explicit test spawning only; natural region spawns, loot rolls and unique AI are not implemented yet.
 
