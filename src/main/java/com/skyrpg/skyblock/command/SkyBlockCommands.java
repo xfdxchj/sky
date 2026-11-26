@@ -6,6 +6,8 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.skyrpg.skyblock.economy.CurrencyManager;
+import com.skyrpg.skyblock.combat.MobDefinition;
+import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
 import com.skyrpg.skyblock.item.ItemDefinition;
 import com.skyrpg.skyblock.item.ItemRegistry;
@@ -137,6 +139,32 @@ public final class SkyBlockCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Attack living mobs while a SkyBlock weapon is equipped."), false);
                     return 1;
                 }))
+                .then(literal("mob")
+                        .then(literal("list").executes(context -> {
+                            var mobs = MobRegistry.all();
+                            context.getSource().sendFeedback(() -> Text.literal("Loaded SkyBlock mobs: " + mobs.size()), false);
+                            for (MobDefinition mob : mobs) {
+                                context.getSource().sendFeedback(() -> Text.literal(
+                                        mob.id() + " | " + mob.displayName() + " | Lv" + mob.level()
+                                                + " | HP " + mob.health() + " | Damage " + mob.damage()
+                                                + " | Defense " + mob.defense()), false);
+                            }
+                            return 1;
+                        }))
+                        .then(literal("info").then(argument("mobId", StringArgumentType.word()).executes(context -> {
+                            String id = StringArgumentType.getString(context, "mobId");
+                            MobDefinition mob = MobRegistry.getById(id).orElse(null);
+                            if (mob == null) {
+                                context.getSource().sendError(Text.literal("Unknown SkyBlock mob: " + id));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal(mob.displayName() + " [" + mob.id() + "] | Lv" + mob.level()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("HP " + mob.health() + " | Damage " + mob.damage() + " | Defense " + mob.defense()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Rewards: " + mob.coinReward() + " coins, " + mob.combatXpReward() + " Combat XP"), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Entity mapping: " + (mob.entityType().isBlank() ? "none" : mob.entityType())), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Source: " + mob.sourceType() + " | " + mob.confidence()), false);
+                            return 1;
+                        }))))
                 .then(literal("items").executes(context -> {
                     for (ItemDefinition item : ItemRegistry.all()) {
                         context.getSource().sendFeedback(() -> Text.literal(
@@ -145,12 +173,26 @@ public final class SkyBlockCommands {
                     }
                     return 1;
                 }))
-                .then(literal("item").then(literal("give").requires(source -> source.hasPermissionLevel(2))
-                        .then(argument("itemId", StringArgumentType.word())
-                                .executes(context -> giveItem(context.getSource(), StringArgumentType.getString(context, "itemId"), 1))
-                                .then(argument("count", IntegerArgumentType.integer(1, 2304)).executes(context ->
-                                        giveItem(context.getSource(), StringArgumentType.getString(context, "itemId"),
-                                                IntegerArgumentType.getInteger(context, "count")))))))
+                .then(literal("item")
+                        .then(literal("give").requires(source -> source.hasPermissionLevel(2))
+                                .then(argument("itemId", StringArgumentType.word())
+                                        .executes(context -> giveItem(context.getSource(), StringArgumentType.getString(context, "itemId"), 1))
+                                        .then(argument("count", IntegerArgumentType.integer(1, 2304)).executes(context ->
+                                                giveItem(context.getSource(), StringArgumentType.getString(context, "itemId"),
+                                                        IntegerArgumentType.getInteger(context, "count"))))))
+                        .then(literal("info").then(argument("itemId", StringArgumentType.word()).executes(context -> {
+                            String id = StringArgumentType.getString(context, "itemId");
+                            ItemDefinition item = ItemRegistry.get(id).orElse(null);
+                            if (item == null) {
+                                context.getSource().sendError(Text.literal("Unknown item id: " + id));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal(item.name() + " [" + item.id() + "] | " + item.rarity() + " | " + item.type()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Slot: " + (item.isEquippable() ? item.equipmentSlot().id() : "none") + " | Max stack: " + item.maxStackSize()), false);
+                            item.stats().forEach((stat, value) -> context.getSource().sendFeedback(() -> Text.literal(stat.id() + ": " + value), false));
+                            item.lore().forEach(line -> context.getSource().sendFeedback(() -> Text.literal(line), false));
+                            return 1;
+                        }))))
                 .then(literal("inventory").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     var inventory = ProfileManager.get(player).getInventory();
