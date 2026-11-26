@@ -2,7 +2,7 @@
   "id": "private_island_spider",
   "name": "Private Island Spider (starter analogue)",
   "entity_type": "minecraft:spider",
-  "level": 1,
+  "level": 3,
   "health": 120,
   "damage": 35,
   "defense": 0,
@@ -11,5 +11,27 @@
   "source_type": "community-wiki",
   "source_url": "https://hypixelskyblock.minecraft.wiki/w/Spider",
   "retrieved_at": "2026-11-26",
-  "confidence": "Wiki-listed minimum range HP/Damage/XP/Coins; exact lowest-level row needs confirmation; Defense 0 remains a project placeholder."
+  "confidence": "Wiki-listed minimum range HP/Damage/XP/Coins; exact lowest-level row needs confirmation; Defense 0 remains a project placeholder.",
+  "family_id": "spider",
+  "category": "hostile",
+  "mob_types": [
+    "arthropod"
+  ],
+  "area": "private_island",
+  "drops": [
+    {
+      "item_id": "spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "string",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "drop_type": "item"
+    }
+  ]
 }
