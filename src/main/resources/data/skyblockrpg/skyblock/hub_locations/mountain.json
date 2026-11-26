@@ -1,0 +1,14 @@
+{
+  "id": "mountain",
+  "name": "Mountain",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": -12,
+  "y": 151,
+  "z": 44,
+  "description": "Large elevated Hub area behind Village.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Mountain",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
