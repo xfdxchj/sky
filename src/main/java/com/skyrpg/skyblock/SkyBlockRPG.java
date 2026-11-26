@@ -111,6 +111,6 @@ public final class SkyBlockRPG implements ModInitializer {
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
         });
 
-        LOGGER.info("{} v{} initialized. P5.3 Hub location catalogue is ready.", MOD_NAME, "0.1.0-alpha.3");
+        LOGGER.info("{} v{} initialized. P5.4 Private Island foundation is ready.", MOD_NAME, "0.1.0-alpha.3");
     }
 }
