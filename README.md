@@ -34,7 +34,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 ### Data provenance
 - Hypixel's official public API documents SkyBlock resources such as items, collections and skills. It does not provide a complete public mob-stat / mob-reward endpoint.
 - The P3.1 combat formula and baseline Crit Chance/Crit Damage are community-wiki references. See `DATA_SOURCES.md`.
-- P3.2 starter mob level/HP/Damage/Defense fields are explicitly provisional project values, not official Hypixel data. Existing coin/Combat XP values preserve the P3.1 tested behavior.
+- P3.2 starter mob level/HP/Damage/reward values are tagged community-wiki sourced; Defense 0 is a project placeholder. The Spider minimum-tier row still needs verification. These are not official API values.
 - The training sword's item stats remain project test values, not a Hypixel item.
 
 ### Commands
