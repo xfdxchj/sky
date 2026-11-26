@@ -1,0 +1,11 @@
+{
+  "id": "golden_apple",
+  "name": "Golden Apple",
+  "rarity": "UNCOMMON",
+  "type": "CONSUMABLE",
+  "max_stack_size": 16,
+  "stats": {},
+  "lore": [
+    "A consumable item. Use is not implemented in P2."
+  ]
+}
