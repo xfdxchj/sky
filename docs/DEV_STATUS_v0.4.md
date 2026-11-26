@@ -114,6 +114,17 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 ---
 
+### 3.7 P5.4 Private Island foundation（代码已提交，待本地验证）
+
+- 新增 `PrivateIslandRecord`、`PrivateIslandWorldData` 和 `PrivateIslandManager`。
+- 每个玩家按 UUID 拥有一个持久化私人岛屿记录；岛屿位置通过 Overworld 天空网格分配。
+- 新增 `/skyblock island create`、`/skyblock island home`、`/skyblock island private info`。
+- 创建前执行目标空域预检，生成失败时不写入所有权记录。
+- 增加非所有者的方块破坏和标准方块交互/相邻放置路径拦截。
+- 设计与测试计划见 `P5.4_PRIVATE_ISLAND_DESIGN.md`、`P5.4_PRIVATE_ISLAND_TEST_PLAN.md`。
+
+**限制：** 当前是私人岛屿基础设施，不包含访客权限、扩建、岛屿等级、Minion、GUI，也未覆盖爆炸、活塞、流体及所有第三方模组交互路径。没有执行 Gradle build 或游戏内验证。
+
 ### 3.6 Core 扩展 API v1（已提交，待本地验证）
 
 - 新增 `CoreApi`、`SkillAPI`、`PlayerDataAPI` 公共入口。
