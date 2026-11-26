@@ -1,0 +1,15 @@
+{
+  "id": "private_island_spider",
+  "name": "Private Island Spider (starter analogue)",
+  "entity_type": "minecraft:spider",
+  "level": 1,
+  "health": 120,
+  "damage": 35,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 5,
+  "source_type": "project-placeholder",
+  "source_url": "",
+  "retrieved_at": "2026-11-26",
+  "confidence": "all combat stats are provisional; rewards preserve P3.1 test data"
+}
