@@ -13,6 +13,10 @@ import com.skyrpg.skyblock.economy.ShopRegistry;
 import com.skyrpg.skyblock.region.RegionRegistry;
 import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpRegistry;
+import com.skyrpg.skyblock.npc.NpcRegistry;
+import com.skyrpg.skyblock.npc.NpcManager;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +44,17 @@ public final class SkyBlockRPG implements ModInitializer {
             ShopRegistry.reload(server.getResourceManager());
             RegionRegistry.reload(server.getResourceManager());
             WarpRegistry.reload(server.getResourceManager());
+            NpcRegistry.reload(server.getResourceManager());
             LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
         });
 
         ServerTickEvents.END_PLAYER_TICK.register(RegionManager::tick);
+
+        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (world.isClient || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer))
+                return ActionResult.PASS;
+            return NpcManager.interact(serverPlayer, entity) ? ActionResult.SUCCESS : ActionResult.PASS;
+        });
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> RegionManager.remove(handler.getPlayer()));
 
