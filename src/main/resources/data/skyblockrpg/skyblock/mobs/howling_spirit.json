@@ -1,0 +1,72 @@
+{
+  "id": "howling_spirit",
+  "name": "Howling Spirit",
+  "entity_type": "",
+  "level": 51,
+  "health": 7000,
+  "damage": 500,
+  "defense": 0,
+  "coin_reward": 17,
+  "combat_xp_reward": 76,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Howling_Spirit",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current listed stats and explicit drop chances; Defense not listed.",
+  "family_id": "howling_spirit",
+  "category": "hostile",
+  "mob_types": [
+    "animal",
+    "arcane"
+  ],
+  "area": "the_park_howling_cave",
+  "drops": [
+    {
+      "item_id": "spruce_log",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.15,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "dark_oak_log",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.15,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "acacia_log",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.15,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "travel_scroll_howling_cave",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0002,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "hound_pet_epic",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00003,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "hound_pet_legendary",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00001,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
