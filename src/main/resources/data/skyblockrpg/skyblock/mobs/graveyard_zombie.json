@@ -30,22 +30,25 @@
       "item_id": "potato",
       "min_count": 0,
       "max_count": 1,
-      "chance": 0.05,
-      "drop_type": "item"
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
     },
     {
       "item_id": "carrot",
       "min_count": 0,
       "max_count": 1,
-      "chance": 0.05,
-      "drop_type": "item"
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
     },
     {
       "item_id": "poisonous_potato",
       "min_count": 0,
       "max_count": 1,
-      "chance": 0.05,
-      "drop_type": "item"
+      "chance": 0,
+      "drop_type": "item",
+      "chance_known": false
     }
   ]
 }
