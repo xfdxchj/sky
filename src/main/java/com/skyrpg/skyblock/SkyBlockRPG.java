@@ -51,8 +51,8 @@ public final class SkyBlockRPG implements ModInitializer {
         ServerTickEvents.END_PLAYER_TICK.register(RegionManager::tick);
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer))
-                return ActionResult.PASS;
+            if (world.isClient || !(player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer)
+                    || serverPlayer.isSpectator()) return ActionResult.PASS;
             return NpcManager.interact(serverPlayer, entity) ? ActionResult.SUCCESS : ActionResult.PASS;
         });
 
