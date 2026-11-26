@@ -1,8 +1,9 @@
 package com.skyrpg.skyblock.combat;
 
-/** A weighted item or non-item drop from a SkyBlock mob. */
+/** A drop entry. Unknown probabilities are explicitly distinguished from zero chance. */
 public record MobDropDefinition(
-        String itemId, int minCount, int maxCount, double chance, String dropType) {
+        String itemId, int minCount, int maxCount, double chance,
+        boolean chanceKnown, String dropType) {
     public MobDropDefinition {
         itemId = itemId == null ? "" : itemId;
         minCount = Math.max(0, minCount);
