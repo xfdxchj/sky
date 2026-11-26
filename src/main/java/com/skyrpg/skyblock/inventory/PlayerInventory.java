@@ -72,6 +72,7 @@ public final class PlayerInventory {
             return false;
         }
         equipment.put(slot, def.id());
+        if (previous != null) reforges.remove(slot);
         return true;
     }
 
@@ -79,6 +80,7 @@ public final class PlayerInventory {
         String itemId = equipment.get(slot);
         if (itemId == null || !add(itemId, 1)) return false;
         equipment.remove(slot);
+        reforges.remove(slot);
         return true;
     }
 
