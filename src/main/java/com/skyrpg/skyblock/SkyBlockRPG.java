@@ -16,6 +16,7 @@ import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
+import com.skyrpg.skyblock.gui.SkyBlockGui;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -34,6 +35,7 @@ public final class SkyBlockRPG implements ModInitializer {
     @Override
     public void onInitialize() {
         SkyBlockConfig.load();
+        SkyBlockGui.register();
 
         CommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess, environment) -> SkyBlockCommands.register(dispatcher)
