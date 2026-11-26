@@ -13,3 +13,9 @@
 ## P3 - Initial combat prototype
 - Added Damage stat, training sword, damage formula, mob metadata and combat command.
 - Initial implementation used a client-side attack callback incorrectly; superseded by P3.1.
+
+
+## P5.1
+- Added manifest-driven native structure NBT import and placement.
+- Added rotation/mirror transforms, bounds checks and all-air paste safety.
+- Added structure commands and a project-authored test fixture.
