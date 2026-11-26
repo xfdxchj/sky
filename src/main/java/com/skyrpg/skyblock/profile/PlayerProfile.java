@@ -32,7 +32,7 @@ public final class PlayerProfile {
     private final Map<String, Integer> activeQuests = new HashMap<>();
     private final Set<String> completedQuests = new LinkedHashSet<>();
     private String selectedPower = "fortuitous";
-    private final Set<String> unlockedPowers = new LinkedHashSet<>(Set.of("fortuitous", "pretty"));
+    private final Set<String> unlockedPowers = new LinkedHashSet<>(Set.of("fortuitous", "pretty", "protected", "simple", "warrior"));
     private final Map<StatType, Integer> tuningAllocations = new EnumMap<>(StatType.class);
 
     public PlayerProfile(UUID playerId, String playerName) {
@@ -157,6 +157,9 @@ public final class PlayerProfile {
         unlockedPowers.clear();
         unlockedPowers.add("fortuitous");
         unlockedPowers.add("pretty");
+        unlockedPowers.add("protected");
+        unlockedPowers.add("simple");
+        unlockedPowers.add("warrior");
         if (unlocked != null) for (String id : unlocked) {
             if (id != null && PowerRegistry.get(id).isPresent()) unlockedPowers.add(id.toLowerCase(java.util.Locale.ROOT));
         }
