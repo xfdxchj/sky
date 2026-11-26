@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P3.4 (implementation branch; build/test pending)
+## Current milestone: P3.5 (core mob content; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -62,10 +62,10 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock equip <itemId>`
 - `/skyblock unequip <slot>`
 
-### P3.4 mob catalogue and incoming damage
+### P3.5 core mob content\n- Design: `docs/P3.5_DESIGN.md`\n- Test checklist: `docs/P3.5_TEST_PLAN.md`\n- Adds 12 sourced Spider's Den and The End definitions, increasing the catalogue from 58 to 70 records.\n- Adds `spawn_entity_type` and per-entity command-tag identity so multiple SkyBlock mob definitions can share one vanilla stand-in without colliding in the entity-type fallback map.\n- `/skyblock mob spawn <mobId>` creates a tagged stand-in with a `[LvX] Name` label and routes attacks/HP through the selected definition.\n- This is explicit test spawning only; natural region spawns, loot rolls and unique AI are not implemented yet.\n\n### P3.4 mob catalogue and incoming damage
 - Design: `docs/P3.4_DESIGN.md`
 - Test checklist: `docs/P3.4_TEST_PLAN.md`
-- 58 sourced mob records are currently included: 15 level variants each for Private Island Zombie, Skeleton and Spider, plus 13 Graveyard/Crypts/Ruins/The Park/Deep Caverns examples. Five vanilla entity mappings are active; other entries are catalogue-only until variant-aware spawn assignment is implemented.
+- 58 sourced mob records are currently included: 15 level variants each for Private Island Zombie, Skeleton and Spider, plus 13 Graveyard/Crypts/Ruins/The Park/Deep Caverns examples. Five vanilla entity mappings are active; additional records can now be explicitly spawned through tagged per-instance identities.
 - The incoming damage bridge replaces vanilla raw damage with the configured mob Damage before vanilla player mitigation.
 
 ### P3.3 mob HP
@@ -83,7 +83,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 - Player melee interception applies to living non-player entities while a registered SkyBlock weapon is equipped.
 - Vanilla entities remain temporary stand-ins for SkyBlock mobs. P3.3 adds independent persistent HP pools, but does not add custom entity classes or AI.
 - Mob Defense remains unknown/project-default for the sourced entries because the cited Wiki pages do not publish a Defense value. The custom HP pool is authoritative for the SkyBlock weapon melee pipeline only; environmental damage and attacks from other vanilla entities still use vanilla health and can bypass the custom pool.
-- No custom mob entity types, AI, spawn tables, variant-aware natural spawning, boss phases, abilities, ranged weapons, attack-speed timing, Ferocity, enchantments, reforges or elemental damage yet.
+- No custom mob entity types, unique AI, natural spawn tables, boss phases, abilities, ranged weapons, attack-speed timing, Ferocity, enchantments, reforges or elemental damage yet. Mob drop JSON is catalogue data only; drops are not yet granted on kill.
 - The logical SkyBlock inventory still has no custom GUI and is not rendered as vanilla item stacks.
 - Full Fabric Gradle build and in-game behavior for P3.4 must be verified in the local project environment.
 
