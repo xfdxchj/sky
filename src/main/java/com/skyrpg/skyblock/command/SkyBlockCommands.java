@@ -39,6 +39,9 @@ import com.skyrpg.skyblock.accessory.PowerRegistry;
 import com.skyrpg.skyblock.reforge.ReforgeDefinition;
 import com.skyrpg.skyblock.reforge.ReforgeRegistry;
 import com.skyrpg.skyblock.reforge.ReforgeManager;
+import com.skyrpg.skyblock.island.IslandDefinition;
+import com.skyrpg.skyblock.island.IslandRegistry;
+import com.skyrpg.skyblock.island.IslandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -56,6 +59,75 @@ public final class SkyBlockCommands {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("skyblock")
+                .then(literal("map").executes(context -> {
+                    var player = context.getSource().getPlayerOrThrow();
+                    String dimension = player.getServerWorld().getRegistryKey().getValue().toString();
+                    context.getSource().sendFeedback(() -> Text.literal("SkyBlock Map Format v1 | Loaded islands: "
+                            + IslandRegistry.all().size() + " | Current dimension: " + dimension), false);
+                    return 1;
+                }))
+                .then(literal("island")
+                        .then(literal("list").executes(context -> {
+                            context.getSource().sendFeedback(() -> Text.literal("Loaded SkyBlock islands: " + IslandRegistry.all().size()), false);
+                            for (IslandDefinition island : IslandRegistry.all()) {
+                                context.getSource().sendFeedback(() -> Text.literal(island.id() + " | " + island.name()
+                                        + " | " + island.dimension()
+                                        + (island.testFixture() ? " | PROJECT TEST FIXTURE" : "")), false);
+                            }
+                            return 1;
+                        }))
+                        .then(literal("info").then(argument("islandId", StringArgumentType.word()).executes(context -> {
+                            String id = StringArgumentType.getString(context, "islandId");
+                            IslandDefinition island = IslandRegistry.get(id).orElse(null);
+                            if (island == null) {
+                                context.getSource().sendError(Text.literal("Unknown island: " + id));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal(island.name() + " [" + island.id() + "]"), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Dimension: " + island.dimension()
+                                    + " | Center: " + island.centerX() + ", " + island.surfaceY() + ", " + island.centerZ()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Footprint: " + island.radiusX() + " x " + island.radiusZ()
+                                    + " | Thickness: " + island.thickness()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Spawn: " + island.spawnX() + ", "
+                                    + island.spawnY() + ", " + island.spawnZ()), false);
+                            context.getSource().sendFeedback(() -> Text.literal("Region: " + island.regionId()
+                                    + " | Warp: " + island.warpId()
+                                    + (island.testFixture() ? " | PROJECT TEST FIXTURE" : "")), false);
+                            return 1;
+                        })))
+                        .then(literal("generate").requires(source -> source.hasPermissionLevel(2))
+                                .then(argument("islandId", StringArgumentType.word()).executes(context -> {
+                                    String id = StringArgumentType.getString(context, "islandId");
+                                    IslandDefinition island = IslandRegistry.get(id).orElse(null);
+                                    if (island == null) {
+                                        context.getSource().sendError(Text.literal("Unknown island: " + id));
+                                        return 0;
+                                    }
+                                    var player = context.getSource().getPlayerOrThrow();
+                                    var result = IslandManager.generate(player.getServerWorld(), island);
+                                    if (!result.success()) {
+                                        context.getSource().sendError(Text.literal("Island generation failed: " + result.message()));
+                                        return 0;
+                                    }
+                                    context.getSource().sendFeedback(() -> Text.literal(result.message()
+                                            + " Placed: " + result.placedBlocks() + " | Skipped: " + result.skippedBlocks()), false);
+                                    return 1;
+                                })))
+                        .then(literal("visit").then(argument("islandId", StringArgumentType.word()).executes(context -> {
+                            String id = StringArgumentType.getString(context, "islandId");
+                            IslandDefinition island = IslandRegistry.get(id).orElse(null);
+                            if (island == null) {
+                                context.getSource().sendError(Text.literal("Unknown island: " + id));
+                                return 0;
+                            }
+                            var player = context.getSource().getPlayerOrThrow();
+                            if (!IslandManager.visit(player, island)) {
+                                context.getSource().sendError(Text.literal("Could not visit island spawn. Check dimension, spawn height and world border."));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal("Visited island: " + island.name()), false);
+                            return 1;
+                        }))))
                 .then(literal("menu").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     GuiMenuManager.openMain(player);
