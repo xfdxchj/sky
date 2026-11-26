@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.HashMap;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
@@ -25,6 +26,8 @@ public final class PlayerProfile {
     private final Map<SkillType, Double> skillExperience;
     private int profileVersion;
     private final Set<String> discoveredRegions = new LinkedHashSet<>();
+    private final Map<String, Integer> activeQuests = new HashMap<>();
+    private final Set<String> completedQuests = new LinkedHashSet<>();
 
     public PlayerProfile(UUID playerId, String playerName) {
         this.playerId = playerId;
@@ -74,6 +77,42 @@ public final class PlayerProfile {
     public boolean hasDiscoveredRegion(String regionId) { return discoveredRegions.contains(regionId); }
     public boolean discoverRegion(String regionId) { return regionId != null && !regionId.isBlank() && discoveredRegions.add(regionId); }
     public Set<String> getDiscoveredRegions() { return Collections.unmodifiableSet(discoveredRegions); }
+
+    public boolean isQuestActive(String questId) { return activeQuests.containsKey(normalizeQuestId(questId)); }
+    public boolean isQuestCompleted(String questId) { return completedQuests.contains(normalizeQuestId(questId)); }
+    public int getQuestProgress(String questId) { return activeQuests.getOrDefault(normalizeQuestId(questId), 0); }
+    public Map<String, Integer> getActiveQuests() { return Collections.unmodifiableMap(activeQuests); }
+    public Set<String> getCompletedQuests() { return Collections.unmodifiableSet(completedQuests); }
+    public boolean acceptQuest(String questId) {
+        String id = normalizeQuestId(questId);
+        if (id.isBlank() || activeQuests.containsKey(id) || completedQuests.contains(id)) return false;
+        activeQuests.put(id, 0);
+        return true;
+    }
+    public boolean abandonQuest(String questId) { return activeQuests.remove(normalizeQuestId(questId)) != null; }
+    public int addQuestProgress(String questId, int amount) {
+        String id = normalizeQuestId(questId);
+        if (amount <= 0 || !activeQuests.containsKey(id)) return 0;
+        int next = (int) Math.min(Integer.MAX_VALUE, (long) activeQuests.get(id) + amount);
+        activeQuests.put(id, next);
+        return next;
+    }
+    public boolean completeQuest(String questId) {
+        String id = normalizeQuestId(questId);
+        if (activeQuests.remove(id) == null) return false;
+        return completedQuests.add(id);
+    }
+    public void loadQuestProgress(String questId, int progress) {
+        String id = normalizeQuestId(questId);
+        if (!id.isBlank() && !completedQuests.contains(id)) activeQuests.put(id, Math.max(0, progress));
+    }
+    public void loadCompletedQuest(String questId) {
+        String id = normalizeQuestId(questId);
+        if (!id.isBlank()) { activeQuests.remove(id); completedQuests.add(id); }
+    }
+    private static String normalizeQuestId(String questId) {
+        return questId == null ? "" : questId.trim().toLowerCase(java.util.Locale.ROOT);
+    }
 
     public PlayerStats getStats() { return stats; }
     public PlayerInventory getInventory() { return inventory; }
