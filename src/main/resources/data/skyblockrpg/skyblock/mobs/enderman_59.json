@@ -1,0 +1,32 @@
+{
+  "id": "enderman_59",
+  "name": "The End Enderman",
+  "entity_type": "",
+  "spawn_entity_type": "minecraft:enderman",
+  "level": 59,
+  "health": 9000,
+  "damage": 700,
+  "defense": 0,
+  "coin_reward": 19,
+  "combat_xp_reward": 88,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Enderman",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Wiki-listed Lv59 variant; Defense is a project placeholder.",
+  "family_id": "the_end_enderman",
+  "category": "hostile",
+  "mob_types": [
+    "ender"
+  ],
+  "area": "the_end",
+  "drops": [
+    {
+      "item_id": "ender_pearl",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
