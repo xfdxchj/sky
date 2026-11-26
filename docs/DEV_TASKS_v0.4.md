@@ -209,7 +209,7 @@
 
 ### P5.3 Hub 地图
 - [x] 建立 Hub POI 数据模型、注册表和查询命令。
-- [x] 收录 Village、Bank、Auction House、Bazaar Alley、Mining District 及部分 NPC 参考坐标；每条记录保留社区 Wiki 来源。
+- [x] 收录 25 个 Hub 区域、服务点和 NPC 参考坐标，覆盖 Village、Bank、Auction House、Bazaar Alley、Mining District、Farm、Combat Settlement、Graveyard、Mountain、Ruins、Foraging Camp、Wilderness 等；每条记录保留社区 Wiki 来源。
 - [ ] 选择有明确使用与再分发许可的当前 Hub 地图资产；未确认许可前不复制第三方世界文件。
 - [ ] 核对 Minecraft 版本差异，决定将当前 Hypixel 地图资产适配到项目 1.21.1，还是调整项目目标版本。
 - [ ] 导入 Hub 地形、功能建筑和结构资源。
