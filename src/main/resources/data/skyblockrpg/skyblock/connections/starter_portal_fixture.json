@@ -1,0 +1,16 @@
+{
+  "id": "starter_portal_fixture",
+  "name": "Starter Portal (Fixture)",
+  "type": "portal",
+  "dimension": "minecraft:overworld",
+  "start_x": 0.5,
+  "start_y": 101,
+  "start_z": 0.5,
+  "end_x": 30.5,
+  "end_y": 102,
+  "end_z": 0.5,
+  "source_warp_id": "starter_island_spawn",
+  "target_warp_id": "starter_outpost_fixture",
+  "activation_radius": 4,
+  "test_fixture": true
+}
