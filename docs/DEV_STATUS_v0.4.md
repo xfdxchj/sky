@@ -114,6 +114,18 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 ---
 
+### 3.6 Core 扩展 API v1（已提交，待本地验证）
+
+- 新增 `CoreApi`、`SkillAPI`、`PlayerDataAPI` 公共入口。
+- 新增 namespaced `SkillRegistration` / `SkillRegistry`，允许依赖 Core 的扩展模组注册技能 ID 和独立 XP 曲线。
+- 玩家技能 XP 从固定 `EnumMap<SkillType, Double>` 迁移为 `Identifier` 映射；保留原有 `SkillType` 重载和短 ID 命令兼容。
+- 旧存档无命名空间技能键迁移到 `skyblockrpg:<skill>`；Profile / world data version 更新至 8。
+- 新增模块玩家数据容器，按 namespaced Identifier 隔离；Core 在扩展未加载时保留其技能 XP 和模块数据。
+- `/skyblock skill` 支持旧短 ID 和扩展 namespaced ID。
+- 架构、API 合约、生活模组交接规范和测试计划见 `MODULE_ARCHITECTURE.md`、`CORE_API_v1.md`、`LIFE_SKILLS_MOD_SPEC.md`。
+
+**边界：** API v1 当前只正式提供技能注册/查询/经验与模块玩家数据。Stat、Item/ItemInstance、Currency transaction、Reward、Quest objective 和通用事件 API 尚未发布；扩展模组不得假设这些接口已经存在。
+
 ## 4. 剩余工作按系统归类
 
 ### P1 玩家系统
