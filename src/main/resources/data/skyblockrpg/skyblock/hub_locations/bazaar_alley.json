@@ -1,0 +1,14 @@
+{
+  "id": "bazaar_alley",
+  "name": "Bazaar Alley",
+  "parent_id": "village",
+  "category": "service",
+  "dimension": "minecraft:overworld",
+  "x": -32.0,
+  "y": 71.0,
+  "z": -27.0,
+  "description": "Village market area containing the Bazaar NPCs.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Bazaar_Alley",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
