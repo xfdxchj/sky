@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class GuiMenuManager {
-    private static final Map<String, Map<Integer, String>> ACTIONS = new HashMap<>();
     private GuiMenuManager() {}
 
     public static void openMain(ServerPlayerEntity player) {
@@ -88,8 +87,7 @@ public final class GuiMenuManager {
         open(player, inventory, "shop", "Shop Catalogue", Map.of(22, "main"));
     }
 
-    public static void handleClick(ServerPlayerEntity player, String menuId, int slot) {
-        String action = ACTIONS.getOrDefault(menuId, Map.of()).get(slot);
+    public static void handleClick(ServerPlayerEntity player, String action) {
         if (action == null) return;
         if (action.startsWith("accept:")) {
             String questId = action.substring("accept:".length());
@@ -111,10 +109,9 @@ public final class GuiMenuManager {
 
     private static void open(ServerPlayerEntity player, SimpleInventory inventory, String menuId,
                              String title, Map<Integer, String> actions) {
-        ACTIONS.put(menuId, Map.copyOf(actions));
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
                 (syncId, playerInventory, ignored) ->
-                        new SkyBlockScreenHandler(syncId, playerInventory, inventory, menuId),
+                        new SkyBlockScreenHandler(syncId, playerInventory, inventory, menuId, actions),
                 Text.literal(title)));
     }
 
