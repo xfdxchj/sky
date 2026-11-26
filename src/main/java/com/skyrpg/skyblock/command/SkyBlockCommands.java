@@ -20,6 +20,12 @@ import com.skyrpg.skyblock.skill.SkillDefinition;
 import com.skyrpg.skyblock.skill.SkillManager;
 import com.skyrpg.skyblock.skill.SkillType;
 import com.skyrpg.skyblock.stats.StatType;
+import com.skyrpg.skyblock.region.RegionDefinition;
+import com.skyrpg.skyblock.region.RegionManager;
+import com.skyrpg.skyblock.region.RegionRegistry;
+import com.skyrpg.skyblock.warp.WarpDefinition;
+import com.skyrpg.skyblock.warp.WarpManager;
+import com.skyrpg.skyblock.warp.WarpRegistry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -243,6 +249,50 @@ public final class SkyBlockCommands {
                                 .then(argument("mobId", StringArgumentType.word()).executes(context ->
                                         spawnMob(context.getSource(), StringArgumentType.getString(context, "mobId")))))
                 )
+                .then(literal("region")
+                        .then(literal("list").executes(context -> {
+                            var regions = RegionRegistry.all();
+                            context.getSource().sendFeedback(() -> Text.literal("Registered regions: " + regions.size()), false);
+                            for (RegionDefinition region : regions) context.getSource().sendFeedback(
+                                    () -> Text.literal(region.id() + " | " + region.displayName() + " | " + region.dimension()), false);
+                            return 1;
+                        }))
+                        .then(literal("here").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            RegionDefinition region = RegionManager.getCurrent(player);
+                            if (region == null) {
+                                context.getSource().sendFeedback(() -> Text.literal("Current region: Unassigned"), false);
+                            } else {
+                                context.getSource().sendFeedback(() -> Text.literal("Current region: " + region.displayName()
+                                        + " [" + region.id() + "] | Discovered: "
+                                        + ProfileManager.get(player).hasDiscoveredRegion(region.id())), false);
+                            }
+                            return 1;
+                        })))
+                .then(literal("warp")
+                        .then(literal("list").executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            var profile = ProfileManager.get(player);
+                            context.getSource().sendFeedback(() -> Text.literal("Registered warps: " + WarpRegistry.all().size()), false);
+                            for (WarpDefinition warp : WarpRegistry.all()) {
+                                boolean unlocked = warp.requiredRegionId().isBlank()
+                                        || profile.hasDiscoveredRegion(warp.requiredRegionId());
+                                context.getSource().sendFeedback(() -> Text.literal(warp.id() + " | " + warp.displayName()
+                                        + " | " + (unlocked ? "Unlocked" : "Locked: discover " + warp.requiredRegionId())), false);
+                            }
+                            return 1;
+                        }))
+                        .then(argument("warpId", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String id = StringArgumentType.getString(context, "warpId");
+                            WarpManager.WarpResult result = WarpManager.teleport(player, id);
+                            if (!result.success()) {
+                                context.getSource().sendError(Text.literal(result.message()));
+                                return 0;
+                            }
+                            context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
+                            return 1;
+                        })))
                 .then(literal("items").executes(context -> {
                     for (ItemDefinition item : ItemRegistry.all()) {
                         context.getSource().sendFeedback(() -> Text.literal(
