@@ -1,0 +1,14 @@
+{
+  "id": "auction_house",
+  "name": "Auction House",
+  "parent_id": "village",
+  "category": "service",
+  "dimension": "minecraft:overworld",
+  "x": -18.0,
+  "y": 71.0,
+  "z": -90.0,
+  "description": "Village location for the Auction House.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Auction_House",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
