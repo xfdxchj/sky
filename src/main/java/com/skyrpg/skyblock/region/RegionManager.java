@@ -31,6 +31,10 @@ public final class RegionManager {
                 + (firstDiscovery ? " (Discovered)" : "")), true);
     }
 
+    public static void remove(ServerPlayerEntity player) {
+        LAST_REGION.remove(player.getUuid());
+    }
+
     public static void clear() {
         LAST_REGION.clear();
     }
