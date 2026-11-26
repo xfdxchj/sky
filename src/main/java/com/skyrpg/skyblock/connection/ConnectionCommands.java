@@ -54,10 +54,11 @@ public final class ConnectionCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Connections touching warp '"
                             + warpId + "': " + routes.size()), false);
                     for (ConnectionDefinition connection : routes) {
-                        String other = connection.sourceWarpId().equalsIgnoreCase(warpId)
-                                ? connection.targetWarpId() : connection.sourceWarpId();
+                        boolean outgoing = connection.sourceWarpId().equalsIgnoreCase(warpId);
+                        String relation = outgoing ? "to: " : "from: ";
+                        String other = outgoing ? connection.targetWarpId() : connection.sourceWarpId();
                         context.getSource().sendFeedback(() -> Text.literal(connection.id() + " | "
-                                + connection.type() + " | next: " + other), false);
+                                + connection.type() + " | " + relation + other), false);
                     }
                     return 1;
                 })))
