@@ -8,8 +8,8 @@
   "defense": 0,
   "coin_reward": 1,
   "combat_xp_reward": 5,
-  "source_type": "project-placeholder",
-  "source_url": "",
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Spider",
   "retrieved_at": "2026-11-26",
-  "confidence": "all combat stats are provisional; rewards preserve P3.1 test data"
+  "confidence": "Wiki-listed minimum range HP/Damage/XP/Coins; exact lowest-level row needs confirmation; Defense 0 remains a project placeholder."
 }
