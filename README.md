@@ -227,3 +227,13 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Initial prices are explicitly marked as project test values, not verified Hypixel prices.
 - This milestone is command-driven. A basic NPC interaction foundation is added in P4.3; NPC GUI, Bazaar and Auction House remain future work.
 - Local Java 21 Gradle build and in-game verification are pending.
+
+
+## P5.1 — Structure Asset Import
+
+- Added manifest-driven structure registration under data/skyblockrpg/skyblock/structures.
+- Added native Minecraft structure NBT placement using the 1.21.1 structure template manager.
+- Supports configured origin, dimension, rotation and mirror.
+- Operator-only paste command; entity placement disabled; full bounding-box preflight requires air and prevents partial overwrite.
+- Includes a tiny project-authored marker fixture. No Hypixel map assets are bundled.
+- See docs/P5.1_STRUCTURE_IMPORT.md and docs/P5.1_STRUCTURE_IMPORT_TEST_PLAN.md.
