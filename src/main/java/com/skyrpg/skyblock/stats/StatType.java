@@ -3,7 +3,7 @@ package com.skyrpg.skyblock.stats;
 import java.util.Locale;
 import java.util.Optional;
 
-/** Extensible stat identifiers for the first RPG data layer. */
+/** Core-supported shared stat identifiers. Adding values requires a Core compatibility review. */
 public enum StatType {
     HEALTH, DEFENSE, TRUE_DEFENSE, DAMAGE, STRENGTH, CRIT_CHANCE, CRIT_DAMAGE,
     ATTACK_SPEED, FEROCITY, INTELLIGENCE, ABILITY_DAMAGE, SPEED,
