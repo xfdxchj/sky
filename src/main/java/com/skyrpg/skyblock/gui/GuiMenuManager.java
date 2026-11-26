@@ -113,9 +113,9 @@ public final class GuiMenuManager {
         set(inventory, 4, Items.AMETHYST_SHARD, "Accessory Bag",
                 inventoryData.getAccessoryBag().size() + "/" + com.skyrpg.skyblock.inventory.PlayerInventory.ACCESSORY_BAG_CAPACITY + " slots used",
                 "Use /skyblock accessory add <itemId> to add accessories");
-        int slot = 10;
+        int slot = 9;
         for (String id : inventoryData.getAccessoryBag()) {
-            if (slot > 16) break;
+            if (slot > 17) break;
             var def = com.skyrpg.skyblock.item.ItemRegistry.get(id).orElse(null);
             set(inventory, slot, Items.AMETHYST_SHARD, def == null ? id : def.name(),
                     "Stored in Accessory Bag", "Click to return to inventory");
