@@ -1,0 +1,14 @@
+{
+  "id": "mining_district",
+  "name": "Mining District",
+  "parent_id": "hub_island",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": 2.0,
+  "y": 62.0,
+  "z": -122.0,
+  "description": "Hub district focused on Mining, adjacent to the Coal Mine route.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Mining_District",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
