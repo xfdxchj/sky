@@ -32,6 +32,18 @@ Move from abstract region/warp coordinates to a map model that can describe and 
 - Connection route queries expose inbound/outbound adjacency between warp nodes.
 - Starter bridge, portal and outpost entries are project test fixtures, not Hypixel map coordinates. Physical portal blocks/effects and shortest-path navigation remain deferred.
 
+## Implemented in P5.4
+
+- One persistent Private Island record per player UUID.
+- Deterministic island allocation in an Overworld sky grid, stored in a separate world PersistentState.
+- Explicit player creation command; no automatic terrain generation on world open or join.
+- Clear-volume preflight before generation.
+- Reuses the existing island generator for the initial grass/dirt/stone floating island.
+- Home travel and private-island info commands.
+- Initial non-owner protection for block breaking and standard block interaction / adjacent placement paths.
+
+This is a foundation only. Visitor permissions, expansion, island levels, minions, GUI, and complete protection coverage remain deferred. The private island is project-generated terrain, not a copy of Hypixel's island.
+
 ## Commands
 
 - `/skyblock map` — report map format version, loaded island count and current dimension.
