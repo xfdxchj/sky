@@ -36,5 +36,5 @@
       "drop_type": "item"
     }
   ],
-  "spawn_entity_type": "minecraft:spider"
+  "spawn_entity_type": "minecraft:skeleton"
 }
