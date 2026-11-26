@@ -6,6 +6,9 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 
 - [Development status v0.4](docs/DEV_STATUS_v0.4.md): what is implemented and what has actually been verified.
 - [Development task list v0.4](docs/DEV_TASKS_v0.4.md): remaining work and acceptance criteria.
+- [Core API v2](docs/CORE_API_v2.md): supported integration contract for optional gameplay modules.
+- [Life Skills specification](docs/LIFE_SKILLS_MOD_SPEC.md): Mining, Fishing, Farming and Foraging extension requirements.
+- [Core API v2 test plan](docs/CORE_API_v2_TEST_PLAN.md): integration and regression checklist.
 - Development may proceed directly on `main`; feature branches are optional and used only when they materially help isolate risk or parallel work.
 
 ## Environment
