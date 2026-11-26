@@ -52,7 +52,7 @@ public final class SkyBlockWorldData extends PersistentState {
             try {
                 UUID uuid = UUID.fromString(entry.getString("uuid"));
                 PlayerProfile profile = new PlayerProfile(uuid, entry.getString("name"));
-                profile.setProfileVersion(PlayerProfile.CURRENT_VERSION); // P1 -> P2 schema migration is additive.
+                profile.setProfileVersion(PlayerProfile.CURRENT_VERSION); // Older profile schemas migrate additively to the current schema.
                 long coins = Math.max(0L, entry.getLong("coins"));
                 if (coins > 0) profile.addCoins(coins);
                 profile.setBankCoinsForLoad(Math.max(0L, entry.getLong("bankCoins")));
