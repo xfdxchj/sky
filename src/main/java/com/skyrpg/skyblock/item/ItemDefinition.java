@@ -14,7 +14,7 @@ public record ItemDefinition(
     public ItemDefinition {
         stats = Map.copyOf(stats);
         lore = List.copyOf(lore);
-        accessoryLine = accessoryLine == null || accessoryLine.isBlank() ? id : accessoryLine;
+        accessoryLine = accessoryLine == null || accessoryLine.isBlank() ? id : accessoryLine.trim().toLowerCase(java.util.Locale.ROOT);
     }
     public boolean isEquippable() { return equipmentSlot != null; }
     public int accessoryPower() { return accessoryPowerOverride >= 0 ? accessoryPowerOverride : rarity.accessoryPower(); }
