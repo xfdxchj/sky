@@ -30,6 +30,8 @@ public final class GuiMenuManager {
         button(inventory, 12, Items.GOLD_INGOT, "Bank", "View your Purse and Bank", actions, "bank");
         button(inventory, 14, Items.BOOK, "Quests", "View available and active quests", actions, "quests");
         button(inventory, 16, Items.EMERALD, "Shop", "Browse registered shop offers", actions, "shop");
+        button(inventory, 20, Items.IRON_CHESTPLATE, "Equipment", "View equipped armor and weapon", actions, "equipment");
+        button(inventory, 22, Items.AMETHYST_SHARD, "Accessories", "Manage your Accessory Bag", actions, "accessories");
         open(player, inventory, "main", "SkyBlock Menu", actions);
     }
 
@@ -87,8 +89,57 @@ public final class GuiMenuManager {
         open(player, inventory, "shop", "Shop Catalogue", Map.of(22, "main"));
     }
 
+
+    private static void openEquipment(ServerPlayerEntity player) {
+        var inventoryData = ProfileManager.get(player).getInventory();
+        SimpleInventory inventory = new SimpleInventory(27);
+        EquipmentSlot[] slots = {EquipmentSlot.WEAPON, EquipmentSlot.HELMET, EquipmentSlot.CHESTPLATE,
+                EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS};
+        int[] positions = {10, 12, 14, 16, 22};
+        for (int i = 0; i < slots.length; i++) {
+            String id = inventoryData.getEquipment().get(slots[i]);
+            String label = id == null ? "Empty" : id;
+            set(inventory, positions[i], Items.IRON_CHESTPLATE, slots[i].id(), label);
+        }
+        set(inventory, 26, Items.ARROW, "Back", "Return to the SkyBlock Menu");
+        open(player, inventory, "equipment", "Equipment", Map.of(26, "main"));
+    }
+
+    private static void openAccessories(ServerPlayerEntity player) {
+        var inventoryData = ProfileManager.get(player).getInventory();
+        SimpleInventory inventory = new SimpleInventory(27);
+        Map<Integer, String> actions = new HashMap<>();
+        set(inventory, 4, Items.AMETHYST_SHARD, "Accessory Bag",
+                inventoryData.getAccessoryBag().size() + "/" + com.skyrpg.skyblock.inventory.PlayerInventory.ACCESSORY_BAG_CAPACITY + " slots used",
+                "Use /skyblock accessory add <itemId> to add accessories");
+        int slot = 10;
+        for (String id : inventoryData.getAccessoryBag()) {
+            if (slot > 16) break;
+            var def = com.skyrpg.skyblock.item.ItemRegistry.get(id).orElse(null);
+            set(inventory, slot, Items.AMETHYST_SHARD, def == null ? id : def.name(),
+                    "Stored in Accessory Bag", "Click to return to inventory");
+            actions.put(slot, "accessory_remove:" + id);
+            slot++;
+        }
+        set(inventory, 22, Items.ARROW, "Back", "Return to the SkyBlock Menu");
+        actions.put(22, "main");
+        open(player, inventory, "accessories", "Accessory Bag", actions);
+    }
+
     public static void handleClick(ServerPlayerEntity player, String action) {
         if (action == null) return;
+        if (action.startsWith("accessory_remove:")) {
+            String itemId = action.substring("accessory_remove:".length());
+            var profile = ProfileManager.get(player);
+            if (profile.getInventory().removeAccessory(itemId)) {
+                ProfileManager.markChanged(player);
+                player.sendMessage(Text.literal("Returned " + itemId + " to your inventory."), false);
+            } else {
+                player.sendMessage(Text.literal("Could not remove accessory. Check inventory space."), false);
+            }
+            openAccessories(player);
+            return;
+        }
         if (action.startsWith("accept:")) {
             String questId = action.substring("accept:".length());
             QuestManager.Result result = QuestManager.accept(player, questId);
@@ -103,6 +154,8 @@ public final class GuiMenuManager {
             case "bank" -> openBank(player);
             case "quests" -> openQuests(player);
             case "shop" -> openShop(player);
+            case "equipment" -> openEquipment(player);
+            case "accessories" -> openAccessories(player);
             default -> { }
         }
     }
