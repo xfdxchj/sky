@@ -42,6 +42,7 @@ import com.skyrpg.skyblock.reforge.ReforgeManager;
 import com.skyrpg.skyblock.island.IslandDefinition;
 import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.island.IslandManager;
+import com.skyrpg.skyblock.structure.StructureCommands;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -128,6 +129,7 @@ public final class SkyBlockCommands {
                             context.getSource().sendFeedback(() -> Text.literal("Visited island: " + island.name()), false);
                             return 1;
                         }))))
+                .then(StructureCommands.command())
                 .then(literal("menu").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     GuiMenuManager.openMain(player);
@@ -138,7 +140,7 @@ public final class SkyBlockCommands {
                     String worldName = source.getServer().getSaveProperties().getLevelName();
                     source.sendFeedback(() -> Text.literal("[SkyBlock RPG] Core loaded successfully."), false);
                     source.sendFeedback(() -> Text.literal("World: " + worldName), false);
-                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P4.7)"), false);
+                    source.sendFeedback(() -> Text.literal("Minecraft: 1.21.1 | Mod: 0.1.0-alpha.3 (P5.1)"), false);
                     return 1;
                 }))
                 .then(literal("profile").executes(context -> {
