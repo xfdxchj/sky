@@ -36,6 +36,9 @@ import com.skyrpg.skyblock.gui.GuiMenuManager;
 import com.skyrpg.skyblock.accessory.AccessoryPowerManager;
 import com.skyrpg.skyblock.accessory.PowerDefinition;
 import com.skyrpg.skyblock.accessory.PowerRegistry;
+import com.skyrpg.skyblock.reforge.ReforgeDefinition;
+import com.skyrpg.skyblock.reforge.ReforgeRegistry;
+import com.skyrpg.skyblock.reforge.ReforgeManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -561,6 +564,36 @@ public final class SkyBlockCommands {
                                             + " tuning to " + points + " points."), false);
                                     return 1;
                                 })))))
+                .then(literal("reforge")
+                        .executes(context -> {
+                            context.getSource().sendFeedback(() -> Text.literal("Loaded basic reforges: " + ReforgeRegistry.all().size()), false);
+                            for (ReforgeDefinition reforge : ReforgeRegistry.all()) {
+                                context.getSource().sendFeedback(() -> Text.literal(reforge.id() + " | " + reforge.name()
+                                        + " | slots: " + String.join(",", reforge.allowedSlots())
+                                        + " | cost: " + reforge.cost() + " coins"
+                                        + (reforge.testFixture() ? " | PROJECT TEST FIXTURE" : "")), false);
+                            }
+                            return 1;
+                        })
+                        .then(literal("roll").then(argument("slot", StringArgumentType.word()).executes(context -> {
+                            var player = context.getSource().getPlayerOrThrow();
+                            String slotId = StringArgumentType.getString(context, "slot");
+                            var slot = EquipmentSlot.fromId(slotId);
+                            if (slot.isEmpty() || slot.get() == EquipmentSlot.ACCESSORY) {
+                                context.getSource().sendError(Text.literal("Unknown reforgeable equipment slot: " + slotId));
+                                return 0;
+                            }
+                            ReforgeManager.Result result = ReforgeManager.roll(player, slot.get());
+                            if (result != ReforgeManager.Result.SUCCESS) {
+                                context.getSource().sendError(Text.literal("Reforge failed: " + result.name().toLowerCase(java.util.Locale.ROOT)));
+                                return 0;
+                            }
+                            String reforgeId = ProfileManager.get(player).getInventory().getReforge(slot.get());
+                            ReforgeDefinition reforge = ReforgeRegistry.get(reforgeId).orElse(null);
+                            context.getSource().sendFeedback(() -> Text.literal("Applied " + (reforge == null ? reforgeId : reforge.name())
+                                    + " to " + slot.get().id() + ". Cost: " + (reforge == null ? 0 : reforge.cost()) + " coins."), false);
+                            return 1;
+                        }))))
                 .then(literal("equipment").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     var equipment = ProfileManager.get(player).getInventory().getEquipment();
