@@ -38,11 +38,12 @@ public final class QuestManager {
             changed = true;
             if (progress >= quest.requiredCount()) {
                 profile.completeQuest(quest.id());
-                if (quest.rewardCoins() > 0) profile.addCoins(quest.rewardCoins());
+                boolean coinsGranted = quest.rewardCoins() == 0 || profile.addCoins(quest.rewardCoins());
                 if (quest.rewardSkill() != null && quest.rewardSkillXp() > 0)
                     SkillManager.addExperience(player, quest.rewardSkill(), quest.rewardSkillXp());
                 player.sendMessage(Text.literal("§aQuest completed: " + quest.title()), false);
-                player.sendMessage(Text.literal("Rewards: " + quest.rewardCoins() + " coins"
+                player.sendMessage(Text.literal("Rewards: "
+                        + (coinsGranted ? quest.rewardCoins() + " coins" : "coin reward could not be added (Purse overflow)")
                         + (quest.rewardSkillXp() > 0 ? ", " + quest.rewardSkillXp() + " " + quest.rewardSkill().id() + " XP" : "")), false);
             } else {
                 player.sendMessage(Text.literal("Quest progress: " + quest.title() + " (" + progress
