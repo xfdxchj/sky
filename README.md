@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P4.5 (GUI foundation; build/test pending)
+## Current milestone: P4.6 (equipment and accessory bag; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -61,6 +61,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 - `/skyblock quest accept <questId>`
 - `/skyblock quest abandon <questId>`
 - `/skyblock menu` (opens the SkyBlock GUI)
+- `/skyblock accessory list|add <itemId>|remove <itemId>`
 - `/skyblock region list`
 - `/skyblock region here`
 - `/skyblock warp list`
@@ -116,6 +117,20 @@ This is the simplified melee core only. It does not yet include additive damage 
 
 ## Build
 Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `gradle build` or the IDE Gradle `build` task.
+
+### P4.6 equipment, accessories and stat aggregation
+- Design: `docs/P4.6_EQUIPMENT_ACCESSORY_STATS_DESIGN.md`
+- Test checklist: `docs/P4.6_EQUIPMENT_ACCESSORY_STATS_TEST_PLAN.md`
+- Adds a persistent 9-entry project-foundation Accessory Bag, separate from equipment slots and the logical inventory.
+- Accessory definitions use `type: ACCESSORY`; moving an accessory into or out of the bag updates the logical inventory transactionally.
+- Duplicate accessory definition IDs are rejected; item-instance identity and Hypixel accessory power progression remain future work.
+- Equipped weapons/armor and bagged accessories feed the shared additive stat-modifier pipeline used by combat.
+- Adds Equipment and Accessories GUI pages; the Accessories page supports returning an item to inventory.
+- Adds `/skyblock accessory list|add|remove` commands.
+- The included `test_power_talisman` is explicitly a project test fixture, not a verified Hypixel item or stat line.
+- Existing profiles migrate additively: missing Accessory Bag data loads empty; profile/world data schema advances to 6.
+- Hypixel accessory power, tuning, reforges, enchantments, set bonuses, item abilities and verified item catalogue import are deferred.
+- Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.5 GUI foundation
 - Design: `docs/P4.5_GUI_FOUNDATION_DESIGN.md`
