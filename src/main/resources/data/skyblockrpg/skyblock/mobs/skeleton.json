@@ -8,8 +8,8 @@
   "defense": 0,
   "coin_reward": 1,
   "combat_xp_reward": 5,
-  "source_type": "project-placeholder",
-  "source_url": "",
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Skeleton",
   "retrieved_at": "2026-11-26",
-  "confidence": "level, HP, damage and defense are provisional implementation values; rewards preserve P3.1 test data"
+  "confidence": "Wiki-listed Private Island Lv1 HP/Damage/XP/Coins; Defense 0 remains a project placeholder."
 }
