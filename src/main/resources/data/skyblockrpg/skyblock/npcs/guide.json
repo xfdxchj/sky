@@ -8,5 +8,5 @@
     "Welcome to your island.",
     "Discover regions to unlock their warp points."
   ],
-  "action": "none"
+  "action": "quest_board"
 }
