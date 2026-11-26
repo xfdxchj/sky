@@ -110,9 +110,15 @@ public final class GuiMenuManager {
         var inventoryData = ProfileManager.get(player).getInventory();
         SimpleInventory inventory = new SimpleInventory(27);
         Map<Integer, String> actions = new HashMap<>();
+        var profile = ProfileManager.get(player);
+        int accessoryPower = profile.getAccessoryPower();
         set(inventory, 4, Items.AMETHYST_SHARD, "Accessory Bag",
                 inventoryData.getAccessoryBag().size() + "/" + com.skyrpg.skyblock.inventory.PlayerInventory.ACCESSORY_BAG_CAPACITY + " slots used",
-                "Use /skyblock accessory add <itemId> to add accessories");
+                "Accessory Power: " + accessoryPower,
+                "Selected Power: " + profile.getSelectedPower(),
+                "Multiplier: " + String.format("%.2f", com.skyrpg.skyblock.accessory.AccessoryPowerManager.getStatsMultiplier(accessoryPower)),
+                "Tuning Points: " + profile.getUsedTuningPoints() + "/" + com.skyrpg.skyblock.accessory.AccessoryPowerManager.getTuningPoints(accessoryPower),
+                "Use /skyblock accessory power to manage Powers");
         int slot = 9;
         for (String id : inventoryData.getAccessoryBag()) {
             if (slot > 17) break;
