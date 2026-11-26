@@ -119,14 +119,15 @@ public final class GuiMenuManager {
                 "Multiplier: " + String.format("%.2f", com.skyrpg.skyblock.accessory.AccessoryPowerManager.getStatsMultiplier(accessoryPower)),
                 "Tuning Points: " + profile.getUsedTuningPoints() + "/" + com.skyrpg.skyblock.accessory.AccessoryPowerManager.getTuningPoints(accessoryPower),
                 "Use /skyblock accessory power to manage Powers");
-        int slot = 9;
+        int[] accessorySlots = {0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+        int index = 0;
         for (String id : inventoryData.getAccessoryBag()) {
-            if (slot > 17) break;
+            if (index >= accessorySlots.length) break;
+            int slot = accessorySlots[index++];
             var def = com.skyrpg.skyblock.item.ItemRegistry.get(id).orElse(null);
             set(inventory, slot, Items.AMETHYST_SHARD, def == null ? id : def.name(),
                     "Stored in Accessory Bag", "Click to return to inventory");
             actions.put(slot, "accessory_remove:" + id);
-            slot++;
         }
         set(inventory, 22, Items.ARROW, "Back", "Return to the SkyBlock Menu");
         actions.put(22, "main");
