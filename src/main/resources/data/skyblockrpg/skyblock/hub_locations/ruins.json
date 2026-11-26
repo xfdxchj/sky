@@ -1,0 +1,14 @@
+{
+  "id": "ruins",
+  "name": "Ruins",
+  "parent_id": "",
+  "category": "area",
+  "dimension": "minecraft:overworld",
+  "x": -200,
+  "y": 90,
+  "z": 40,
+  "description": "Hub combat area containing Wolves and Old Wolves.",
+  "source_type": "community_wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Ruins",
+  "reference_revision": "post-0.24.2 Hub redesign; accessed 2026-11-27"
+}
