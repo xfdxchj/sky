@@ -17,6 +17,12 @@ public record IslandDefinition(
         if (thickness < 3 || thickness > 64) throw new IllegalArgumentException("Island thickness must be 3..64");
         if (!Double.isFinite(spawnX) || !Double.isFinite(spawnY) || !Double.isFinite(spawnZ))
             throw new IllegalArgumentException("Spawn coordinates must be finite");
+        double spawnDx = (spawnX - centerX) / radiusX;
+        double spawnDz = (spawnZ - centerZ) / radiusZ;
+        if (spawnDx * spawnDx + spawnDz * spawnDz >= 1.0)
+            throw new IllegalArgumentException("Island spawn must be inside the island footprint");
+        if (spawnY <= surfaceY + 3)
+            throw new IllegalArgumentException("Island spawn must be at least four blocks above the nominal surface");
         regionId = regionId == null ? "" : regionId;
         warpId = warpId == null ? "" : warpId;
         if (topBlock == null || topBlock.isBlank() || soilBlock == null || soilBlock.isBlank()
