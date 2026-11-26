@@ -64,7 +64,7 @@ This is the simplified melee core only. It does not yet include additive damage 
 ### P3.4 mob catalogue and incoming damage
 - Design: `docs/P3.4_DESIGN.md`
 - Test checklist: `docs/P3.4_TEST_PLAN.md`
-- 51 sourced mob records are currently included: 15 level variants each for Private Island Zombie, Skeleton and Spider, plus six Graveyard/Crypts/Ruins entries. Five vanilla entity mappings are active; other entries are catalogue-only until variant-aware spawn assignment is implemented.
+- 58 sourced mob records are currently included: 15 level variants each for Private Island Zombie, Skeleton and Spider, plus 13 Graveyard/Crypts/Ruins/The Park/Deep Caverns examples. Five vanilla entity mappings are active; other entries are catalogue-only until variant-aware spawn assignment is implemented.
 - The incoming damage bridge replaces vanilla raw damage with the configured mob Damage before vanilla player mitigation.
 
 ### P3.3 mob HP
