@@ -35,10 +35,4 @@ public final class SkyBlockHandledScreen extends HandledScreen<SkyBlockScreenHan
         context.drawText(textRenderer, title, 8, 8, 0xFFFFFF, false);
     }
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        drawMouseoverTooltip(context, mouseX, mouseY);
-    }
 }
