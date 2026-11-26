@@ -26,14 +26,18 @@ public final class ShopRegistry {
                 String shopName = required(root, "name");
                 JsonArray offers = root.getAsJsonArray("offers");
                 if (offers == null) throw new IllegalArgumentException("Missing offers array");
+                Map<String, ShopOffer> fileOffers = new LinkedHashMap<>();
                 for (var element : offers) {
                     JsonObject json = element.getAsJsonObject();
                     String itemId = required(json, "item_id").toLowerCase(Locale.ROOT);
                     if (ItemRegistry.get(itemId).isEmpty()) throw new IllegalArgumentException("Unknown item id: " + itemId);
                     ShopOffer offer = new ShopOffer(shopId, shopName, itemId,
                             requiredLong(json, "buy_price"), optionalLong(json, "sell_price", 0L));
-                    if (loaded.putIfAbsent(itemId, offer) != null) throw new IllegalArgumentException("Duplicate shop offer: " + itemId);
+                    if (fileOffers.putIfAbsent(itemId, offer) != null || loaded.containsKey(itemId)) {
+                        throw new IllegalArgumentException("Duplicate shop offer: " + itemId);
+                    }
                 }
+                loaded.putAll(fileOffers);
             } catch (Exception e) {
                 SkyBlockRPG.LOGGER.error("Failed to load shop data from {}", entry.getKey(), e);
             }
