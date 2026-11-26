@@ -10,7 +10,7 @@ public record ItemDefinition(
         String id, String name, ItemRarity rarity, ItemType type,
         EquipmentSlot equipmentSlot, int maxStackSize,
         Map<StatType, Double> stats, List<String> lore,
-        String accessoryLine, boolean dungeonAccessory, int accessoryPowerOverride) {
+        String accessoryLine, boolean dungeonAccessory, int accessoryPowerOverride, boolean reforgeable) {
     public ItemDefinition {
         stats = Map.copyOf(stats);
         lore = List.copyOf(lore);
