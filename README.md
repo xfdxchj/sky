@@ -8,7 +8,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P5.0 (Island map foundation; build/test pending)
+## Current milestone: P5.2 (Island connections; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
@@ -125,7 +125,7 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Adds an operator-triggered procedural floating-island generator with configurable footprint, height, thickness and block palette. It preserves existing non-air blocks and checks world border, build height and a generation-size safety cap.
 - Adds `/skyblock map`, `/skyblock island list|info <id>|generate <id>|visit <id>`.
 - The included `starter_island_fixture` is only a development fixture; it is not Hypixel Private Island or Hub geometry. No terrain is generated automatically when a world opens.
-- Structure/schematic import, island protection, actual Hypixel map assets, portals and map GUI remain deferred.
+- Native structure NBT import is implemented in P5.1. P5.2 adds JSON-driven bridge and portal route definitions. Island protection, actual Hypixel map assets and map GUI remain deferred.
 - Local Java 21 Gradle build and in-game verification are pending.
 
 ### P4.8 Basic Reforge foundation
@@ -237,3 +237,15 @@ Open the project in IntelliJ IDEA with Gradle JVM set to Java 21, then run `grad
 - Operator-only paste command; entity placement disabled; full bounding-box preflight requires air and prevents partial overwrite.
 - Includes a tiny project-authored marker fixture. No Hypixel map assets are bundled.
 - See docs/P5.1_STRUCTURE_IMPORT.md and docs/P5.1_STRUCTURE_IMPORT_TEST_PLAN.md.
+
+
+### P5.2 Island connections
+- Design: `docs/P5.2_ISLAND_CONNECTIONS.md`
+- Test checklist: `docs/P5.2_ISLAND_CONNECTIONS_TEST_PLAN.md`
+- Adds JSON-driven bridge and portal connections under `data/skyblockrpg/skyblock/connections/*.json`, each linking existing source and target warp nodes.
+- Adds a route adjacency query with `/skyblock connection routes <warpId>`.
+- Adds operator-triggered bridge deck construction with dimension, build-height, world-border, block-count and all-air preflight checks.
+- Adds proximity-gated portal travel delegated to the existing WarpManager, preserving destination warp discovery requirements.
+- Includes clearly labelled starter bridge, portal and outpost fixtures. These are project test coordinates, not Hypixel map data.
+- This is an adjacency graph only; shortest-path search, actual portal blocks/effects, supports/rails and verified Hypixel map coordinates remain future work.
+- Local Java 21 Gradle build and in-game verification are pending.
