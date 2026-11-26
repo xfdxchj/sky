@@ -1,6 +1,7 @@
 package com.skyrpg.skyblock.skill;
 
 import java.util.Locale;
+import net.minecraft.util.Identifier;
 import java.util.Optional;
 
 /** Stable internal IDs. This list is a technical starting point, not a claim of complete current-game parity. */
@@ -9,6 +10,8 @@ public enum SkillType {
     ENCHANTING, ALCHEMY, TAMING, CARPENTRY, RUNECRAFTING, SOCIAL, HUNTING;
 
     public String id() { return name().toLowerCase(Locale.ROOT); }
+
+    public Identifier identifier() { return Identifier.of("skyblockrpg", id()); }
 
     public static Optional<SkillType> fromId(String id) {
         if (id == null) return Optional.empty();
