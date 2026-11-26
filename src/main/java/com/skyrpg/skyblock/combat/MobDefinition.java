@@ -3,7 +3,7 @@ package com.skyrpg.skyblock.combat;
 import java.util.List;
 
 public record MobDefinition(
-        String id, String displayName, String entityType, int level,
+        String id, String displayName, String entityType, String spawnEntityType, int level,
         double health, double damage, double defense, long coinReward,
         double combatXpReward, String sourceType, String sourceUrl,
         String retrievedAt, String confidence, String familyId,
@@ -13,6 +13,7 @@ public record MobDefinition(
         if (id == null || id.isBlank()) throw new IllegalArgumentException("Mob id cannot be blank");
         if (displayName == null || displayName.isBlank()) displayName = id;
         entityType = entityType == null ? "" : entityType;
+        spawnEntityType = spawnEntityType == null || spawnEntityType.isBlank() ? entityType : spawnEntityType;
         level = Math.max(0, level);
         health = nonNegative(health);
         damage = nonNegative(damage);
