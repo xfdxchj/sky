@@ -1,0 +1,47 @@
+{
+  "id": "sneaky_creeper",
+  "name": "Sneaky Creeper",
+  "entity_type": "",
+  "level": 5,
+  "health": 120,
+  "damage": 80,
+  "defense": 0,
+  "coin_reward": 1,
+  "combat_xp_reward": 7,
+  "source_type": "community-wiki",
+  "source_url": "https://hypixelskyblock.minecraft.wiki/w/Sneaky_Creeper",
+  "retrieved_at": "2026-11-26",
+  "confidence": "Current listed stats and explicit drop chances; Defense not listed.",
+  "family_id": "sneaky_creeper",
+  "category": "hostile",
+  "mob_types": [
+    "cubic"
+  ],
+  "area": "deep_caverns_gunpowder_mines",
+  "drops": [
+    {
+      "item_id": "gunpowder",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "enchanted_gunpowder",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.005,
+      "chance_known": true,
+      "drop_type": "item"
+    },
+    {
+      "item_id": "exp_share_core",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0001,
+      "chance_known": true,
+      "drop_type": "item"
+    }
+  ]
+}
