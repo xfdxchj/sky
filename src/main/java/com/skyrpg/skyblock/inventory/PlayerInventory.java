@@ -18,10 +18,17 @@ public final class PlayerInventory {
     private final Map<String, Integer> items = new LinkedHashMap<>();
     private final EnumMap<EquipmentSlot, String> equipment = new EnumMap<>(EquipmentSlot.class);
     private final List<String> accessoryBag = new ArrayList<>();
+    private final EnumMap<EquipmentSlot, String> reforges = new EnumMap<>(EquipmentSlot.class);
 
     public Map<String, Integer> getItems() { return Collections.unmodifiableMap(items); }
     public Map<EquipmentSlot, String> getEquipment() { return Collections.unmodifiableMap(equipment); }
     public List<String> getAccessoryBag() { return Collections.unmodifiableList(accessoryBag); }
+    public Map<EquipmentSlot, String> getReforges() { return Collections.unmodifiableMap(reforges); }
+    public String getReforge(EquipmentSlot slot) { return reforges.get(slot); }
+    public void setReforge(EquipmentSlot slot, String reforgeId) {
+        if (slot == null || slot == EquipmentSlot.ACCESSORY || reforgeId == null || reforgeId.isBlank()) return;
+        reforges.put(slot, reforgeId.trim().toLowerCase(Locale.ROOT));
+    }
     public int getCount(String itemId) { return items.getOrDefault(itemId, 0); }
     public int getUsedSlots() {
         int slots = 0;
@@ -113,7 +120,11 @@ public final class PlayerInventory {
 
     public List<StatModifier> getStatModifiers() {
         List<StatModifier> result = new ArrayList<>();
-        equipment.forEach((slot, id) -> addItemModifiers(result, "equipment:" + slot.id() + ":" + id, id));
+        equipment.forEach((slot, id) -> {
+            addItemModifiers(result, "equipment:" + slot.id() + ":" + id, id);
+            String reforgeId = reforges.get(slot);
+            if (reforgeId != null) result.addAll(com.skyrpg.skyblock.reforge.ReforgeManager.modifiers(slot, reforgeId));
+        });
         for (String id : getEffectiveAccessories()) addItemModifiers(result, "accessory:" + id, id);
         return result;
     }
@@ -136,6 +147,9 @@ public final class PlayerInventory {
         NbtCompound equipped = new NbtCompound();
         equipment.forEach((slot, id) -> equipped.putString(slot.id(), id));
         nbt.put("equipment", equipped);
+        NbtCompound reforgeData = new NbtCompound();
+        reforges.forEach((slot, id) -> reforgeData.putString(slot.id(), id));
+        nbt.put("reforges", reforgeData);
         NbtList accessories = new NbtList();
         accessoryBag.forEach(id -> accessories.add(NbtString.of(id)));
         nbt.put("accessoryBag", accessories);
@@ -157,6 +171,12 @@ public final class PlayerInventory {
             String id = equipped.getString(slot.id());
             ItemDefinition def = ItemRegistry.get(id).orElse(null);
             if (def != null && def.isEquippable() && def.equipmentSlot() == slot) inventory.equipment.put(slot, id);
+        }
+        NbtCompound reforgeData = nbt.getCompound("reforges");
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot == EquipmentSlot.ACCESSORY) continue;
+            String reforgeId = reforgeData.getString(slot.id());
+            if (!reforgeId.isBlank() && inventory.equipment.containsKey(slot)) inventory.reforges.put(slot, reforgeId);
         }
         NbtList accessories = nbt.getList("accessoryBag", NbtElement.STRING_TYPE);
         for (int i = 0; i < accessories.size() && inventory.accessoryBag.size() < ACCESSORY_BAG_CAPACITY; i++) {
