@@ -1,6 +1,5 @@
 package com.skyrpg.skyblock.island;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -8,7 +7,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Set;
-import java.util.UUID;
 
 /** Creates and manages one persistent private island per player. */
 public final class PrivateIslandManager {
@@ -45,6 +43,9 @@ public final class PrivateIslandManager {
         int centerX = BASE_X + column * ISLAND_SPACING;
         int centerZ = BASE_Z + row * ISLAND_SPACING;
         ServerWorld world = player.getServer().getOverworld();
+        if (SURFACE_Y + 8 >= world.getTopY() || SURFACE_Y - THICKNESS - 2 < world.getBottomY()) {
+            return new CreationResult(false, false, "The configured private island height is outside this world's build range.", null);
+        }
 
         if (!volumeIsClear(world, centerX, centerZ)) {
             return new CreationResult(false, false,
