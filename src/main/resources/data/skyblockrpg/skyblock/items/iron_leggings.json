@@ -1,0 +1,15 @@
+{
+  "id": "iron_leggings",
+  "name": "Iron Leggings",
+  "rarity": "COMMON",
+  "type": "ARMOR",
+  "max_stack_size": 1,
+  "stats": {
+    "health": 20,
+    "defense": 15
+  },
+  "lore": [
+    "A simple pair of iron leggings."
+  ],
+  "equipment_slot": "leggings"
+}
