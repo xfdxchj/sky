@@ -85,9 +85,11 @@ Class: `StatAPI`
 ```java
 double miningSpeed = StatAPI.getFinal(player, StatType.MINING_SPEED);
 double miningFortune = StatAPI.getFinal(player, StatType.MINING_FORTUNE);
+double farmingSpeed = StatAPI.getFinal(player, StatType.FARMING_SPEED);
 double farmingFortune = StatAPI.getFinal(player, StatType.FARMING_FORTUNE);
 double foragingFortune = StatAPI.getFinal(player, StatType.FORAGING_FORTUNE);
 double fishingSpeed = StatAPI.getFinal(player, StatType.FISHING_SPEED);
+double fishingFortune = StatAPI.getFinal(player, StatType.FISHING_FORTUNE);
 double seaCreatureChance = StatAPI.getFinal(player, StatType.SEA_CREATURE_CHANCE);
 ```
 
@@ -95,9 +97,9 @@ The v2 stat API is intentionally read-only. It reads the same final-stat calcula
 
 Current life-skill stat IDs include:
 - `MINING_SPEED`, `MINING_FORTUNE`
-- `FARMING_FORTUNE`
+- `FARMING_SPEED`, `FARMING_FORTUNE`
 - `FORAGING_SPEED`, `FORAGING_FORTUNE`
-- `FISHING_SPEED`, `SEA_CREATURE_CHANCE`
+- `FISHING_SPEED`, `FISHING_FORTUNE`, `SEA_CREATURE_CHANCE`
 - `WISDOM_MINING`, `WISDOM_FARMING`, `WISDOM_FORAGING`, `WISDOM_FISHING`
 
 This is a fixed Core stat catalogue, not arbitrary runtime stat registration. New shared stat types require a Core change and API compatibility review. Life Skills owns its local mechanic modifiers (for example a temporary fishing condition) and combines them in its own resolver; only Core-owned sources contribute to `StatAPI.getFinal` until a modifier-source write API is published.
