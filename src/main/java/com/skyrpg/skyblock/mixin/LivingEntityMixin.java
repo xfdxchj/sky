@@ -18,7 +18,7 @@ public abstract class LivingEntityMixin {
             argsOnly = true,
             ordinal = 0
     )
-    private float skyblockrpg$useSkyBlockMobDamage(float vanillaDamage, DamageSource source) {
+    private float skyblockrpg$useSkyBlockMobDamage(float vanillaDamage, DamageSource source, float originalAmount) {
         if (!((Object) this instanceof ServerPlayerEntity)) return vanillaDamage;
         MobDefinition mob = MobRegistry.getAttackingMob(source);
         if (mob.id().equals("unregistered") || mob.damage() <= 0.0) return vanillaDamage;
