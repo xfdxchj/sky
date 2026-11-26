@@ -17,11 +17,13 @@ public final class ItemRegistry {
 
     public static void reload(ResourceManager manager) {
         Map<String, ItemDefinition> loaded = new LinkedHashMap<>();
-        Map<Identifier, Resource> resources = manager.findResources("skyblock/items", id -> id.getNamespace().equals("skyblockrpg") && id.getPath().endsWith(".json"));
+        Map<Identifier, Resource> resources = manager.findResources("skyblock/items", id -> id.getPath().endsWith(".json"));
         for (var entry : resources.entrySet()) {
             try (Reader reader = entry.getValue().getReader()) {
                 JsonObject j = JsonParser.parseReader(reader).getAsJsonObject();
-                String id = required(j,"id");
+                String rawId = required(j,"id");
+                String id = entry.getKey().getNamespace().equals("skyblockrpg") || rawId.contains(":")
+                        ? rawId : entry.getKey().getNamespace() + ":" + rawId;
                 ItemRarity rarity = ItemRarity.valueOf(required(j,"rarity").toUpperCase(Locale.ROOT));
                 ItemType type = ItemType.valueOf(required(j,"type").toUpperCase(Locale.ROOT));
                 String slotId = optional(j,"equipment_slot","");
@@ -49,7 +51,14 @@ public final class ItemRegistry {
         ITEMS.clear(); ITEMS.putAll(loaded);
         SkyBlockRPG.LOGGER.info("Loaded {} SkyBlock item definitions.",ITEMS.size());
     }
-    public static Optional<ItemDefinition> get(String id) { return Optional.ofNullable(ITEMS.get(id == null ? "" : id.toLowerCase(Locale.ROOT))); }
+    public static Optional<ItemDefinition> get(String id) {
+        if (id == null || id.isBlank()) return Optional.empty();
+        String normalized = id.trim().toLowerCase(Locale.ROOT);
+        ItemDefinition exact = ITEMS.get(normalized);
+        if (exact != null) return Optional.of(exact);
+        if (!normalized.contains(":")) return Optional.ofNullable(ITEMS.get("skyblockrpg:" + normalized));
+        return Optional.empty();
+    }
     public static Collection<ItemDefinition> all() { return Collections.unmodifiableCollection(ITEMS.values()); }
     private static String required(JsonObject j,String k) {
         if (!j.has(k) || j.get(k).isJsonNull()) throw new IllegalArgumentException("Missing "+k);
