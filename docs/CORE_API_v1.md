@@ -1,6 +1,6 @@
-# Core Public API v1
+# Core Public API v1 (Historical)
 
-**Status:** Initial public contract, implemented in Core  
+**Status:** Historical API v1 contract; superseded by [Core Public API v2](CORE_API_v2.md)  
 **Target:** Minecraft 1.21.1 / Fabric / Java 21  
 **Core Mod ID:** `skyblockrpg`
 
