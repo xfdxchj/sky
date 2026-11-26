@@ -51,6 +51,17 @@ These are useful current references, but they are not official Hypixel API data 
 - Mob-level/reward formulas: https://hypixelskyblock.minecraft.wiki/w/Mobs
   - The wiki documents formulas deriving mob level, Combat XP and coins for most mobs. Special mobs can use manually defined values.
 
+- The Park: https://hypixelskyblock.minecraft.wiki/w/The_Park
+  - Pack Spirit: Lv43, 6,000 Health, 300 Damage, 64 Combat XP, 14 Coins.
+  - Howling Spirit: Lv51, 7,000 Health, 500 Damage, 76 Combat XP, 17 Coins.
+  - Soul of the Alpha: Lv90, 31,150 Health, 1,425 Damage, 135 Combat XP, 30 Coins.
+- Deep Caverns examples:
+  - Sneaky Creeper: https://hypixelskyblock.minecraft.wiki/w/Sneaky_Creeper — Lv5, 120 Health, 80 Damage, 7 Combat XP, 1 Coin.
+  - Lapis Zombie: https://hypixelskyblock.minecraft.wiki/w/Lapis_Zombie — Lv6, 200 Health, 50 Damage, 9 Combat XP, 2 Coins.
+  - Redstone Pigman: https://hypixelskyblock.minecraft.wiki/w/Redstone_Pigman — Lv8, 250 Health, 75 Damage, 12 Combat XP, 2 Coins.
+  - Emerald Slime: https://hypixelskyblock.minecraft.wiki/w/Cubic_%28Mob_Type%29 — Lv4, 80 Health, 70 Damage, 6 Combat XP, 1 Coin.
+- Island coverage notes: the current Wiki's Mobs page states that the Gold Mine is the only public island without mobs. The Farming Islands do have passive animal families; these are better represented in a later farming/collection milestone rather than the current hostile-combat bridge.
+
 ## Project-only placeholders
 
 - `training_sword` is a test item, not a Hypixel item.
