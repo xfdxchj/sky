@@ -125,17 +125,19 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 **限制：** 当前是私人岛屿基础设施，不包含访客权限、扩建、岛屿等级、Minion、GUI，也未覆盖爆炸、活塞、流体及所有第三方模组交互路径。没有执行 Gradle build 或游戏内验证。
 
-### 3.6 Core 扩展 API v1（已提交，待本地验证）
+### 3.6 Core 扩展 API v2（源码已提交，待本地验证）
 
-- 新增 `CoreApi`、`SkillAPI`、`PlayerDataAPI` 公共入口。
-- 新增 namespaced `SkillRegistration` / `SkillRegistry`，允许依赖 Core 的扩展模组注册技能 ID 和独立 XP 曲线。
-- 玩家技能 XP 从固定 `EnumMap<SkillType, Double>` 迁移为 `Identifier` 映射；保留原有 `SkillType` 重载和短 ID 命令兼容。
-- 旧存档无命名空间技能键迁移到 `skyblockrpg:<skill>`；Profile / world data version 更新至 8。
-- 新增模块玩家数据容器，按 namespaced Identifier 隔离；Core 在扩展未加载时保留其技能 XP 和模块数据。
-- `/skyblock skill` 支持旧短 ID 和扩展 namespaced ID。
-- 架构、API 合约、生活模组交接规范和测试计划见 `MODULE_ARCHITECTURE.md`、`CORE_API_v1.md`、`LIFE_SKILLS_MOD_SPEC.md`。
+- 保留 API v1 的 `SkillAPI` 与 `PlayerDataAPI`，不改变既有方法签名。
+- `CoreApi.API_VERSION` 更新为 2。
+- 新增只读 `StatAPI`：查询 Core 最终属性管线；补充 `FORAGING_SPEED`、`FORAGING_FORTUNE`。
+- 新增 `ItemAPI`：查询 Core 与扩展数据包中的物品定义。
+- `ItemRegistry` 现在扫描所有命名空间下的 `data/<namespace>/skyblock/items/*.json`，扩展物品使用 namespaced ID；保留 Core 旧 ID 查询兼容。
+- 新增 `InventoryAPI`：通过 Core 逻辑背包安全查询、增加和移除物品。
+- 新增 `CurrencyAPI`：统一访问 Purse / Bank。
+- 新增 `RewardAPI`：提供物品、金币和技能经验奖励入口。
+- 生活模组接口合约与测试计划见 `CORE_API_v2.md`、`CORE_API_v2_TEST_PLAN.md`；生活模组开发规范见 `LIFE_SKILLS_MOD_SPEC.md`。
 
-**边界：** API v1 当前只正式提供技能注册/查询/经验与模块玩家数据。Stat、Item/ItemInstance、Currency transaction、Reward、Quest objective 和通用事件 API 尚未发布；扩展模组不得假设这些接口已经存在。
+**明确未包含：** 动态注册任意 StatType、写入属性修正来源、ItemInstance、原子多奖励事务、Quest Objective 和通用 Core 事件总线。Life Skills 不得假设这些接口存在。所有新增 API 目前仅完成源码提交，尚未由本地 Gradle build 或游戏内测试验证。
 
 ## 4. 剩余工作按系统归类
 
