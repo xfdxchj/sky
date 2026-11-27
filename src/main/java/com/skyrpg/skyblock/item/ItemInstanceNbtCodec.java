@@ -4,6 +4,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
+import com.skyrpg.skyblock.reforge.ReforgeDefinition;
+import com.skyrpg.skyblock.reforge.ReforgeRegistry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -71,10 +73,19 @@ public final class ItemInstanceNbtCodec {
             }
         }
 
+        String reforgeId = tag.getString("reforgeId");
+        if (!reforgeId.isBlank()) {
+            ReforgeDefinition reforge = ReforgeRegistry.get(reforgeId).orElse(null);
+            if (reforge == null || !definition.reforgeable() || definition.equipmentSlot() == null
+                    || !reforge.allows(definition.equipmentSlot().id())) {
+                throw new IllegalArgumentException("Unknown or incompatible reforge: " + reforgeId);
+            }
+        }
+
         NbtCompound customData = tag.contains("customData", NbtElement.COMPOUND_TYPE)
                 ? tag.getCompound("customData").copy() : new NbtCompound();
         return ItemInstance.restore(instanceId, definitionId, tag.getInt("count"),
-                tag.getString("reforgeId"), enchantments, tag.getInt("stars"),
+                reforgeId, enchantments, tag.getInt("stars"),
                 tag.getInt("upgradeLevel"), customData, definition);
     }
 }
