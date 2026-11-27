@@ -44,7 +44,8 @@
 ### VS-1：起始据点与玩家入口
 
 目标：玩家进入世界后知道自己在哪里、能做什么。
-- [ ] 确认出生点/起始岛的落点，不让玩家出生在虚空或测试结构外。
+- [x] 首次加入时自动创建私人岛并传送至岛屿出生点（首版代码已提交；待构建与游戏内验收）。
+- [ ] 将当前单一椭圆浮岛升级为 Hypixel 初始双岛布局：主岛（草地/树木/简单任务）与副岛（洞穴、Hub Portal、Jerry、Cobblestone Minion I）。
 - [ ] 提供清晰的首次进入提示和基础状态入口。
 - [ ] 至少能查看 Purse、Bank、主要属性、技能等级和当前目标。
 - [ ] 起始据点至少有一个可交互 NPC 或等效入口。
@@ -135,7 +136,7 @@
 
 以下是对当前 main 源码与数据文件的静态审查，不代表构建或游戏内验证：
 
-- 已有 starter island fixture：可通过岛屿生成逻辑放置浮岛，但当前入口是管理员命令；未见首次进入自动生成/传送的流程。
+- 已有 starter island fixture：可通过岛屿生成逻辑放置浮岛。2026-11-27 新增首次加入自动创建私人岛并传送的流程，源码已提交，尚未构建或游戏验证。当前生成几何仍是单一椭圆浮岛，不等于 Hypixel 初始双岛布局。
 - 已有 starter_test_area Region fixture，范围为 Overworld 的 X/Z -64 至 64；它目前是区域数据，不是已建成的冒险地图。
 - 已有训练武器、铁甲、药水/补给类测试物品和 General Store 数据；价格明确来自 project_test_values。
 - 已有 MobDefinition 的奖励与 drops 数据结构；CombatManager 当前击杀结算发放金币和 Combat XP，但尚未执行 MobDropDefinition 的物品掉落。
@@ -156,3 +157,14 @@
 4. Private Island：暂无已确认的官方独立地图下载，依据 Wiki 初始布局描述制作项目自有结构。
 
 任何外部地图均不得直接覆盖玩家世界；先记录来源、版本、许可、哈希和转换说明，再切片导入。完整地图未实际导入前，VS-1/VS-3 仍不得标记为完成。
+
+
+## 8. VS-1 首次进入流程（2026-11-27）
+
+- `SkyBlockRPG` 的 JOIN 回调在玩家档案加载后检查 `PrivateIslandManager.get(player)`。
+- 没有私人岛记录时调用 `PrivateIslandManager.create(player)`；创建成功后调用 `visitHome(player)`，并显示首次进入提示。
+- 已有私人岛记录的玩家不会在每次登录时被强制传送，保留其当前所在位置。
+- 创建失败或回家失败时向玩家显示原因并记录服务端错误日志，不写入“已成功传送”的假状态。
+- 该改动复用现有天空网格分配、空域预检、浮岛生成和私人岛持久化，不覆盖玩家世界原有方块。
+- 代码提交：`837ccee`。当前仅为源码提交；未执行 Gradle build、runClient 或游戏内验收。
+- 后续还原目标：依据 `HYPIXEL_REFERENCE_ASSET_CATALOG.md` 的 Wiki 初始布局资料，将单岛升级为主岛+副岛，并分别生成树木、洞穴、箱子初始物资、Jerry、Hub Portal 和 Cobblestone Minion I。以上实体/物资应由玩法数据生成，不写死在结构 NBT 中。
