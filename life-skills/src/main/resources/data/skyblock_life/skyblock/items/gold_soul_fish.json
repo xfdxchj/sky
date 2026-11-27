@@ -1,0 +1,11 @@
+﻿{
+  "id": "skyblock_life:gold_soul_fish",
+  "name": "Soul Fish (gold)",
+  "rarity": "RARE",
+  "type": "MATERIAL",
+  "max_stack_size": 64,
+  "stats": {},
+  "lore": [
+    "A fishing catch."
+  ]
+}

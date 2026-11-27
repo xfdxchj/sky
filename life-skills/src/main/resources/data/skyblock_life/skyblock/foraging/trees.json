@@ -1,0 +1,12 @@
+{
+  "trees": [
+    { "id": "oak", "display_name": "Oak", "logs": ["minecraft:oak_log"], "drop": "skyblock_life:oak_log", "xp": 5.0 },
+    { "id": "birch", "display_name": "Birch", "logs": ["minecraft:birch_log"], "drop": "skyblock_life:birch_log", "xp": 5.0 },
+    { "id": "spruce", "display_name": "Spruce", "logs": ["minecraft:spruce_log"], "drop": "skyblock_life:spruce_log", "xp": 5.0 },
+    { "id": "jungle", "display_name": "Jungle", "logs": ["minecraft:jungle_log"], "drop": "skyblock_life:jungle_log", "xp": 5.0 },
+    { "id": "acacia", "display_name": "Acacia", "logs": ["minecraft:acacia_log"], "drop": "skyblock_life:acacia_log", "xp": 5.0 },
+    { "id": "dark_oak", "display_name": "Dark Oak", "logs": ["minecraft:dark_oak_log"], "drop": "skyblock_life:dark_oak_log", "xp": 5.0 },
+    { "id": "fig", "display_name": "Fig", "logs": ["minecraft:stripped_spruce_log", "minecraft:stripped_spruce_wood"], "drop": "skyblock_life:fig_log", "xp": 5.0 },
+    { "id": "mangrove", "display_name": "Mangrove", "logs": ["minecraft:mangrove_log", "minecraft:mangrove_wood"], "drop": "skyblock_life:mangrove_log", "xp": 5.0 }
+  ]
+}

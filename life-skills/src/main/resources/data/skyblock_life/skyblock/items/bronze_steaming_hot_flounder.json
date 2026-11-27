@@ -1,0 +1,11 @@
+﻿{
+  "id": "skyblock_life:bronze_steaming_hot_flounder",
+  "name": "Steaming Hot Flounder (bronze)",
+  "rarity": "RARE",
+  "type": "MATERIAL",
+  "max_stack_size": 64,
+  "stats": {},
+  "lore": [
+    "A fishing catch."
+  ]
+}

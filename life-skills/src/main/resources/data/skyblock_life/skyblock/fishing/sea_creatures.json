@@ -1,0 +1,25 @@
+{
+  "sea_creatures": [
+    { "id": "squid", "display_name": "Squid", "entity_type": "minecraft:squid", "required_level": 1, "skill_xp": 20 },
+    { "id": "sea_walker", "display_name": "Sea Walker", "entity_type": "minecraft:zombie", "required_level": 4, "skill_xp": 40 },
+    { "id": "night_squid", "display_name": "Night Squid", "entity_type": "minecraft:glow_squid", "required_level": 6, "skill_xp": 80 },
+    { "id": "sea_guardian", "display_name": "Sea Guardian", "entity_type": "minecraft:guardian", "required_level": 8, "skill_xp": 120 },
+    { "id": "sea_witch", "display_name": "Sea Witch", "entity_type": "minecraft:witch", "required_level": 10, "skill_xp": 150 },
+    { "id": "sea_archer", "display_name": "Sea Archer", "entity_type": "minecraft:skeleton", "required_level": 15, "skill_xp": 200 },
+    { "id": "monster_of_the_deep", "display_name": "Monster of the Deep", "entity_type": "minecraft:elder_guardian", "required_level": 20, "skill_xp": 300 },
+    { "id": "catfish", "display_name": "Catfish", "entity_type": "minecraft:cod", "required_level": 24, "skill_xp": 400 },
+    { "id": "carrot_king", "display_name": "Carrot King", "entity_type": "minecraft:zombie", "required_level": 26, "skill_xp": 500 },
+    { "id": "sea_leech", "display_name": "Sea Leech", "entity_type": "minecraft:squid", "required_level": 30, "skill_xp": 650 },
+    { "id": "guardian_defender", "display_name": "Guardian Defender", "entity_type": "minecraft:guardian", "required_level": 35, "skill_xp": 900 },
+    { "id": "water_hydra", "display_name": "Water Hydra", "entity_type": "minecraft:guardian", "required_level": 60, "skill_xp": 7500 },
+    { "id": "the_sea_emperor", "display_name": "The Sea Emperor", "entity_type": "minecraft:elder_guardian", "required_level": 80, "skill_xp": 20000 },
+    { "id": "magma_slug", "display_name": "Magma Slug", "entity_type": "minecraft:magma_cube", "required_level": 21, "skill_xp": 450 },
+    { "id": "moogma", "display_name": "Moogma", "entity_type": "minecraft:magma_cube", "required_level": 22, "skill_xp": 500 },
+    { "id": "lava_leech", "display_name": "Lava Leech", "entity_type": "minecraft:magma_cube", "required_level": 24, "skill_xp": 550 },
+    { "id": "pyroclastic_worm", "display_name": "Pyroclastic Worm", "entity_type": "minecraft:magma_cube", "required_level": 28, "skill_xp": 800 },
+    { "id": "fire_eel", "display_name": "Fire Eel", "entity_type": "minecraft:blaze", "required_level": 28, "skill_xp": 800 },
+    { "id": "lava_blaze", "display_name": "Lava Blaze", "entity_type": "minecraft:blaze", "required_level": 30, "skill_xp": 1000 },
+    { "id": "taurus", "display_name": "Taurus", "entity_type": "minecraft:piglin", "required_level": 36, "skill_xp": 2500 },
+    { "id": "lord_jawbus", "display_name": "Lord Jawbus", "entity_type": "minecraft:wither_skeleton", "required_level": 45, "skill_xp": 15000 }
+  ]
+}

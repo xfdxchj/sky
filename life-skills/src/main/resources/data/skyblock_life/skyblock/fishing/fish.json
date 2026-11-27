@@ -1,0 +1,14 @@
+{
+  "fish": [
+    { "id": "raw_fish", "display_name": "Raw Fish", "weight": 36, "skill_xp": 5 },
+    { "id": "raw_salmon", "display_name": "Raw Salmon", "weight": 22, "skill_xp": 6 },
+    { "id": "pufferfish", "display_name": "Pufferfish", "weight": 10, "skill_xp": 7 },
+    { "id": "ink_sac", "display_name": "Ink Sac", "weight": 8, "skill_xp": 5 },
+    { "id": "lily_pad", "display_name": "Lily Pad", "weight": 8, "skill_xp": 5 },
+    { "id": "clay_ball", "display_name": "Clay Ball", "weight": 6, "skill_xp": 5 },
+    { "id": "prismarine_crystals", "display_name": "Prismarine Crystals", "weight": 4, "skill_xp": 6 },
+    { "id": "prismarine_shard", "display_name": "Prismarine Shard", "weight": 3, "skill_xp": 6 },
+    { "id": "tropical_fish", "display_name": "Tropical Fish", "weight": 2, "skill_xp": 8 },
+    { "id": "sponge", "display_name": "Sponge", "weight": 1, "skill_xp": 10 }
+  ]
+}

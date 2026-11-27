@@ -1,0 +1,56 @@
+plugins {
+    id 'fabric-loom' version '1.9.2'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+loom {
+    mixin {
+        defaultRefmapName = "skyblock-life-refmap.json"
+    }
+}
+
+repositories {
+    // Fabric Loom already configures the Minecraft and Fabric repositories.
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // SkyBlock RPG core mod: modCompileOnly lets Loom remap the production jar.
+    modCompileOnly files("libs/skyblock-rpg-0.1.0-alpha.3.jar")
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'minecraft_version', project.minecraft_version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version,
+               'minecraft_version': project.minecraft_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+jar {
+    from('LICENSE') {
+        rename { "${it}_${project.archives_base_name}" }
+    }
+}

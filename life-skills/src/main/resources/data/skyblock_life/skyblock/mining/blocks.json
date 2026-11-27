@@ -1,0 +1,32 @@
+{
+  "blocks": [
+    { "id": "andesite", "handler": "pickaxe", "strength": 15, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "granite", "handler": "pickaxe", "strength": 15, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "diorite", "handler": "pickaxe", "strength": 15, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "stone", "handler": "pickaxe", "strength": 15, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "cobblestone", "handler": "pickaxe", "strength": 20, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "sand", "handler": "pickaxe", "strength": 5, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "netherrack", "handler": "pickaxe", "strength": 4, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "end_stone", "handler": "pickaxe", "strength": 30, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "ice", "handler": "pickaxe", "strength": 10, "power": 1, "xp": 1.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "obsidian", "handler": "pickaxe", "strength": 500, "power": 4, "xp": 25.0, "drops": [{ "item": "skyblock_life:stone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "coal_ore", "handler": "pickaxe", "strength": 30, "power": 1, "xp": 5.0, "drops": [{ "item": "skyblock_life:coal", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "deepslate_coal_ore", "handler": "pickaxe", "strength": 30, "power": 1, "xp": 5.0, "drops": [{ "item": "skyblock_life:coal", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "iron_ore", "handler": "pickaxe", "strength": 30, "power": 2, "xp": 5.0, "drops": [{ "item": "skyblock_life:iron", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "deepslate_iron_ore", "handler": "pickaxe", "strength": 30, "power": 2, "xp": 5.0, "drops": [{ "item": "skyblock_life:iron", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "gold_ore", "handler": "pickaxe", "strength": 30, "power": 3, "xp": 6.0, "drops": [{ "item": "skyblock_life:gold", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "deepslate_gold_ore", "handler": "pickaxe", "strength": 30, "power": 3, "xp": 6.0, "drops": [{ "item": "skyblock_life:gold", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "diamond_ore", "handler": "pickaxe", "strength": 30, "power": 3, "xp": 8.0, "drops": [{ "item": "skyblock_life:diamond", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "deepslate_diamond_ore", "handler": "pickaxe", "strength": 30, "power": 3, "xp": 8.0, "drops": [{ "item": "skyblock_life:diamond", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "redstone_ore", "handler": "pickaxe", "strength": 30, "power": 3, "xp": 5.0, "drops": [{ "item": "skyblock_life:redstone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "deepslate_redstone_ore", "handler": "pickaxe", "strength": 30, "power": 3, "xp": 5.0, "drops": [{ "item": "skyblock_life:redstone", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "gray_wool", "handler": "pickaxe", "strength": 500, "power": 4, "xp": 5.0, "drops": [{ "item": "skyblock_life:mithril", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "cyan_terracotta", "handler": "pickaxe", "strength": 500, "power": 4, "xp": 5.0, "drops": [{ "item": "skyblock_life:mithril", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "prismarine", "handler": "pickaxe", "strength": 800, "power": 4, "xp": 5.0, "drops": [{ "item": "skyblock_life:mithril", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "dark_prismarine", "handler": "pickaxe", "strength": 800, "power": 4, "xp": 5.0, "drops": [{ "item": "skyblock_life:mithril", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "prismarine_bricks", "handler": "pickaxe", "strength": 800, "power": 4, "xp": 5.0, "drops": [{ "item": "skyblock_life:mithril", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "light_blue_wool", "handler": "pickaxe", "strength": 1500, "power": 4, "xp": 5.0, "drops": [{ "item": "skyblock_life:mithril", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "polished_diorite", "handler": "pickaxe", "strength": 2500, "power": 5, "xp": 5.0, "drops": [{ "item": "skyblock_life:titanium", "min": 1, "max": 1, "chance": 1.0 }] },
+    { "id": "gold_block", "handler": "pickaxe", "strength": 600, "power": 3, "xp": 5.0, "drops": [{ "item": "skyblock_life:dwarven_gold", "min": 1, "max": 1, "chance": 1.0 }] }
+  ]
+}

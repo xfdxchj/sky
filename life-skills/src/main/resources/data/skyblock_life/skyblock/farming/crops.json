@@ -1,0 +1,15 @@
+{
+  "crops": [
+    { "id": "wheat", "display_name": "Wheat", "blocks": ["minecraft:wheat"], "drop": "skyblock_life:wheat", "xp": 4.0 },
+    { "id": "carrot", "display_name": "Carrot", "blocks": ["minecraft:carrots"], "drop": "skyblock_life:carrot", "xp": 4.0 },
+    { "id": "potato", "display_name": "Potato", "blocks": ["minecraft:potatoes"], "drop": "skyblock_life:potato", "xp": 4.0 },
+    { "id": "beetroot", "display_name": "Beetroot", "blocks": ["minecraft:beetroots"], "drop": "skyblock_life:beetroot", "xp": 4.0 },
+    { "id": "sugar_cane", "display_name": "Sugar Cane", "blocks": ["minecraft:sugar_cane"], "drop": "skyblock_life:sugar_cane", "xp": 4.0 },
+    { "id": "cactus", "display_name": "Cactus", "blocks": ["minecraft:cactus"], "drop": "skyblock_life:cactus", "xp": 4.0 },
+    { "id": "brown_mushroom", "display_name": "Brown Mushroom", "blocks": ["minecraft:brown_mushroom"], "drop": "skyblock_life:brown_mushroom", "xp": 4.0 },
+    { "id": "red_mushroom", "display_name": "Red Mushroom", "blocks": ["minecraft:red_mushroom"], "drop": "skyblock_life:red_mushroom", "xp": 4.0 },
+    { "id": "nether_wart", "display_name": "Nether Wart", "blocks": ["minecraft:nether_wart"], "drop": "skyblock_life:nether_wart", "xp": 4.0 },
+    { "id": "pumpkin", "display_name": "Pumpkin", "blocks": ["minecraft:pumpkin", "minecraft:carved_pumpkin"], "drop": "skyblock_life:pumpkin", "xp": 4.0 },
+    { "id": "melon", "display_name": "Melon", "blocks": ["minecraft:melon"], "drop": "skyblock_life:melon", "xp": 4.0 }
+  ]
+}

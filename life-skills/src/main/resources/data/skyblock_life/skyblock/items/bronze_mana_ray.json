@@ -1,0 +1,11 @@
+﻿{
+  "id": "skyblock_life:bronze_mana_ray",
+  "name": "Mana Ray (bronze)",
+  "rarity": "RARE",
+  "type": "MATERIAL",
+  "max_stack_size": 64,
+  "stats": {},
+  "lore": [
+    "A fishing catch."
+  ]
+}

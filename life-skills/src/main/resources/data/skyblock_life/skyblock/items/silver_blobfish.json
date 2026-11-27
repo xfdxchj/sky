@@ -1,0 +1,11 @@
+﻿{
+  "id": "skyblock_life:silver_blobfish",
+  "name": "Blobfish (silver)",
+  "rarity": "RARE",
+  "type": "MATERIAL",
+  "max_stack_size": 64,
+  "stats": {},
+  "lore": [
+    "A fishing catch."
+  ]
+}

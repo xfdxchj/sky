@@ -1,0 +1,11 @@
+{
+  "id": "skyblock_life:beetroot",
+  "name": "Beetroot",
+  "rarity": "COMMON",
+  "type": "MATERIAL",
+  "max_stack_size": 64,
+  "stats": {},
+  "lore": [
+    "A basic farming material."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "skyblock_life",
+  "version": "${version}",
+  "name": "SkyBlock RPG Life Skills",
+  "description": "Life skills expansion (Mining, Fishing, Farming, Foraging) for SkyBlock RPG. Requires the SkyBlock RPG core mod.",
+  "authors": [
+    "SkyBlock RPG Team"
+  ],
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.skyrpg.life.SkyBlockLife"
+    ]
+  },
+  "mixins": [
+    "skyblock_life.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "skyblockrpg": "*"
+  }
+}

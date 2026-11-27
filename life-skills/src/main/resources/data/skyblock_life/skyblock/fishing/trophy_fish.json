@@ -1,0 +1,22 @@
+{
+  "trophy_fish": [
+    { "id": "sulphur_skitter", "display_name": "Sulphur Skitter", "chance": 0.30 },
+    { "id": "blobfish", "display_name": "Blobfish", "chance": 0.25 },
+    { "id": "obfuscated_1", "display_name": "Obfuscated 1", "chance": 0.25 },
+    { "id": "steaming_hot_flounder", "display_name": "Steaming-Hot Flounder", "chance": 0.20 },
+    { "id": "gusher", "display_name": "Gusher", "chance": 0.20 },
+    { "id": "obfuscated_2", "display_name": "Obfuscated 2", "chance": 0.20 },
+    { "id": "slugfish", "display_name": "Slugfish", "chance": 0.15 },
+    { "id": "obfuscated_3", "display_name": "Obfuscated 3", "chance": 0.10 },
+    { "id": "flyfish", "display_name": "Flyfish", "chance": 0.08 },
+    { "id": "vanille", "display_name": "Vanille", "chance": 0.08 },
+    { "id": "lavahorse", "display_name": "Lavahorse", "chance": 0.04 },
+    { "id": "mana_ray", "display_name": "Mana Ray", "chance": 0.0 },
+    { "id": "volcanic_stonefish", "display_name": "Volcanic Stonefish", "chance": 0.03 },
+    { "id": "skeleton_fish", "display_name": "Skeleton Fish", "chance": 0.02 },
+    { "id": "moldfin", "display_name": "Moldfin", "chance": 0.02 },
+    { "id": "soul_fish", "display_name": "Soul Fish", "chance": 0.02 },
+    { "id": "karate_fish", "display_name": "Karate Fish", "chance": 0.02 },
+    { "id": "golden_fish", "display_name": "Golden Fish", "chance": 0.0 }
+  ]
+}
