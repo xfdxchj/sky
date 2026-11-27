@@ -76,7 +76,7 @@ data.putLong("blocks_mined", data.getLong("blocks_mined") + 1L);
 PlayerDataAPI.set(player, key, data);
 ```
 
-`get` returns a defensive copy. Mutations must be written back through `set`. Core retains extension data even while that extension is absent.
+`get` returns a defensive copy. Mutations must be written back through `set`. Core retains extension data even while that extension is absent. Extension keys must use the extension's own namespace; the reserved `skyblockrpg` namespace is rejected by this API.
 
 ## 4. Stat API
 
