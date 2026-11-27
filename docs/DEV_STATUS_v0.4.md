@@ -135,7 +135,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 新增 `InventoryAPI`：通过 Core 逻辑背包安全查询、增加和移除物品。
 - 新增 `CurrencyAPI`：统一访问 Purse / Bank。
 - 新增 `RewardAPI`：提供物品、金币和技能经验奖励入口。
-- 生活模组接口合约与测试计划见 `CORE_API_v2.md`、`CORE_API_v2_TEST_PLAN.md`；生活模组开发规范见 `LIFE_SKILLS_MOD_SPEC.md`。
+- 生活模组接口合约、外部模组依赖说明和独立 API smoke-test 工程见 `CORE_API_v2.md`、`CORE_API_v2_TEST_PLAN.md`、`EXTERNAL_MODULE_SETUP.md`、`examples/life-skills-api-smoke/`、`LIFE_SKILLS_MOD_SPEC.md`。
 
 **明确未包含：** 动态注册任意 StatType、写入属性修正来源、ItemInstance、原子多奖励事务、Quest Objective 和通用 Core 事件总线。Life Skills 不得假设这些接口存在。所有新增 API 目前仅完成源码提交，尚未由本地 Gradle build 或游戏内测试验证。
 
