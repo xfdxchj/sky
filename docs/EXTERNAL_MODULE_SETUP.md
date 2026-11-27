@@ -70,12 +70,38 @@ Core loads item definitions during server startup resource loading. Do not query
 
 ## 5. API version guard
 
-At startup, check `CoreApi.API_VERSION` before using methods introduced by that API version. Core API v2 is the current contract. A hard dependency on the Core mod alone does not guarantee that an older Core jar has the required methods.
+At startup, check `CoreApi.API_VERSION` before using methods introduced by that API version. Core API v3 is the current contract. A hard dependency on the Core mod alone does not guarantee that an older Core jar has the required methods.
 
 ## 6. Server authority
 
 All profile, inventory, currency, reward and skill-XP writes must run on the logical server. Never award rewards from client callbacks. Check every boolean return value.
 
-## 7. Compatibility rule
+## 7. Temporary stat effects
+
+Use `StatEffectAPI` to contribute extension-owned BUFF, TEMPORARY or OTHER modifiers without reaching into Core profile internals:
+
+```java
+Identifier effectId = Identifier.of("skyblock_life", "well_fed");
+Identifier sourceId = Identifier.of("skyblock_life", "farming_food");
+
+boolean applied = StatEffectAPI.apply(
+    player,
+    effectId,
+    sourceId,
+    StatSource.BUFF,
+    StatType.HEALTH,
+    20.0,
+    StatModifier.Operation.ADDITIVE,
+    20L * 60L * 5L
+);
+
+boolean removed = StatEffectAPI.remove(player, effectId);
+```
+
+Both identifiers must use the same non-Core namespace. Use a stable effect ID when refreshing an existing effect; use distinct IDs only when contributions should coexist. Duration is measured in Overworld game ticks; `-1` means no automatic expiry. The effect is persisted in the player's Core profile and removed on expiry or explicit removal.
+
+This API intentionally does not expose equipment, accessory, base-stat or skill-level source writes. `StatSource`, `StatType` and `StatModifier.Operation` are shared Core types required by the current contract. As with other in-process Fabric APIs, namespace validation is a compatibility boundary, not a sandbox against malicious installed mods.
+
+## 8. Compatibility rule
 
 Do not rely on internal classes merely because they are visible on the compile classpath. If an extension needs an operation not covered by the public API, request a Core API addition rather than reaching into Core profile or manager internals.
