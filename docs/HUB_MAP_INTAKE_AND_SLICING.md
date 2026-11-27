@@ -64,12 +64,12 @@ Core 已有原生 Minecraft Structure NBT 导入器：
 - NBT 放置路径：data/<namespace>/structures/<path>.nbt
 - manifest 路径：data/skyblockrpg/skyblock/structures/*.json
 - 命令：/skyblock structure list|info|paste
-- 当前单个结构的包围盒体积上限：250,000 blocks
+- 当前单个结构的包围盒体积上限：4,000,000 blocks（代码上限；实际导入仍应按内存、tick 与目标世界压力控制切片规模）
 - 当前策略：目标包围盒必须全部为空；不覆盖现有地形
 - 当前实体放置关闭；NPC 需由 Core NPC 系统单独布置
 - 结构 manifest 支持 dimension、origin、rotation、mirror 和来源/许可字段
 
-因此切片应控制在 250,000 体积以内。超大区域拆成多个不重叠、边界明确的子切片；不要把整张 Hub 当作一个结构。
+因此切片的硬上限是 4,000,000 体积，但这不是推荐切片大小。建议仍按功能区拆分，避免一次导入整张 Hub；超大区域拆成多个不重叠、边界明确的子切片。
 
 **当前导入器的重要限制：** `StructureImportManager` 要求整个目标包围盒均为空气，并且默认忽略结构实体。这意味着不能把切片直接贴到普通已生成地形上。拿到地图后，需要先判断该地图是否适合作为新世界的基础存档；若要把建筑合并进现有世界，则需准备受控空域/预清理区，或另行设计明确的 replace policy。不得默认覆盖地形或玩家建筑。
 
@@ -106,11 +106,35 @@ Core 已有原生 Minecraft Structure NBT 导入器：
 6. 将 POI 坐标从“社区 Wiki 参考坐标”更新为“地图测量坐标”，同时保留原始来源字段。
 7. 按地图测量结果建立 Region cuboid、Warp 锚点、NPC 实体位置和连接图。
 
-## 8. 目前需要的输入
+## 8. 已上传结构资产与本地审计
 
-真正生成 NBT 切片和填写准确 manifest，需要拿到实际解压后的地图文件（或至少提供地图所在目录/压缩包）。当前仓库只有下载来源链接和结构导入代码，没有地图二进制，因此不能诚实地给出切片坐标、体积、哈希或声称已经导入。
+仓库现已收到 12 个结构 NBT 文件（提交：`568d50d7bcafebc47dfbd9507ce24b974c85bbe8`）：
 
-收到地图文件后，第一步不是马上贴进游戏，而是先产出：
+- `worlds/structures/the_hub_incl_carnival.nbt` — Hub（含 Carnival）
+- `worlds/structures/gold_mine_modern_version.nbt`、`worlds/structures/gold_mine.nbt` — Gold Mine 两个版本
+- `worlds/structures/the_deep_caverns.nbt` — Deep Caverns
+- `worlds/structures/dwarven_mines_modern_version.nbt` — Dwarven Mines
+- `worlds/structures/spiders_den_modern_version.nbt` — Spider's Den
+- `worlds/structures/the_end_modern_version.nbt` — The End
+- `worlds/structures/the_farming_islands_modern_version.nbt` — Farming Islands
+- `worlds/structures/jerrys_workshop.nbt` — Jerry's Workshop
+- `worlds/structures/dungeon_hub_modern_version.nbt` — Dungeon Hub
+- `worlds/structures/floor_vii_world_download.nbt` — Floor VII
+- `worlds/structures/galatea.nbt` — Galatea
+
+已新增不依赖第三方 Python 包的只读审计脚本：`tools/inspect_structure_nbt.py`。在仓库根目录运行：
+
+```powershell
+python tools/inspect_structure_nbt.py worlds/structures --output reports/structure_audit.json
+```
+
+脚本支持 gzip/zlib/未压缩 NBT，输出结构尺寸、包围盒体积、DataVersion、palette、方块状态计数、方块实体数、实体类型和方块坐标范围；不会修改 NBT。注意：GitHub 文件浏览器/连接器无法解码这些二进制 NBT，必须在本地仓库运行脚本才能得到真实测量结果。
+
+**当前已确认的是 12 个结构 NBT 已提交；尚未确认它们的实际尺寸、坐标、方块统计和游戏内兼容性。** 不能把这些结构文件误称为完整可运行的世界存档，也不能在审计前假设 Hub NBT 的坐标就是目标世界坐标。
+
+## 9. 审计完成后需要产出的结果
+
+真正生成准确 manifest 前，先产出：
 - 地图维度与区块范围清单；
 - Hub 主要建筑/区域的坐标包围盒；
 - 不兼容方块与方块实体报告；
