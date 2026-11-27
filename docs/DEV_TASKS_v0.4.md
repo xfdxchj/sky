@@ -138,12 +138,14 @@
 **目标：把现有 ItemDefinition、逻辑背包、装备、Accessory Power、Tuning 和 Reforge foundation 整合为稳定物品体系。**
 
 ### P2-01 ItemInstance
-- [ ] P2-01A：ItemInstance 数据模型、UUID 身份、状态校验与堆叠规则。
+- [x] P2-01A：ItemInstance 数据模型、UUID 身份、状态校验与堆叠规则（源码已提交；待本地构建与规则测试）。
 - [ ] P2-01B：版本化 NBT 持久化与旧 items/equipment/accessoryBag/reforges 无损迁移。
 - [ ] P2-01C：Inventory 实例存储、装备/饰品原子移动与旧 API 聚合兼容。
 - [ ] P2-01D：新增 API-owned 只读实例 DTO/查询能力，保持 API v3 现有方法签名。
 - 设计：`P2-01_ITEM_INSTANCE_DESIGN.md`；测试：`P2-01_ITEM_INSTANCE_TEST_PLAN.md`。
-- 明确区分静态 ItemDefinition 与动态 ItemInstance。
+- [x] 明确区分静态 ItemDefinition 与动态 ItemInstance。
+- [x] P2-01A：新增不可变 ItemInstance、实例 UUID、定义级校验、状态更新、拆分/合并规则与扩展 NBT 防御性复制。
+- [ ] P2-01A：Java 21 Gradle 构建及规则测试；未通过前不得进入 P2-01B 存档迁移。
 - 实例字段至少考虑：唯一实例 ID、Reforge、Enchantments、Stars、Upgrade Level、附加数据。
 - 定义堆叠规则：有实例状态的物品不能错误合并。
 - NBT 序列化、反序列化、旧数据迁移和复制安全。
