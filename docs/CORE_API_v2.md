@@ -19,7 +19,7 @@ Public entry points live under `com.skyrpg.skyblock.api`.
 | `SkillAPI` | 1 | Namespaced skill registration and progression |
 | `PlayerDataAPI` | 1 | Extension-owned persistent player data |
 | `StatAPI` | 1 | Read Core's shared stat pipeline |
-| `ItemAPI` | 1 | Read item definitions from Core/extension data packs |
+| `ItemAPI` | 1 | Read API-owned item views from Core/extension data packs |
 | `InventoryAPI` | 1 | Safe access to the logical SkyBlock inventory |
 | `CurrencyAPI` | 1 | Purse and Bank operations |
 | `RewardAPI` | 1 | Common item, coin and skill-XP reward facade |
