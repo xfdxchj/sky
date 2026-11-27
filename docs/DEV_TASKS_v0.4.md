@@ -98,6 +98,9 @@
 - [x] P1-02B：玩家实体生命同步与登录/重生/最大生命变化生命周期（服务端同步桥已提交，待本地构建与游戏验收）。
 - [x] P1-02C：DamageKind 分类与 Defense / True Defense 纯计算层已提交；尚未接入 Minecraft 伤害流程，待构建与公式测试。
 - [ ] P1-02D：原版伤害桥接，避免双重护甲减伤和重复扣血。
+  - [x] P1-02D-0：建立 `PlayerDamageClassifier`，将 OUT_OF_WORLD / GENERIC_KILL 标记为 BYPASS_RPG_DEFENSE；其余来源默认 NORMAL。
+  - [ ] P1-02D-1：基于项目实际 Loom/Yarn 1.21.1+build.3 字节码核对 damage 调用顺序，确定护甲与 RPG Defense 的唯一减伤方案。
+  - [ ] P1-02D-2：接入玩家近战、登记怪物攻击，并验证环境来源与原版反馈。
 - [ ] P1-02E：Health Regen 服务端调度。
 - [ ] P1-02F：死亡、重生、断线、维度切换和环境伤害边界。
 - [ ] 用户本地 Gradle build、runClient 与游戏内验收。
