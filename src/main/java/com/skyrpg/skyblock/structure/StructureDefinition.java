@@ -18,8 +18,8 @@ public record StructureDefinition(
         if (dimension == null || Identifier.tryParse(dimension) == null)
             throw new IllegalArgumentException("Invalid dimension: " + dimension);
         if (rotation == null || mirror == null) throw new IllegalArgumentException("Rotation and mirror are required");
-        if (maxBlocks < 1 || maxBlocks > 250_000)
-            throw new IllegalArgumentException("max_blocks must be between 1 and 250000");
+        if (maxBlocks < 1 || maxBlocks > 4_000_000)
+            throw new IllegalArgumentException("max_blocks must be between 1 and 4000000");
         source = source == null ? "" : source;
         sourceUrl = sourceUrl == null ? "" : sourceUrl;
         license = license == null ? "" : license;
