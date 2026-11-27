@@ -9,6 +9,7 @@ public final class PlayerStats {
         // Current Hypixel SkyBlock baseline combat stats (community-wiki sourced).
         // Profile NBT values, when present, override these defaults during loading.
         baseValues.put(StatType.HEALTH, 100.0);
+        baseValues.put(StatType.HEALTH_REGEN, 100.0);
         baseValues.put(StatType.DEFENSE, 0.0);
         baseValues.put(StatType.TRUE_DEFENSE, 0.0);
         baseValues.put(StatType.CRIT_CHANCE, 30.0);
