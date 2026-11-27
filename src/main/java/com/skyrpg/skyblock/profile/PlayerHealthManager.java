@@ -22,6 +22,8 @@ public final class PlayerHealthManager {
     public static void onJoin(ServerPlayerEntity player) {
         PlayerProfile profile = ProfileManager.get(player);
         applyProfileHealth(player, profile);
+        // Persist any legacy initialization or max-health clamp performed during synchronization.
+        ProfileManager.markChanged(player);
     }
 
     /** A respawn starts at full RPG Health; the vanilla respawn flow remains authoritative. */
@@ -56,6 +58,9 @@ public final class PlayerHealthManager {
 
         if (maxChanged) {
             // Preserve the absolute RPG HP amount; getCurrentHealth already clamps it.
+            if (Math.abs(currentRpg - state.lastRpgHealth) > EPSILON) {
+                ProfileManager.markChanged(player);
+            }
             applyProfileHealth(player, profile);
             return;
         }
@@ -72,6 +77,7 @@ public final class PlayerHealthManager {
         }
 
         if (Math.abs(currentRpg - state.lastRpgHealth) > EPSILON) {
+            ProfileManager.markChanged(player);
             applyProfileHealth(player, profile);
         }
     }
