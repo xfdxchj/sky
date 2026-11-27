@@ -204,6 +204,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照，并提交 BUFF / TEMPORARY / OTHER 效果生命周期、NBT 持久化、SKILL 等级奖励派生与 Core API v3；未执行 Gradle build 或游戏内测试。
 - 2026-11-27：P1-02 设计、测试计划和 P1-02A（当前 RPG Health 字段、schema 10 持久化迁移、Health / Health Regen / Defense / True Defense 基准）已提交；未执行 Gradle build 或游戏内测试。
 - 2026-11-27：P1-02B 服务端生命同步桥已提交，包含登录初始化、原版生命变化回写、档案生命变化下发、最大生命变化处理、重生满血和断线清理；未执行 Gradle build 或游戏内测试。
+- 2026-11-27：P1-02C DamageKind 与 PlayerDamageMath 纯计算层已提交，区分普通伤害、True Damage 和绕过 RPG 防御的伤害；尚未接入实体伤害流程，未执行构建或公式测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
