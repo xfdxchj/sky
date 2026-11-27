@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.stats.StatEffectManager;
 import com.skyrpg.skyblock.skill.SkillRegistry;
 import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.item.ItemRegistry;
@@ -70,6 +71,7 @@ public final class SkyBlockRPG implements ModInitializer {
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            StatEffectManager.tick(server);
             for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 RegionManager.tick(player);
             }
