@@ -146,7 +146,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `SkillAPI.registerStatReward`：扩展为自身已注册的技能定义明确等级属性奖励；达到阈值后由 Core 派生为 `StatSource.SKILL`。不使用 XP 曲线推算任何奖励数值。
 - 生活模组接口合约、外部模组依赖说明和独立 API smoke-test 工程见 `CORE_API_v3.md`、`CORE_API_v3_TEST_PLAN.md`（v2 历史文档保留）、`EXTERNAL_MODULE_SETUP.md`、`examples/life-skills-api-smoke/`、`LIFE_SKILLS_MOD_SPEC.md`。
 
-**明确未包含：** 动态注册任意 StatType、写入属性修正来源、ItemInstance、原子多奖励事务、Quest Objective 和通用 Core 事件总线。Life Skills 不得假设这些接口存在。所有新增 API 目前仅完成源码提交，尚未由本地 Gradle build 或游戏内测试验证。
+**明确未包含：** 动态注册任意 StatType、直接写入 BASE / EQUIPMENT / ACCESSORY / SKILL 来源、ItemInstance、原子多奖励事务、Quest Objective 和通用 Core 事件总线。BUFF / TEMPORARY / OTHER 写入由 StatEffectAPI 限定开放。Life Skills 不得假设这些接口存在。所有新增 API 目前仅完成源码提交，尚未由本地 Gradle build 或游戏内测试验证。
 
 ## 4. 剩余工作按系统归类
 
