@@ -157,7 +157,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
 - BUFF、TEMPORARY、OTHER 已接入效果生命周期：效果按 ID 刷新/替换，不同 ID 可叠加；支持主动移除和 Overworld 游戏刻过期；效果存入玩家档案 NBT，旧档案缺字段时按空列表迁移。
 - 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 来源通过独立等级奖励注册表派生。扩展可为自己注册的技能定义明确阈值与属性值；Core 不从临时 XP 曲线推导奖励。基础属性仍由 PlayerStats 独立保存。
-- P1-02 RPG 生命系统：设计与测试计划已提交；P1-02A 源码已提交，包含 PlayerProfile 当前 RPG Health、Health / Health Regen / Defense / True Defense 基准值、schema 10 的 currentHealth 持久化与 schema 9 旧档满血迁移。P1-02B 至 P1-02F 尚未实现。具体见 `P1-02_RPG_HEALTH_DESIGN.md` 和 `P1-02_RPG_HEALTH_TEST_PLAN.md`。
+- P1-02 RPG 生命系统：P1-02A 当前生命档案与 schema 10 迁移、P1-02B 原版生命同步管理器、P1-02C DamageKind / PlayerDamageMath 纯计算层已提交；P1-02D 正在分步实施，当前只完成 DamageSource 分类器（OUT_OF_WORLD / GENERIC_KILL 绕过 RPG Defense，其余默认 NORMAL），尚未接入实体伤害流程。P1-02E Health Regen 与 P1-02F 边界完善未开始。所有代码均待用户本地构建与游戏验收。具体见 `P1-02_RPG_HEALTH_DESIGN.md` 和 `P1-02_RPG_HEALTH_TEST_PLAN.md`。
 - 技能等级增益、正式经验表和技能解锁。
 - HUD 与状态展示。
 - 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`；Core API v3 测试：`CORE_API_v3_TEST_PLAN.md`。
@@ -205,6 +205,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：P1-02 设计、测试计划和 P1-02A（当前 RPG Health 字段、schema 10 持久化迁移、Health / Health Regen / Defense / True Defense 基准）已提交；未执行 Gradle build 或游戏内测试。
 - 2026-11-27：P1-02B 服务端生命同步桥已提交，包含登录初始化、原版生命变化回写、档案生命变化下发、最大生命变化处理、重生满血和断线清理；未执行 Gradle build 或游戏内测试。
 - 2026-11-27：P1-02C DamageKind 与 PlayerDamageMath 纯计算层已提交，区分普通伤害、True Damage 和绕过 RPG 防御的伤害；尚未接入实体伤害流程，未执行构建或公式测试。
+- 2026-11-27：P1-02D-0 PlayerDamageClassifier 已提交，明确 OUT_OF_WORLD / GENERIC_KILL 绕过 RPG Defense，其他来源默认 NORMAL；仅完成分类器，不代表伤害桥接已实现。未执行 Gradle build 或游戏测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
