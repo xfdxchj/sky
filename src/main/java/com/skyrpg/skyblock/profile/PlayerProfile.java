@@ -193,15 +193,31 @@ public final class PlayerProfile {
 
     public int getUsedTuningPoints() { return getTuningAllocations().values().stream().mapToInt(Integer::intValue).sum(); }
 
-    public double getFinalStat(StatType type) {
+    /**
+     * Returns the current derived modifier snapshot from equipment, reforges,
+     * accessory power and tuning. Skill/Buff/Temporary sources can be appended
+     * here as their lifecycle managers are introduced.
+     */
+    public java.util.List<StatModifier> getStatModifiers() {
         java.util.List<StatModifier> modifiers = new java.util.ArrayList<>(inventory.getStatModifiers());
-        int ap = getAccessoryPower();
-        modifiers.addAll(AccessoryPowerManager.getPowerModifiers(selectedPower, ap));
-        int tuning = getTuningAllocations().getOrDefault(type, 0);
-        double tuningValue = AccessoryPowerManager.tuningValue(type) * tuning;
-        if (tuningValue != 0) modifiers.add(new StatModifier("accessory_tuning:" + type.id(), type,
-                tuningValue, StatModifier.Operation.ADDITIVE));
-        return stats.getFinal(type, modifiers);
+        int accessoryPower = getAccessoryPower();
+        modifiers.addAll(AccessoryPowerManager.getPowerModifiers(selectedPower, accessoryPower));
+        getTuningAllocations().forEach((stat, points) -> {
+            double amount = AccessoryPowerManager.tuningValue(stat) * points;
+            if (amount != 0.0) modifiers.add(new StatModifier(
+                    "accessory_tuning:" + stat.id(), stat, amount,
+                    StatModifier.Operation.ADDITIVE));
+        });
+        return java.util.List.copyOf(modifiers);
+    }
+
+    public double getFinalStat(StatType type) {
+        return stats.getFinal(type, getStatModifiers());
+    }
+
+    /** Calculates a stat using only the requested modifier source categories. */
+    public double getFinalStat(StatType type, Set<com.skyrpg.skyblock.stats.StatSource> includedSources) {
+        return stats.getFinal(type, getStatModifiers(), includedSources);
     }
     /** Returns an immutable snapshot of all retained namespaced skill XP values. */
     public Map<Identifier, Double> getSkillExperience() { return Collections.unmodifiableMap(skillExperience); }
