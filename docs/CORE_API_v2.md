@@ -42,7 +42,7 @@ Use the API-owned `SkillDefinition` record to define display name, max level and
 ```java
 Identifier mining = Identifier.of("skyblock_life", "mining");
 boolean registered = SkillAPI.registerSkill(
-    new SkillRegistration(mining, "Mining", 50, miningXpCurve)
+    new SkillDefinition(mining, "Mining", 50, miningXpCurve)
 );
 double xp = SkillAPI.getExperience(player, mining);
 int level = SkillAPI.getLevel(player, mining);
