@@ -43,6 +43,7 @@
 ## E. Regression / compatibility
 
 - Build Core with Java 21.
+- Build `examples/life-skills-api-smoke` after copying the Core remapped jar into its `libs/` folder.
 - Start Core without optional mods.
 - Start Core plus a minimal Life Skills test mod.
 - Verify the extension can use only public API packages.
