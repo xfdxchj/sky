@@ -68,7 +68,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `StatEffect`、`StatEffectManager`：BUFF / TEMPORARY / OTHER 效果应用、刷新、主动移除、持久化与过期清理。
 - `StatEffectAPI`（API v3）：为外部扩展开放命名空间隔离的 BUFF / TEMPORARY / OTHER 写入与移除入口。
 - `SkillType`：12 个内部技能 ID；它们是技术注册起点，不代表当前 Hypixel 所有技能玩法均已实现。
-- `SkillDefinition`：当前仍使用临时 XP 曲线，不是最终 Hypixel 经验表。
+- `SkillDefinition`：支持扩展注册 namespaced 技能；内置/示例 XP 曲线仍是临时数据，不是最终 Hypixel 经验表。
+- `SkillStatReward`、`SkillStatRewardRegistry`：按明确等级阈值注册精确属性奖励；PlayerProfile 按当前技能等级派生 SKILL 来源修正，不从 XP 曲线推导奖励。
 - `CurrencyManager`、`BankManager`：Purse 和 Bank 的基础操作。
 
 ### 3.2 物品、装备与饰品
@@ -127,10 +128,10 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 **限制：** 当前是私人岛屿基础设施，不包含访客权限、扩建、岛屿等级、Minion、GUI，也未覆盖爆炸、活塞、流体及所有第三方模组交互路径。没有执行 Gradle build 或游戏内验证。
 
-### 3.6 Core 扩展 API v2（源码已提交，待本地验证）
+### 3.6 Core 扩展 API v3（源码已提交，待本地验证）
 
 - 保留 API v1 的 `SkillAPI` 与 `PlayerDataAPI`，不改变既有方法签名。
-- `CoreApi.API_VERSION` 更新为 2。
+- `CoreApi.API_VERSION` 更新为 3。
 - 新增 API-owned `SkillDefinition` / `ItemView` DTO，避免扩展代码依赖内部 `SkillRegistration` / `ItemDefinition`。
 - 新增只读 `StatAPI`：查询 Core 最终属性管线；补充生活技能所需的 `FARMING_SPEED`、`FISHING_FORTUNE`、`FORAGING_SPEED`、`FORAGING_FORTUNE`。
 - 新增 `ItemAPI`：查询 Core 与扩展数据包中的 API-owned `ItemView`。
@@ -141,7 +142,9 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 新增 `InventoryAPI`：通过 Core 逻辑背包安全查询、增加和移除物品。
 - 新增 `CurrencyAPI`：统一访问 Purse / Bank。
 - 新增 `RewardAPI`：提供物品、金币和技能经验奖励入口。
-- 生活模组接口合约、外部模组依赖说明和独立 API smoke-test 工程见 `CORE_API_v2.md`、`CORE_API_v2_TEST_PLAN.md`、`EXTERNAL_MODULE_SETUP.md`、`examples/life-skills-api-smoke/`、`LIFE_SKILLS_MOD_SPEC.md`。
+- 新增 `StatEffectAPI`：外部模块使用同命名空间的 effect/source ID 写入或移除 BUFF、TEMPORARY、OTHER 修正。
+- `SkillAPI.registerStatReward`：扩展为自身已注册的技能定义明确等级属性奖励；达到阈值后由 Core 派生为 `StatSource.SKILL`。不使用 XP 曲线推算任何奖励数值。
+- 生活模组接口合约、外部模组依赖说明和独立 API smoke-test 工程见 `CORE_API_v3.md`、`CORE_API_v3_TEST_PLAN.md`（v2 历史文档保留）、`EXTERNAL_MODULE_SETUP.md`、`examples/life-skills-api-smoke/`、`LIFE_SKILLS_MOD_SPEC.md`。
 
 **明确未包含：** 动态注册任意 StatType、写入属性修正来源、ItemInstance、原子多奖励事务、Quest Objective 和通用 Core 事件总线。Life Skills 不得假设这些接口存在。所有新增 API 目前仅完成源码提交，尚未由本地 Gradle build 或游戏内测试验证。
 
@@ -153,11 +156,11 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `PlayerStats` 支持按来源筛选计算；`PlayerProfile.getStatModifiers()` 提供统一修正快照，`getFinalStat(type, includedSources)` 可按来源过滤。
 - 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
 - BUFF、TEMPORARY、OTHER 已接入效果生命周期：效果按 ID 刷新/替换，不同 ID 可叠加；支持主动移除和 Overworld 游戏刻过期；效果存入玩家档案 NBT，旧档案缺字段时按空列表迁移。
-- 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 等级属性奖励仍未实现，避免把临时 XP 曲线转化为未经核实的属性数据。基础属性仍由 PlayerStats 独立保存。
+- 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 来源通过独立等级奖励注册表派生。扩展可为自己注册的技能定义明确阈值与属性值；Core 不从临时 XP 曲线推导奖励。基础属性仍由 PlayerStats 独立保存。
 - 玩家 RPG 生命与原版生命同步策略。
 - 技能等级增益、正式经验表和技能解锁。
 - HUD 与状态展示。
-- 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`。
+- 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`；Core API v3 测试：`CORE_API_v3_TEST_PLAN.md`。
 
 ### P2 物品与装备
 - `ItemInstance` 和实例 NBT 序列化。
@@ -198,7 +201,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 构建环境记录：Gradle 8.12.1、JDK 21。
 - P5.2 的 `runClient` 和完整游戏内行为仍需测试。
 - P5.3 尚未由用户本地 Gradle build 或游戏内测试。
-- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照，并提交 BUFF / TEMPORARY / OTHER 效果生命周期和 NBT 持久化；未执行 Gradle build 或游戏内测试。
+- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照，并提交 BUFF / TEMPORARY / OTHER 效果生命周期、NBT 持久化、SKILL 等级奖励派生与 Core API v3；未执行 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
