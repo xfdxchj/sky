@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
-    public static final int CURRENT_VERSION = 9;
+    public static final int CURRENT_VERSION = 10;
 
     private final UUID playerId;
     private String lastKnownName;
@@ -44,6 +44,7 @@ public final class PlayerProfile {
     private final Set<String> unlockedPowers = new LinkedHashSet<>(Set.of("fortuitous", "pretty", "protected", "simple", "warrior"));
     private final Map<StatType, Integer> tuningAllocations = new EnumMap<>(StatType.class);
     private final Map<String, StatEffect> statEffects = new LinkedHashMap<>();
+    private double currentHealth = 100.0;
 
     public PlayerProfile(UUID playerId, String playerName) {
         this.playerId = playerId;
@@ -130,6 +131,38 @@ public final class PlayerProfile {
     }
 
     public PlayerStats getStats() { return stats; }
+
+    /** Maximum RPG Health derived from the shared stat pipeline. */
+    public double getMaxHealth() {
+        double value = getFinalStat(StatType.HEALTH);
+        return Double.isFinite(value) ? Math.max(1.0, Math.min(1_000_000.0, value)) : 100.0;
+    }
+
+    /** Current RPG Health, always clamped to the currently derived maximum. */
+    public double getCurrentHealth() {
+        currentHealth = clampHealth(currentHealth, getMaxHealth());
+        return currentHealth;
+    }
+
+    public boolean setCurrentHealth(double value) {
+        if (!Double.isFinite(value)) return false;
+        currentHealth = clampHealth(value, getMaxHealth());
+        return true;
+    }
+
+    /** Load hook. Missing values in pre-v10 profiles are initialized at full health. */
+    public void loadCurrentHealth(double value) {
+        currentHealth = Double.isFinite(value) ? clampHealth(value, getMaxHealth()) : getMaxHealth();
+    }
+
+    public void initializeCurrentHealthIfMissing() {
+        currentHealth = getMaxHealth();
+    }
+
+    private static double clampHealth(double value, double maximum) {
+        if (!Double.isFinite(value)) return maximum;
+        return Math.max(0.0, Math.min(maximum, value));
+    }
     public PlayerInventory getInventory() { return inventory; }
     public void setInventory(PlayerInventory inventory) { this.inventory = inventory == null ? new PlayerInventory() : inventory; }
     public int getAccessoryPower() { return AccessoryPowerManager.getAccessoryPower(inventory, false); }
