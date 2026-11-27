@@ -1,0 +1,12 @@
+{
+  "id": "starter_graveyard",
+  "name": "Starter Graveyard",
+  "dimension": "minecraft:overworld",
+  "x": 256.5,
+  "y": 187.0,
+  "z": 0.5,
+  "yaw": 0,
+  "pitch": 0,
+  "required_region_id": "",
+  "description": "Project-owned starter combat area; placeholder until the measured Hub Graveyard slice is imported."
+}
