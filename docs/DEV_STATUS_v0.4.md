@@ -157,7 +157,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
 - BUFF、TEMPORARY、OTHER 已接入效果生命周期：效果按 ID 刷新/替换，不同 ID 可叠加；支持主动移除和 Overworld 游戏刻过期；效果存入玩家档案 NBT，旧档案缺字段时按空列表迁移。
 - 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 来源通过独立等级奖励注册表派生。扩展可为自己注册的技能定义明确阈值与属性值；Core 不从临时 XP 曲线推导奖励。基础属性仍由 PlayerStats 独立保存。
-- 玩家 RPG 生命与原版生命同步策略。
+- P1-02 RPG 生命系统：设计与测试计划已提交，尚未实现代码。设计明确 RPG Health=100 的基准、原版 20 点生命映射、Defense / True Defense 伤害分类、当前生命存档迁移、恢复与死亡/重生流程；具体见 `P1-02_RPG_HEALTH_DESIGN.md` 和 `P1-02_RPG_HEALTH_TEST_PLAN.md`。
 - 技能等级增益、正式经验表和技能解锁。
 - HUD 与状态展示。
 - 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`；Core API v3 测试：`CORE_API_v3_TEST_PLAN.md`。
