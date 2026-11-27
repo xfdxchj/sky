@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: structure-audit
-          path: reports/structure_audit.json
+          path: |\n            reports/structure_audit.json\n            reports/structure_audit_summary.md
