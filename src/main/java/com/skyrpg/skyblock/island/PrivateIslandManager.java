@@ -53,22 +53,14 @@ public final class PrivateIslandManager {
                     "The reserved sky volume is not clear. That allocation slot was skipped; run the create command again.", null);
         }
 
-        double spawnX = centerX + 0.5;
+        // The main island is offset to the west; the secondary island hosts the cave,
+        // starter chest, Jerry, decorative Hub portal and a visual Minion pedestal.
+        double spawnX = centerX - 14.5;
         double spawnY = SURFACE_Y + 6.0;
         double spawnZ = centerZ + 0.5;
-        IslandDefinition definition = new IslandDefinition(
-                "private_" + player.getUuid().toString().replace("-", ""),
-                "Private Island",
-                World.OVERWORLD.getValue().toString(),
-                centerX, centerZ, SURFACE_Y,
-                RADIUS, RADIUS, THICKNESS,
-                spawnX, spawnY, spawnZ,
-                "", "",
-                "minecraft:grass_block", "minecraft:dirt", "minecraft:stone",
-                false
-        );
 
-        IslandManager.GenerationResult generated = IslandManager.generate(world, definition);
+        PrivateIslandStarterLayout.Result generated =
+                PrivateIslandStarterLayout.generate(world, centerX, centerZ, SURFACE_Y);
         if (!generated.success() || generated.placedBlocks() == 0) {
             data.skipToSlot(slot + 1);
             return new CreationResult(false, false, "Private island generation failed: " + generated.message()
@@ -82,7 +74,7 @@ public final class PrivateIslandManager {
         );
         data.add(record, slot + 1);
         return new CreationResult(true, true,
-                "Private island created. Placed " + generated.placedBlocks() + " blocks; skipped " + generated.skippedBlocks() + ".",
+                "Private island created. " + generated.message() + " Placed " + generated.placedBlocks() + " blocks.",
                 record);
     }
 
