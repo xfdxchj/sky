@@ -130,3 +130,18 @@
 - Life Skills 的完整 GUI、地图和全部职业内容。
 
 这些内容仍保留在原 P 阶段路线图中，但不阻塞第一个可玩闭环。
+
+## 6. 首轮代码审查结果（2026-11-27）
+
+以下是对当前 main 源码与数据文件的静态审查，不代表构建或游戏内验证：
+
+- 已有 starter island fixture：可通过岛屿生成逻辑放置浮岛，但当前入口是管理员命令；未见首次进入自动生成/传送的流程。
+- 已有 starter_test_area Region fixture，范围为 Overworld 的 X/Z -64 至 64；它目前是区域数据，不是已建成的冒险地图。
+- 已有训练武器、铁甲、药水/补给类测试物品和 General Store 数据；价格明确来自 project_test_values。
+- 已有 MobDefinition 的奖励与 drops 数据结构；CombatManager 当前击杀结算发放金币和 Combat XP，但尚未执行 MobDropDefinition 的物品掉落。
+- 已有 NPC 标签识别与交互；NPC 需要世界中存在带正确命令标签的实体，当前入口代码未显示自动布置完整 NPC 场景。
+- 已有基础 GUI 菜单；商店页面目前是目录展示，购买仍提示使用命令；NPC 商店交互也以聊天信息/命令提示为主。
+- QuestDefinition 当前只接受 talk_to_npc；首个战斗任务需要新增最小 kill_mob 目标与可靠的击杀事件结算。
+- ItemInstance 与 NBT codec 已存在，但尚未接入 PlayerInventory 活动存档；首轮装备闭环暂时必须基于旧逻辑背包，或等 ItemInstance 迁移通过构建与迁移验收后再切换。
+
+据此，VS-1 的第一项实际工作应是明确并实现首次进入的起始落点/据点入口，而不是先堆 NPC 数量或地图 POI。VS-3 的关键缺口是掉落执行与一次性击杀结算；VS-4 的关键缺口是击杀任务目标和可交互的 GUI 交易路径。
