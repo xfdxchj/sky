@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.profile.PlayerHealthManager;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import com.skyrpg.skyblock.stats.StatEffectManager;
 import com.skyrpg.skyblock.skill.SkillRegistry;
 import com.skyrpg.skyblock.combat.MobRegistry;
@@ -74,6 +76,7 @@ public final class SkyBlockRPG implements ModInitializer {
             StatEffectManager.tick(server);
             for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 RegionManager.tick(player);
+                PlayerHealthManager.tick(player);
             }
         });
 
@@ -103,12 +106,22 @@ public final class SkyBlockRPG implements ModInitializer {
             return NpcManager.interact(serverPlayer, entity) ? ActionResult.SUCCESS : ActionResult.PASS;
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> RegionManager.remove(handler.getPlayer()));
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            RegionManager.remove(handler.getPlayer());
+            PlayerHealthManager.remove(handler.getPlayer());
+        });
 
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> RegionManager.clear());
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            RegionManager.clear();
+            PlayerHealthManager.clear();
+        });
+
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
+                PlayerHealthManager.onRespawn(newPlayer));
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
+            PlayerHealthManager.onJoin(handler.getPlayer());
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
         });
