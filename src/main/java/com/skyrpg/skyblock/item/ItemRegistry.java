@@ -30,8 +30,15 @@ public final class ItemRegistry {
                         throw new IllegalArgumentException("Item ID must belong to its data-pack namespace: " + rawId);
                     }
                     id = parsedId.toString();
+                } else if (resourceNamespace.equals("skyblockrpg")) {
+                    if (Identifier.tryParse("skyblockrpg:" + rawId) == null) {
+                        throw new IllegalArgumentException("Invalid Core item ID: " + rawId);
+                    }
+                    id = rawId;
                 } else {
-                    id = resourceNamespace.equals("skyblockrpg") ? rawId : resourceNamespace + ":" + rawId;
+                    Identifier parsedId = Identifier.tryParse(resourceNamespace + ":" + rawId);
+                    if (parsedId == null) throw new IllegalArgumentException("Invalid extension item ID: " + rawId);
+                    id = parsedId.toString();
                 }
                 ItemRarity rarity = ItemRarity.valueOf(required(j,"rarity").toUpperCase(Locale.ROOT));
                 ItemType type = ItemType.valueOf(required(j,"type").toUpperCase(Locale.ROOT));
