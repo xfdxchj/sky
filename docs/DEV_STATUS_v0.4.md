@@ -157,7 +157,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
 - BUFF、TEMPORARY、OTHER 已接入效果生命周期：效果按 ID 刷新/替换，不同 ID 可叠加；支持主动移除和 Overworld 游戏刻过期；效果存入玩家档案 NBT，旧档案缺字段时按空列表迁移。
 - 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 来源通过独立等级奖励注册表派生。扩展可为自己注册的技能定义明确阈值与属性值；Core 不从临时 XP 曲线推导奖励。基础属性仍由 PlayerStats 独立保存。
-- P1-02 RPG 生命系统：P1-02A 当前生命档案与 schema 10 迁移、P1-02B 原版生命同步管理器、P1-02C DamageKind / PlayerDamageMath 纯计算层已提交；P1-02D 正在分步实施，当前只完成 DamageSource 分类器（OUT_OF_WORLD / GENERIC_KILL 绕过 RPG Defense，其余默认 NORMAL），尚未接入实体伤害流程。P1-02E Health Regen 与 P1-02F 边界完善未开始。所有代码均待用户本地构建与游戏验收。具体见 `P1-02_RPG_HEALTH_DESIGN.md` 和 `P1-02_RPG_HEALTH_TEST_PLAN.md`。
+- P1-02 RPG 生命系统：P1-02A 当前生命档案与 schema 10 迁移、P1-02B 原版生命同步管理器、P1-02C DamageKind / PlayerDamageMath 纯计算层已提交；P1-02D 正在分步实施，当前已完成 DamageSource 分类器（OUT_OF_WORLD / GENERIC_KILL 绕过 RPG Defense，其余默认 NORMAL）和 Yarn 1.21.1+build.3 Javadoc 方法签名/职责核对，但尚未取得项目实际 Loom mapped jar 核验方法体与调用顺序，也未接入实体伤害流程。P1-02E Health Regen 与 P1-02F 边界完善未开始。代码待用户本地构建与游戏验收。具体见 `P1-02_RPG_HEALTH_DESIGN.md`、`P1-02_RPG_HEALTH_TEST_PLAN.md` 和 `P1-02D_DAMAGE_PIPELINE_INVESTIGATION.md`。
 - 技能等级增益、正式经验表和技能解锁。
 - HUD 与状态展示。
 - 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`；Core API v3 测试：`CORE_API_v3_TEST_PLAN.md`。
@@ -206,6 +206,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：P1-02B 服务端生命同步桥已提交，包含登录初始化、原版生命变化回写、档案生命变化下发、最大生命变化处理、重生满血和断线清理；未执行 Gradle build 或游戏内测试。
 - 2026-11-27：P1-02C DamageKind 与 PlayerDamageMath 纯计算层已提交，区分普通伤害、True Damage 和绕过 RPG 防御的伤害；尚未接入实体伤害流程，未执行构建或公式测试。
 - 2026-11-27：P1-02D-0 PlayerDamageClassifier 已提交，明确 OUT_OF_WORLD / GENERIC_KILL 绕过 RPG Defense，其他来源默认 NORMAL；仅完成分类器，不代表伤害桥接已实现。未执行 Gradle build 或游戏测试。
+- 2026-11-27：P1-02D-1 已核对 Yarn 1.21.1+build.3 Javadoc 的 damage / applyArmorToDamage / modifyAppliedDamage / applyDamage 方法签名与职责，并提交 `P1-02D_DAMAGE_PIPELINE_INVESTIGATION.md`。Javadoc 不提供完整方法体，项目实际 Loom mapped jar 的字节码调用顺序仍待核验；未提交高风险伤害 Mixin，未执行 Gradle build 或游戏测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
