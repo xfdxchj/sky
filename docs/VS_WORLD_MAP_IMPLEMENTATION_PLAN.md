@@ -145,9 +145,10 @@ POI 坐标不能自动等同于 Region 边界；区域边界必须由地图切�
 - [ ] 传送前检查目标区块、地面和安全落点。
 
 ### VS-World-2：Hub Village 切片
-- [ ] 在 1.21.1 隔离实例直接打开现代 Hub 地图副本。
+- [ ] 对 `worlds/structures/the_hub_incl_carnival.nbt` 运行本地 NBT 审计，记录尺寸、DataVersion、palette、方块实体和实体。
 - [ ] 扫描方块/状态/方块实体/实体/数据包兼容性；只对真实不兼容项做局部处理。
-- [ ] 完成 Village 切片的许可、版本、哈希、源坐标与包围盒记录。
+- [ ] 从 Hub 结构中确认可识别的区域范围，决定是否需按 Village/Bank/Auction/Bazaar 二次切片；完成许可、版本、哈希、源坐标与包围盒记录。
+- [ ] 在 1.21.1 隔离实例中验证结构 NBT 的实际加载与方块状态兼容性。
 - [ ] 导出并转换为 1.21.1 可用结构。
 - [ ] 建立安全预览/导入流程，不能覆盖玩家已有建筑。
 - [ ] 在测试世界放置 Village，核验道路、广场、建筑和高度。
@@ -205,9 +206,9 @@ POI 坐标不能自动等同于 Region 边界；区域边界必须由地图切�
 截至本计划建立时：
 - 私人岛双岛布局：源码已提交，等待最新本地构建和游戏验收。
 - Hub POI：已有 25 条坐标/地点参考数据；不是已建成的 Hub。
-- Hub 地形/建筑：尚未导入。
+- Hub 地形/建筑：已上传 Hub 结构 NBT（含 Carnival），尚未完成本地审计或游戏内导入。
 - Graveyard 地形：尚未导入。
-- 地图资产：已登记现代 Hub 候选来源；用户反馈地图基本可兼容，但仓库尚未收到地图文件，未完成扫描、切片或许可核验。
+- 地图资产：仓库已提交 12 个结构 NBT（Hub、Gold Mine、Deep Caverns、Dwarven Mines、Spider's Den、The End、Farming Islands、Jerry's Workshop、Dungeon Hub、Floor VII、Galatea 等）；已添加本地只读审计脚本 `tools/inspect_structure_nbt.py`。尺寸、坐标、方块统计、兼容性和许可仍待核验。
 - 坐标预设：Hub 规划原点暂定 Overworld (0,80,0)；私人岛网格基准为 (8192,8192)，间距 512；两者均须在地图测量后复核。
 - Portal、Minion：当前私人岛上仍是占位展示，不是完整玩法。
 
