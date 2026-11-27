@@ -1,6 +1,6 @@
 # P2-01 ItemInstance 设计
 
-> 状态：P2-01A 数据模型源码已提交；尚未完成本地构建与单元/游戏测试。
+> 状态：P2-01A 数据模型与 P2-01B NBT 编解码/迁移基础源码已提交；尚未完成本地构建与迁移验收。
 > 基线：main @ e2ee2b3（2026-11-27）；Core API v3；Minecraft 1.21.1 / Fabric / Java 21。
 > 目标：在不破坏现有物品定义、逻辑背包和 Life Skills API v3 的前提下，引入可持久化、可独立强化的物品实例。
 
@@ -110,3 +110,16 @@ Inventory 统一持有 ItemInstance/堆叠条目；装备槽和 Accessory Bag �
 本阶段刻意不修改 `PlayerInventory`、`PlayerProfile` 或存档 schema；实例尚未进入玩家档案，也未改变 API v3 旧接口。扩展 NBT 的精确序列化字节上限将在 P2-01B 的 NBT 编解码层落实。
 
 **待验证：** Java 21 / Loom 编译、实例规则测试、ItemRegistry 加载后 definition 校验，以及后续 P2-01B 的真实 NBT 往返。
+
+
+## 9. P2-01B 当前实现边界（2026-11-27）
+
+已新增：
+
+- `ItemInstanceNbtCodec`：实例格式版本 1 的编码/解码，持久化 UUID、definition ID、count、Reforge、Enchantments、Stars、Upgrade Level 和 customData；解码时重新检查定义、实例字段和 Reforge 的槽位兼容性。
+- `LegacyInventoryMigrator`：纯迁移函数，将旧 items 拆成独立堆叠实例；为 equipment / accessoryBag 建立独立 count=1 实例并写入引用；把合法旧 Reforge 迁移到装备实例。
+- 新存储形状包含 `instances`、`inventoryRefs`、`equipmentRefs`、`accessoryRefs`、`quarantine`、`quarantineCount` 和 `formatVersion`。
+- 未知物品、无效数量、未知/不兼容装备、Reforge、饰品、超容量数据和错误字段类型进入 quarantine；旧库存中未识别的顶层字段复制到 `legacyExtensions`。
+- 迁移函数不修改输入 NBT，并拒绝把已含新格式字段的数据再次当作旧格式迁移。
+
+**重要边界：** 当前尚未把迁移函数接入 `PlayerInventory.fromNbt` / `toNbt` 或 `SkyBlockWorldData`。旧格式仍是玩家档案的活动存储格式；P2-01B 尚未完成。P2-01C 将在明确实例容器与事务语义后接入活动档案，避免短期双真相来源。
