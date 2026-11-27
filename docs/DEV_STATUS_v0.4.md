@@ -153,7 +153,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - SKILL、BUFF、TEMPORARY、OTHER 的注册、持续时间、叠加规则和移除生命周期尚未接入；基础属性仍由 PlayerStats 独立保存。
 - 玩家 RPG 生命与原版生命同步策略。
 - 技能等级增益、正式经验表和技能解锁。
-- HUD 与状态展示。\n- 当前属性来源管线测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`。
+- HUD 与状态展示。
+- 当前属性来源管线测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`。
 
 ### P2 物品与装备
 - `ItemInstance` 和实例 NBT 序列化。
@@ -193,7 +194,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：用户记录 P5.2 本地 Gradle 构建成功（BUILD SUCCESSFUL，JAR 约 261.8 KB）。
 - 构建环境记录：Gradle 8.12.1、JDK 21。
 - P5.2 的 `runClient` 和完整游戏内行为仍需测试。
-- P5.3 尚未由用户本地 Gradle build 或游戏内测试。\n- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照；未执行 Gradle build 或游戏内测试。
+- P5.3 尚未由用户本地 Gradle build 或游戏内测试。
+- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照；未执行 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
