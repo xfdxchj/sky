@@ -22,7 +22,7 @@
 2. Confirm BUFF, TEMPORARY, OTHER are accepted; BASE, EQUIPMENT, ACCESSORY, SKILL are rejected.
 3. Confirm Core namespace IDs, mismatched namespaces, null IDs and invalid durations are rejected.
 4. Confirm same effect ID refreshes and distinct IDs coexist.
-5. Confirm remove by full namespaced effect ID succeeds only when that effect exists.
+5. Confirm remove requires the extension's owner namespace and full namespaced effect ID; mismatched owner namespace is rejected.
 6. Confirm timed effects persist and expire according to Overworld game time.
 
 ## C. Regression
