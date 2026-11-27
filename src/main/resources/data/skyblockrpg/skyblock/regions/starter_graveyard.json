@@ -1,0 +1,12 @@
+{
+  "id": "starter_graveyard",
+  "name": "Graveyard (Project Fixture)",
+  "dimension": "minecraft:overworld",
+  "min_x": 220,
+  "min_y": 160,
+  "min_z": -32,
+  "max_x": 292,
+  "max_y": 240,
+  "max_z": 32,
+  "priority": 10
+}
