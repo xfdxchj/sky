@@ -12,14 +12,12 @@
 6. `customData()` 返回副本；修改返回值不得改变原实例。
 7. 对实例应用 Reforge、Enchantments、Stars、Upgrade Level、customData 后，原实例不变，新实例保留原 UUID。
 8. 两个相同 definitionId 的装备分别修改强化状态，状态互不影响。
-2. 分别修改两个实例的 Reforge、Enchantments、Stars、Upgrade Level，状态互不影响。
-9. 同一实例 ID 不得在两个容器位置重复出现（P2-01C）。
-10. 未知 definitionId、非法 UUID、负 count、超最大堆叠数、非法星级/升级等级、非法附魔等级和过大 customData 被拒绝或隔离。
-11. 普通无状态堆叠可合并；任一实例带状态后不可合并。
-12. 普通堆叠拆分后两个堆叠具有不同 UUID，数量之和保持不变。
-13. 拆分后余量保留原 UUID，新拆出堆叠使用新 UUID；合并后目标 UUID 保留。
-14. count>1 的堆叠尝试加入任意实例状态必须失败，不得悄悄减少物品数量。
-15. split 对有状态实例必须失败；amount<=0 或 amount>=count 必须失败。
+9. 普通无状态堆叠可合并；任一实例带状态后不可合并。
+10. 普通堆叠拆分后两个堆叠具有不同 UUID，数量之和保持不变；余量保留原 UUID，新拆出堆叠使用新 UUID。
+11. 合并后目标 UUID 保留，源实例由调用方从容器移除。
+12. count>1 的堆叠尝试加入任意实例状态必须失败，不得悄悄减少物品数量。
+13. split 对有状态实例必须失败；amount<=0 或 amount>=count 必须失败。
+14. 未知 definitionId、非法 UUID、负 count、超最大堆叠数、非法星级/升级等级、非法附魔等级和过大 customData 被拒绝或隔离。
 
 ## B. 旧档案迁移
 1. 仅含旧 items map 的档案迁移后各 itemId 总数完全一致。
