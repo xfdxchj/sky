@@ -1,6 +1,10 @@
 package com.skyrpg.skyblock.profile;
 
 import com.skyrpg.skyblock.skill.SkillType;
+import com.skyrpg.skyblock.skill.SkillRegistry;
+import com.skyrpg.skyblock.skill.SkillStatReward;
+import com.skyrpg.skyblock.skill.SkillStatRewardRegistry;
+import com.skyrpg.skyblock.stats.StatSource;
 import net.minecraft.util.Identifier;
 import net.minecraft.nbt.NbtCompound;
 import com.skyrpg.skyblock.stats.PlayerStats;
@@ -204,6 +208,15 @@ public final class PlayerProfile {
         java.util.List<StatModifier> modifiers = new java.util.ArrayList<>(inventory.getStatModifiers());
         int accessoryPower = getAccessoryPower();
         modifiers.addAll(AccessoryPowerManager.getPowerModifiers(selectedPower, accessoryPower));
+        for (SkillStatReward reward : SkillStatRewardRegistry.all()) {
+            var definition = SkillRegistry.get(reward.skillId()).orElse(null);
+            if (definition == null) continue;
+            int level = definition.levelFromTotalXp(getSkillExperience(reward.skillId()));
+            if (level >= reward.requiredLevel()) {
+                modifiers.add(new StatModifier(reward.sourceId(), reward.stat(), reward.amount(),
+                        reward.operation(), StatSource.SKILL));
+            }
+        }
         statEffects.values().forEach(effect -> modifiers.add(effect.modifier()));
         getTuningAllocations().forEach((stat, points) -> {
             double amount = AccessoryPowerManager.tuningValue(stat) * points;
