@@ -32,7 +32,7 @@
    - `/skyblock quest accept first_steps`
    - `/skyblock quest accept clear_the_graveyard`
    - `/skyblock warp starter_graveyard`
-5. 接取 `first_steps`，再次与 Jerry 交互，应完成一次且只完成一次，获得 25 coins 与 10 Social XP。
+5. 接取 `first_steps`，再次与 Jerry 交互，应完成一次且只完成一次，获得 100 coins 与 10 Social XP。
 6. 接取 `clear_the_graveyard`，传送至 Graveyard。
 7. 确认 Graveyard 区域有三只带有 `skyblockrpg_mob_graveyard_zombie` 标签的可攻击僵尸。
 8. 装备 Core 训练武器，击杀三只僵尸。
