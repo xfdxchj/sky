@@ -15,8 +15,8 @@ public final class SkillAPI {
     public static boolean registerSkill(SkillRegistration definition) { return SkillRegistry.register(definition); }
     public static Optional<SkillRegistration> getSkill(Identifier id) { return SkillRegistry.get(id); }
     public static Collection<SkillRegistration> getSkills() { return SkillRegistry.all(); }
-    public static double getExperience(ServerPlayerEntity player, Identifier skillId) { return SkillManager.getExperience(player, skillId); }
-    public static int getLevel(ServerPlayerEntity player, Identifier skillId) { return SkillManager.getLevel(player, skillId); }
+    public static double getExperience(ServerPlayerEntity player, Identifier skillId) { return player == null || skillId == null ? 0.0 : SkillManager.getExperience(player, skillId); }
+    public static int getLevel(ServerPlayerEntity player, Identifier skillId) { return player == null || skillId == null ? 0 : SkillManager.getLevel(player, skillId); }
     /** Returns progress within the current level, clamped to [0, 1]. */
     public static double getProgress(ServerPlayerEntity player, Identifier skillId) {
         SkillRegistration definition = SkillRegistry.get(skillId).orElse(null);
@@ -35,6 +35,6 @@ public final class SkillAPI {
         return Math.max(0.0, definition.xpToNextLevel().get(level) - (total - consumed));
     }
     public static boolean addExperience(ServerPlayerEntity player, Identifier skillId, double amount) {
-        return SkillManager.addExperience(player, skillId, amount);
+        return player != null && skillId != null && SkillManager.addExperience(player, skillId, amount);
     }
 }
