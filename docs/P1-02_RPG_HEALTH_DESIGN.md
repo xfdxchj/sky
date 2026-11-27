@@ -1,6 +1,6 @@
 # P1-02 RPG 生命与战斗状态设计
 
-> 状态：设计基线，尚未实现。
+> 状态：P1-02A/B/C 已提交；P1-02D 正在分步实施，尚未完成原版伤害桥接。
 > 目标版本：Minecraft 1.21.1 / Fabric / Java 21。
 > 上游任务：P1 玩家系统完善。不要将 P1-02 改写为 P0 或重新编号。
 
@@ -16,6 +16,7 @@
 - `PlayerStats` 当前只初始化 CRIT_CHANCE=30、CRIT_DAMAGE=50；HEALTH / DEFENSE / TRUE_DEFENSE / HEALTH_REGEN 未设默认值。
 - `PlayerProfile` schema 为 9，持久化玩家经济、技能、物品、任务和 StatEffect，但没有当前生命字段。
 - `LivingEntityMixin` 当前只替换登记怪物对玩家的攻击数值。
+- `PlayerDamageClassifier` 已新增：`OUT_OF_WORLD` 与 `GENERIC_KILL` 明确绕过 RPG Defense；其余来源默认 NORMAL。分类器尚未接入伤害流程。
 - `PlayerEntityMixin` 当前只处理 Core 武器的玩家近战攻击。
 - `MobDefinition` 有 damage / defense，没有 trueDamage 类型字段。
 - `CombatMath` 的目标 Defense 减伤公式已经采用 `100 / (100 + defense)`，但这不是玩家受伤流程。
@@ -113,7 +114,7 @@ Core 已建立纯计算层 `DamageKind` / `PlayerDamageMath`：`NORMAL` 使用 D
 
 ## 8. Minecraft 1.21.1 技术实现约束
 
-Yarn 1.21.1+build.3 文档中，LivingEntity 提供 `damage(DamageSource,float)`、`applyArmorToDamage`、`modifyAppliedDamage` 和 `applyDamage` 等不同层次。实现前必须对照当前 Loom/Yarn 映射和实际字节码确认调用顺序。
+Yarn 1.21.1+build.3 文档确认 `LivingEntity` 存在 `damage(DamageSource,float)`、`applyArmorToDamage(DamageSource,float)`、`modifyAppliedDamage(DamageSource,float)` 与 `applyDamage(DamageSource,float)`；`DamageSource.isOf(RegistryKey<DamageType>)` 可用于精确识别 `OUT_OF_WORLD` / `GENERIC_KILL`。这些 API 签名可由 Yarn Javadoc 核对，但 Javadoc 不提供完整方法体，因此仍不能仅凭文档断言护甲、盾牌、耐久、抗性和 hurtTime 的实际调用先后。下一步必须以项目实际 Loom 生成的 1.21.1+build.3 mapped jar / bytecode 为准，再选定 Mixin 注入点。
 
 建议：
 1. 在服务端玩家专用路径识别伤害来源。
@@ -128,7 +129,9 @@ Yarn 1.21.1+build.3 文档中，LivingEntity 提供 `damage(DamageSource,float)`
 - P1-02A：PlayerProfile currentHealth 字段、schema 迁移、最大生命读取与夹取；不改伤害。
 - P1-02B：玩家实体生命同步与登录/重生/最大生命变化生命周期。
 - P1-02C：DamageKind / 伤害来源分类与 Defense / True Defense 计算单元测试。
-- P1-02D：原版伤害桥接，先支持玩家近战和已登记怪物攻击；再扩展环境伤害。
+- P1-02D-0：建立 `DamageSource` → `DamageKind` 分类器；已提交，尚未接入伤害流程。
+- P1-02D-1：核对 1.21.1+build.3 实际 damage 方法体与顺序，确定单次应用 RPG Defense 且不重复应用原版护甲减伤的注入策略。
+- P1-02D-2：先接入玩家近战和已登记怪物攻击；再逐类扩展环境伤害，并保留原版反馈、盾牌、无敌帧和死亡处理。
 - P1-02E：Health Regen 服务端调度。
 - P1-02F：死亡、重生、断线和维度切换边界测试。
 - 每个子任务完成后先本地 build，再进入下一个子任务；未通过不推进下一段。
