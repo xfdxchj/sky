@@ -2,7 +2,7 @@ package com.example.skyblocklife;
 
 import com.skyrpg.skyblock.api.CoreApi;
 import com.skyrpg.skyblock.api.SkillAPI;
-import com.skyrpg.skyblock.skill.SkillRegistration;
+import com.skyrpg.skyblock.api.SkillDefinition;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public final class LifeSkillsApiSmoke implements ModInitializer {
         Identifier id = Identifier.of("skyblock_life", path);
         // Deliberately simple test curve: 100 XP per level, 50 levels.
         boolean registered = SkillAPI.registerSkill(
-                SkillRegistration.linear(id, capitalize(path), 50, 100.0)
+                SkillDefinition.linear(id, capitalize(path), 50, 100.0)
         );
         if (!registered) {
             throw new IllegalStateException("Could not register smoke-test skill " + id
