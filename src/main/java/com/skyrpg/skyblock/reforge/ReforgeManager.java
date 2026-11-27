@@ -5,6 +5,7 @@ import com.skyrpg.skyblock.item.ItemDefinition;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.profile.PlayerProfile;
 import com.skyrpg.skyblock.stats.StatModifier;
+import com.skyrpg.skyblock.stats.StatSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,8 @@ public final class ReforgeManager {
         if (reforge == null || !reforge.allows(slot.id())) return List.of();
         List<StatModifier> result = new ArrayList<>();
         reforge.stats().forEach((stat, amount) -> result.add(new StatModifier(
-                "reforge:" + slot.id() + ":" + reforge.id(), stat, amount, StatModifier.Operation.ADDITIVE)));
-        return result;
+                "reforge:" + slot.id() + ":" + reforge.id(), stat, amount,
+                StatModifier.Operation.ADDITIVE, StatSource.EQUIPMENT)));
+        return List.copyOf(result);
     }
 }
