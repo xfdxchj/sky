@@ -144,27 +144,46 @@ def inspect_file(path: Path) -> dict:
     decoded = decode_nbt(raw)
     root = decoded["root"]
     size = int_list(root.get("size"))
-    palette = root.get("palette")
-    if not isinstance(palette, list):
-        palette = []
-    # Some structure formats may use palettes (plural); report each palette size.
-    palettes = root.get("palettes")
+
+    # Vanilla structure NBT can contain either one palette or several
+    # alternative palettes. Block.state indexes are interpreted against
+    # each palette independently.
+    raw_palettes = root.get("palettes")
+    if isinstance(raw_palettes, list) and raw_palettes:
+        palette_variants = [
+            palette if isinstance(palette, list) else []
+            for palette in raw_palettes
+        ]
+        palette_format = "palettes"
+    else:
+        palette = root.get("palette")
+        palette_variants = [palette if isinstance(palette, list) else []]
+        palette_format = "palette"
+
     blocks = root.get("blocks") if isinstance(root.get("blocks"), list) else []
     entities = root.get("entities") if isinstance(root.get("entities"), list) else []
 
-    state_counts: Counter[str] = Counter()
+    variant_counts: list[Counter[str]] = [Counter() for _ in palette_variants]
+    invalid_by_variant = [0 for _ in palette_variants]
     block_entity_count = 0
     min_pos = [None, None, None]
     max_pos = [None, None, None]
-    invalid_state_indices = 0
+    out_of_bounds_positions = 0
+
     for block in blocks:
         if not isinstance(block, dict):
             continue
         state_idx = block.get("state")
-        if isinstance(state_idx, int) and 0 <= state_idx < len(palette):
-            state_counts[block_state_name(palette[state_idx])] += 1
+        if isinstance(state_idx, int):
+            for index, palette in enumerate(palette_variants):
+                if 0 <= state_idx < len(palette):
+                    variant_counts[index][block_state_name(palette[state_idx])] += 1
+                else:
+                    invalid_by_variant[index] += 1
         else:
-            invalid_state_indices += 1
+            for index in range(len(palette_variants)):
+                invalid_by_variant[index] += 1
+
         if isinstance(block.get("nbt"), dict):
             block_entity_count += 1
         pos = int_list(block.get("pos"))
@@ -172,6 +191,8 @@ def inspect_file(path: Path) -> dict:
             for axis in range(3):
                 min_pos[axis] = pos[axis] if min_pos[axis] is None else min(min_pos[axis], pos[axis])
                 max_pos[axis] = pos[axis] if max_pos[axis] is None else max(max_pos[axis], pos[axis])
+            if size and any(pos[axis] < 0 or pos[axis] >= size[axis] for axis in range(3)):
+                out_of_bounds_positions += 1
 
     entity_types = Counter()
     for entity in entities:
@@ -182,9 +203,19 @@ def inspect_file(path: Path) -> dict:
         entity_types[str(entity_id)] += 1
 
     volume = math.prod(size) if size else None
+    primary_counts = variant_counts[0] if variant_counts else Counter()
     block_id_counts: Counter[str] = Counter()
-    for state, count in state_counts.items():
+    for state, count in primary_counts.items():
         block_id_counts[state.split("[", 1)[0]] += count
+
+    palette_reports = []
+    for index, (palette, counts) in enumerate(zip(palette_variants, variant_counts)):
+        palette_reports.append({
+            "index": index,
+            "palette_entries": len(palette),
+            "invalid_state_indices": invalid_by_variant[index],
+            "block_state_counts": dict(sorted(counts.items())),
+        })
 
     return {
         "file": str(path),
@@ -195,16 +226,19 @@ def inspect_file(path: Path) -> dict:
         "data_version": root.get("DataVersion"),
         "size": size,
         "bounding_box_volume": volume,
-        "palette_entries": len(palette),
-        "alternate_palette_count": len(palettes) if isinstance(palettes, list) else 0,
+        "palette_format": palette_format,
+        "palette_entries": len(palette_variants[0]) if palette_variants else 0,
+        "alternate_palette_count": max(0, len(palette_variants) - 1),
+        "palette_variants": palette_reports,
         "block_entries": len(blocks),
         "block_entities": block_entity_count,
         "entities": len(entities),
         "entity_types": dict(sorted(entity_types.items())),
         "block_position_min": min_pos if all(v is not None for v in min_pos) else None,
-        "block_position_max": max_pos if all(v is not None for v in max_pos) else None,
-        "invalid_state_indices": invalid_state_indices,
-        "block_state_counts": dict(sorted(state_counts.items())),
+        "block_position_max": max_pos if all(v is not None for v is not None for v in max_pos) else None,
+        "out_of_bounds_block_positions": out_of_bounds_positions,
+        "invalid_state_indices": invalid_by_variant[0] if invalid_by_variant else len(blocks),
+        "block_state_counts": dict(sorted(primary_counts.items())),
         "top_block_ids": dict(block_id_counts.most_common(30)),
     }
 
