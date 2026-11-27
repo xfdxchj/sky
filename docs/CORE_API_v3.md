@@ -16,15 +16,16 @@ Public entry points live under `com.skyrpg.skyblock.api`.
 | API | Version | Purpose |
 |---|---:|---|
 | `CoreApi` | 3 | Aggregate compatibility marker |
-| `SkillAPI` | 1 | Namespaced skill registration and progression |
+| `SkillAPI` | 1 | Namespaced skill registration, progression and level rewards |
 | `PlayerDataAPI` | 1 | Extension-owned persistent player data |
 | `StatAPI` | 1 | Read Core's shared stat pipeline |
 | `ItemAPI` | 1 | Read API-owned item views from Core/extension data packs |
 | `InventoryAPI` | 1 | Safe access to the logical SkyBlock inventory |
 | `CurrencyAPI` | 1 | Purse and Bank operations |
 | `RewardAPI` | 1 | Common item, coin and skill-XP reward facade |
+| `StatEffectAPI` | 1 | Namespaced BUFF / TEMPORARY / OTHER stat effects |
 
-The individual API versions are independent. Check `CoreApi.API_VERSION >= 3` before using the v2 surface.
+The individual API versions are independent. Check `CoreApi.API_VERSION >= 3` before using the v3 surface.
 
 ## 2. Skill API
 
