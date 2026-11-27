@@ -40,8 +40,16 @@
 
 ## D. 原版伤害兼容
 
+P1-02D-0 分类器用例（当前仅分类，不代表已接入伤害结算）：
+- `OUT_OF_WORLD` → `BYPASS_RPG_DEFENSE`。
+- `GENERIC_KILL` → `BYPASS_RPG_DEFENSE`，避免 `/kill` 被 RPG Defense 抵消。
+- 普通玩家近战、普通怪物近战、摔落、火焰、熔岩、爆炸等 → `NORMAL`。
+- Minecraft armor-bypass 标签本身不得映射为 `TRUE`。
+- `TRUE` 只能由未来明确声明 SkyBlock True Damage 的来源产生；当前无默认 True Damage 来源。
+
 分别测试：
 - 玩家近战攻击。
+- `OUT_OF_WORLD` / `GENERIC_KILL` 致死行为。
 - 已登记 SkyBlock 怪物攻击玩家。
 - 未登记原版怪物攻击玩家。
 - 摔落、火焰、熔岩、窒息、溺水、仙人掌、爆炸、虚空、饥饿。
