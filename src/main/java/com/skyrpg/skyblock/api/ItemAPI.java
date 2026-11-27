@@ -25,8 +25,11 @@ public final class ItemAPI {
     }
 
     private static ItemView toView(ItemDefinition definition) {
+        Identifier itemId = definition.id().contains(":")
+                ? Identifier.tryParse(definition.id())
+                : Identifier.of("skyblockrpg", definition.id());
         return new ItemView(
-                Identifier.tryParse(definition.id()),
+                itemId,
                 definition.name(),
                 definition.rarity().name(),
                 definition.type().name(),
