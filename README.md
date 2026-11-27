@@ -9,6 +9,8 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - [Core API v2](docs/CORE_API_v2.md): supported integration contract for optional gameplay modules.
 - [Life Skills specification](docs/LIFE_SKILLS_MOD_SPEC.md): Mining, Fishing, Farming and Foraging extension requirements.
 - [Core API v2 test plan](docs/CORE_API_v2_TEST_PLAN.md): integration and regression checklist.
+- [External module setup](docs/EXTERNAL_MODULE_SETUP.md): how another AI/developer can build an independent Fabric extension against Core.
+- [API smoke-test project](examples/life-skills-api-smoke/README.md): minimal independent mod that registers the four life skills.
 - Development may proceed directly on `main`; feature branches are optional and used only when they materially help isolate risk or parallel work.
 
 ## Environment
