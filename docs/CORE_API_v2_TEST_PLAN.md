@@ -25,7 +25,7 @@
 
 1. Add a test definition at `data/skyblock_life/skyblock/items/test_material.json`.
 2. Use ID `skyblock_life:test_material`.
-3. Start a world and verify ItemAPI resolves the definition.
+3. Start a world and verify ItemAPI resolves the definition as an API-owned ItemView.
 4. Verify ItemAPI can still resolve legacy Core IDs and namespaced Core IDs.
 5. Add the item to the logical inventory through InventoryAPI.
 6. Save/restart and verify the item count persists.
