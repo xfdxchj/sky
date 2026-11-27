@@ -12,6 +12,13 @@ public record ItemDefinition(
         Map<StatType, Double> stats, List<String> lore,
         String accessoryLine, boolean dungeonAccessory, int accessoryPowerOverride, boolean reforgeable) {
     public ItemDefinition {
+        if (id == null || id.isBlank()) throw new IllegalArgumentException("Item id is required");
+        if (maxStackSize < 1 || maxStackSize > 64) throw new IllegalArgumentException("maxStackSize must be between 1 and 64");
+        if (stats == null || lore == null) throw new IllegalArgumentException("stats and lore are required");
+        stats.forEach((stat, amount) -> {
+            if (stat == null || amount == null || !Double.isFinite(amount))
+                throw new IllegalArgumentException("Item stat values must be finite and have a stat key");
+        });
         stats = Map.copyOf(stats);
         lore = List.copyOf(lore);
         accessoryLine = accessoryLine == null || accessoryLine.isBlank() ? id : accessoryLine.trim().toLowerCase(java.util.Locale.ROOT);
