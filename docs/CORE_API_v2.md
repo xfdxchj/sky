@@ -130,7 +130,7 @@ Resource location example:
 Lookup:
 
 ```java
-ItemDefinition item = ItemAPI.get(Identifier.of("skyblock_life", "refined_mithril"))
+ItemView item = ItemAPI.get(Identifier.of("skyblock_life", "refined_mithril"))
     .orElseThrow();
 ```
 
