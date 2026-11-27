@@ -5,6 +5,7 @@ on:
     paths:
       - "worlds/structures/**"
       - "tools/inspect_structure_nbt.py"
+      - "tools/summarize_structure_audit.py"
       - ".github/workflows/structure-audit.yml"
   workflow_dispatch:
 
@@ -18,17 +19,19 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
-        run: pip install nbtlib
-
-      - name: Compile auditor
-        run: python -m py_compile tools/inspect_structure_nbt.py
+      - name: Compile audit tools
+        run: python -m py_compile tools/inspect_structure_nbt.py tools/summarize_structure_audit.py
 
       - name: Run structure audit
         run: python tools/inspect_structure_nbt.py worlds/structures --output reports/structure_audit.json
 
-      - name: Upload audit report
+      - name: Summarize structure audit
+        run: python tools/summarize_structure_audit.py reports/structure_audit.json --markdown reports/structure_audit_summary.md
+
+      - name: Upload audit reports
         uses: actions/upload-artifact@v4
         with:
           name: structure-audit
-          path: |\n            reports/structure_audit.json\n            reports/structure_audit_summary.md
+          path: |
+            reports/structure_audit.json
+            reports/structure_audit_summary.md
