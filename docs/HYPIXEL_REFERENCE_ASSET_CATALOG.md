@@ -119,3 +119,30 @@
 - conversion_tool_and_version
 - conversion_notes
 - in_game_verified（true/false）
+
+
+## 6. Private Island 初始布局参考
+
+目前没有在上述世界下载目录中确认到可信的、独立的官方 Private Island 世界文件。Wiki 对首次创建档案时的初始状态有较明确描述，因此第一版可以按公开描述制作自有结构，而不是臆造一个大浮岛：
+
+- 玩家首次出生在两个浮岛之一。
+- 第一座小岛：草方块、泥土、石头和一棵橡树；承载最初的简单任务。
+- 第二座岛：Hub Portal、Jerry、Cobblestone Minion I，以及带火把和箱子的小洞穴。
+- 初始箱子内容：Lava Bucket、Water Bucket、3 Bone Meal、5 Dirt、7 Grass、8 Cobblestone。
+- 初始 Cobblestone Minion I 有 20 Cobblestone。
+- Private Island 默认可建造区域为 161×161（后续可升级）。
+
+参考：
+- https://hypixelskyblock.minecraft.wiki/w/Private_Island
+- https://hypixelskyblock.minecraft.wiki/w/Minions
+
+以上是 Wiki 社区资料整理，不是官方可下载结构文件。实现时请在自有结构定义中保留来源字段，并将 NPC、箱子内容、Minion 作为玩法数据单独生成，避免把实体和方块实体写死在结构模板中。
+
+## 7. 当前 Hub 版本选择注意事项
+
+Wiki 记录 Hub 于 2026-02-24（0.24.2）进行重大重制，并与其他岛屿升级至 Minecraft 1.21.9+。因此：
+- 2026-11 的社区下载目录中 Hub Modern Version 是最值得优先检查的候选。
+- 1.8 Hub 归档不是当前 Hub，只适合历史布局和建筑参考。
+- 本项目 Minecraft 1.21.1 低于该重制地图标注的 1.21.9+ 基线；禁止把整个新版本世界直接覆盖或加载到项目世界。
+- 推荐在独立的 1.21.9+/对应版本实例打开现代 Hub，按 Village、Bank/Auction/Bazaar、Combat Settlement/Graveyard 等功能区切片；只导出 1.21.1 已支持的方块状态，遇到新方块要有显式替换表。
+- 如果不能可靠转换，则先使用地图作为坐标/视觉参考，在 1.21.1 用自有结构重建必要区域；不要静默丢方块或数据。
