@@ -10,7 +10,8 @@
 4. Award XP using SkillAPI; query level, total XP, within-level progress and XP remaining to next level.
 5. Write separate NBT compounds under all four Life Skills keys.
 6. Stop/restart the world and verify values persist.
-7. Remove Life Skills, load/save the world, reinstall Life Skills and verify its data remains.
+7. Attempt to write a key under the reserved `skyblockrpg` namespace and verify PlayerDataAPI rejects it.
+8. Remove Life Skills, load/save the world, reinstall Life Skills and verify its data remains.
 
 ## B. Stats
 
