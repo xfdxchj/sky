@@ -83,8 +83,14 @@ public final class NpcManager {
             case "quest_board" -> {
                 player.sendMessage(Text.literal("Available quests:"), false);
                 for (QuestDefinition quest : QuestRegistry.all()) {
-                    player.sendMessage(Text.literal("- " + quest.title() + " [" + QuestManager.status(profile, quest) + "]"
+                    String objective = "talk_to_npc".equals(quest.objectiveType())
+                            ? "Talk to " + quest.targetNpcId() : "Defeat " + quest.targetMobId();
+                    player.sendMessage(Text.literal("- " + quest.title() + " | " + objective
+                            + " [" + QuestManager.status(profile, quest) + "]"
                             + " | /skyblock quest accept " + quest.id()), false);
+                }
+                if (!npc.actionTarget().isBlank()) {
+                    player.sendMessage(Text.literal("Adventure route: /skyblock warp " + npc.actionTarget()), false);
                 }
             }
             default -> { }
