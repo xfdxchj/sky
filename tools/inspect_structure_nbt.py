@@ -235,7 +235,7 @@ def inspect_file(path: Path) -> dict:
         "entities": len(entities),
         "entity_types": dict(sorted(entity_types.items())),
         "block_position_min": min_pos if all(v is not None for v in min_pos) else None,
-        "block_position_max": max_pos if all(v is not None for v is not None for v in max_pos) else None,
+        "block_position_max": max_pos if all(v is not None for v in max_pos) else None,
         "out_of_bounds_block_positions": out_of_bounds_positions,
         "invalid_state_indices": invalid_by_variant[0] if invalid_by_variant else len(blocks),
         "block_state_counts": dict(sorted(primary_counts.items())),
