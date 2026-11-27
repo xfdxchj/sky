@@ -36,7 +36,7 @@ public final class ItemInstance {
     private final int upgradeLevel;
     private final NbtCompound customData;
 
-    public ItemInstance(
+    private ItemInstance(
             UUID instanceId,
             Identifier definitionId,
             int count,
@@ -148,6 +148,12 @@ public final class ItemInstance {
         if (hasInstanceState() || other.hasInstanceState()) return false;
         if (!definitionId.equals(other.definitionId)
                 || !definitionId.equals(parseDefinitionId(definition.id()))) return false;
+        try {
+            validateAgainst(definition);
+            other.validateAgainst(definition);
+        } catch (IllegalArgumentException invalidInstance) {
+            return false;
+        }
         return (long) count + other.count <= definition.maxStackSize();
     }
 
