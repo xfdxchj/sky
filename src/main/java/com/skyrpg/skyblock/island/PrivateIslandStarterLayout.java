@@ -153,12 +153,8 @@ public final class PrivateIslandStarterLayout {
     }
 
     private static void spawnJerry(ServerWorld world, double x, double y, double z) {
-        BlockPos pos = BlockPos.ofFloored(x, y, z);
-        for (Entity entity : world.getOtherEntities(null, new net.minecraft.util.math.Box(
-                pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2,
-                pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2))) {
-            if (entity.getCommandTags().contains(NpcManager.entityTag("jerry"))) return;
-        }
+        // This generator is only called for a newly allocated island record, so Jerry
+        // is spawned exactly once in the normal first-join flow.
         Entity entity = net.minecraft.entity.EntityType.VILLAGER.create(world);
         if (!(entity instanceof MobEntity mob)) return;
         entity.refreshPositionAndAngles(x, y, z, 180.0F, 0.0F);
