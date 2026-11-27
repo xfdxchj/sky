@@ -58,6 +58,8 @@
 - [x] InventoryAPI：访问 Core 逻辑背包。
 - [x] CurrencyAPI：访问 Purse / Bank。
 - [x] RewardAPI：发放物品、金币和技能经验。
+- [x] StatEffectAPI：扩展模组 namespaced BUFF / TEMPORARY / OTHER 效果应用与按 owner namespace 移除。
+- [x] SkillAPI.registerStatReward：扩展模组为自有技能注册精确等级属性奖励。
 - [x] 更新 Life Skills 接口合约与测试计划。
 - [ ] 用户本地 Gradle build 与 Core-only 游戏验证。
 - [x] 建立独立 API smoke-test Mod 模板，验证四技能注册入口可编译调用。
