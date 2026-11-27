@@ -64,7 +64,7 @@ Core 已有原生 Minecraft Structure NBT 导入器：
 - NBT 放置路径：data/<namespace>/structures/<path>.nbt
 - manifest 路径：data/skyblockrpg/skyblock/structures/*.json
 - 命令：/skyblock structure list|info|paste
-- 当前单个结构的包围盒体积上限：4,000,000 blocks（代码上限；实际导入仍应按内存、tick 与目标世界压力控制切片规模）
+- 当前单个结构的包围盒体积上限：4,000,000 blocks（代码硬上限；manifest 默认 250,000；实际导入仍应按内存、tick 与目标世界压力控制切片规模）
 - 当前策略：目标包围盒必须全部为空；不覆盖现有地形
 - 当前实体放置关闭；NPC 需由 Core NPC 系统单独布置
 - 结构 manifest 支持 dimension、origin、rotation、mirror 和来源/许可字段
