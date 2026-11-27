@@ -9,5 +9,6 @@
     "This is your personal space. Build, explore, and develop it at your own pace.",
     "The portal is decorative for now; the Hub destination will be connected in a later world-slice task."
   ],
-  "action": "quest_board"
+  "action": "quest_board",
+  "action_target": "starter_graveyard"
 }
