@@ -75,7 +75,9 @@
 - [x] 引入 StatSource 来源类别（BASE、EQUIPMENT、ACCESSORY、SKILL、BUFF、TEMPORARY、OTHER）。
 - [x] StatModifier 增加显式来源字段，并保留旧四参数构造兼容。
 - [x] PlayerStats 增加按来源筛选的最终属性计算入口。
-- [ ] 将现有装备、饰品、Power、Tuning 修正迁移为显式来源标记并核对来源归类。
+- [x] 将装备词条、Reforge 修正显式标记为 EQUIPMENT 来源。
+- [x] 将饰品词条、Power、Tuning 修正显式标记为 ACCESSORY 来源。
+- [x] PlayerProfile 提供统一 getStatModifiers() 快照与按来源过滤的 getFinalStat()。
 - [ ] 在统一管线接入 Skill、Buff、Temporary、Other 来源的注册/移除生命周期。
 - 在现有 PlayerStats / StatModifier 上扩展。
 - 区分 Base、Equipment、Accessory、Skill、Buff、Temporary、Other 来源。
