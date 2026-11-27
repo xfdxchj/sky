@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "skyblock_life_api_smoke",
+  "version": "${version}",
+  "name": "SkyBlock Life Skills API Smoke Test",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.example.skyblocklife.LifeSkillsApiSmoke"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "skyblockrpg": "*"
+  }
+}
