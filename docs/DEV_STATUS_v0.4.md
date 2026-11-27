@@ -251,3 +251,6 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 
 - 2026-11-27：P2-01B 基础源码已提交：新增 `ItemInstanceNbtCodec` 与 `LegacyInventoryMigrator`。迁移结果采用独立 inventory format v1，生成 instances / inventoryRefs / equipmentRefs / accessoryRefs，并保留 quarantine 与 legacyExtensions。未改动 PlayerProfile schema 10、PlayerInventory 活动读写路径；未执行 Gradle build、自动化测试或游戏内迁移验收。
+
+
+- 2026-11-27：VS-1 首次进入流程首版已提交（837ccee）：新玩家没有私人岛记录时自动分配并生成私人岛，随后传送到岛屿出生点；已有私人岛的玩家重连时不强制传送。失败时向玩家提示并记录日志。当前岛屿仍为单一椭圆浮岛，尚未还原 Wiki 描述的 Hypixel 主岛+副岛布局；未执行 Gradle build、runClient 或游戏内测试。
