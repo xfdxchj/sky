@@ -60,7 +60,8 @@
 - [x] RewardAPI：发放物品、金币和技能经验。
 - [x] 更新 Life Skills 接口合约与测试计划。
 - [ ] 用户本地 Gradle build 与 Core-only 游戏验证。
-- [ ] 最小测试扩展 Mod 验证四技能注册、物品数据包加载和奖励流程。
+- [x] 建立独立 API smoke-test Mod 模板，验证四技能注册入口可编译调用。
+- [ ] 用户本地构建 smoke-test Mod，并在游戏中验证四技能注册、物品数据包加载、存档与奖励流程。
 
 **明确延期：** 任意 StatType 动态注册、属性修正写入 API、ItemInstance、原子多奖励事务、Quest Objective 和通用事件总线。不得把未发布接口写进 Life Skills 的编译依赖。
 
