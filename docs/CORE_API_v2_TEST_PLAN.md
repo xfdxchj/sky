@@ -29,7 +29,7 @@
 4. Verify ItemAPI can still resolve legacy Core IDs and namespaced Core IDs.
 5. Add the item to the logical inventory through InventoryAPI.
 6. Save/restart and verify the item count persists.
-7. Verify duplicate IDs and invalid stat keys are logged/rejected without preventing unrelated definitions from loading.
+7. Verify duplicate IDs, invalid stat keys, non-finite stat values and invalid stack sizes are logged/rejected without preventing unrelated definitions from loading.
 
 ## D. Economy and rewards
 
