@@ -21,6 +21,24 @@ public final class CombatManager {
 
     private CombatManager() {}
 
+    private static void grantConfiguredDrops(ServerPlayerEntity player, PlayerProfile profile, MobDefinition mob) {
+        for (MobDropDefinition drop : mob.drops()) {
+            // Unknown probabilities are not interpreted as guaranteed drops.
+            if (!"item".equalsIgnoreCase(drop.dropType()) || !drop.chanceKnown()
+                    || drop.itemId().isBlank() || drop.maxCount() < 1
+                    || ItemRegistry.get(drop.itemId()).isEmpty()) continue;
+            if (player.getRandom().nextDouble() >= drop.chance()) continue;
+            int count = player.getRandom().nextBetween(drop.minCount(), drop.maxCount());
+            if (count <= 0) continue;
+            if (!profile.getInventory().add(drop.itemId(), count)) {
+                player.sendMessage(Text.literal("Inventory full; could not collect " + drop.itemId()
+                        + " x" + count + "."), false);
+            } else {
+                player.sendMessage(Text.literal("§e+" + count + " " + drop.itemId()), true);
+            }
+        }
+    }
+
     public static boolean shouldHandleAttack(ServerPlayerEntity player, LivingEntity target) {
         if (player.isSpectator() || target instanceof PlayerEntity || !target.isAlive()) return false;
         PlayerProfile profile = ProfileManager.get(player);
