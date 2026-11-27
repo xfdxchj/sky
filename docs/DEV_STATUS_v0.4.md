@@ -129,6 +129,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 - 保留 API v1 的 `SkillAPI` 与 `PlayerDataAPI`，不改变既有方法签名。
 - `CoreApi.API_VERSION` 更新为 2。
+- 新增 API-owned `SkillDefinition` / `ItemView` DTO，避免扩展代码依赖内部 `SkillRegistration` / `ItemDefinition`。
 - 新增只读 `StatAPI`：查询 Core 最终属性管线；补充生活技能所需的 `FARMING_SPEED`、`FISHING_FORTUNE`、`FORAGING_SPEED`、`FORAGING_FORTUNE`。
 - 新增 `ItemAPI`：查询 Core 与扩展数据包中的 API-owned `ItemView`。
 - 新增 `SkillDefinition`、`ItemView` DTO，避免扩展模组直接依赖 Core 的内部注册表数据类。
