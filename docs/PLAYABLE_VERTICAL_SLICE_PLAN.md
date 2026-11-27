@@ -145,3 +145,14 @@
 - ItemInstance 与 NBT codec 已存在，但尚未接入 PlayerInventory 活动存档；首轮装备闭环暂时必须基于旧逻辑背包，或等 ItemInstance 迁移通过构建与迁移验收后再切换。
 
 据此，VS-1 的第一项实际工作应是明确并实现首次进入的起始落点/据点入口，而不是先堆 NPC 数量或地图 POI。VS-3 的关键缺口是掉落执行与一次性击杀结算；VS-4 的关键缺口是击杀任务目标和可交互的 GUI 交易路径。
+
+
+## 7. 外部地图与参考资料
+
+地图和数据来源统一登记在 [HYPIXEL_REFERENCE_ASSET_CATALOG.md](HYPIXEL_REFERENCE_ASSET_CATALOG.md)。当前优先级：
+1. Hub Modern Version：作为当前 Hub 视觉/结构参考，先在隔离实例检查；地图版本 1.21.9+/1.22，与项目 1.21.1 不兼容风险尚未解决。
+2. Hub Village 与 Bank/商店周边：首个起始据点切片。
+3. Graveyard：首个冒险区域切片。
+4. Private Island：暂无已确认的官方独立地图下载，依据 Wiki 初始布局描述制作项目自有结构。
+
+任何外部地图均不得直接覆盖玩家世界；先记录来源、版本、许可、哈希和转换说明，再切片导入。完整地图未实际导入前，VS-1/VS-3 仍不得标记为完成。
