@@ -139,3 +139,11 @@ python tools/inspect_structure_nbt.py worlds/structures --output reports/structu
 - Hub 主要建筑/区域的坐标包围盒；
 - 不兼容方块与方块实体报告；
 - 首批切片 manifest 草案。
+
+审计后可进一步生成便于人工审阅的摘要：
+
+```powershell
+python tools/summarize_structure_audit.py reports/structure_audit.json --markdown reports/structure_audit_summary.md
+```
+
+摘要会列出各结构的尺寸、包围盒体积、方块/方块实体/实体数量，以及 palette 索引错误和越界坐标提示。它不会推断地图内 POI 的真实名称或坐标，也不会自动生成正式 manifest。GitHub Actions 在 NBT 或审计工具更新时会自动运行，并将 JSON 原始报告与 Markdown 摘要作为 `structure-audit` artifact 保存。
