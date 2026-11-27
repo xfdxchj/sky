@@ -157,7 +157,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
 - BUFF、TEMPORARY、OTHER 已接入效果生命周期：效果按 ID 刷新/替换，不同 ID 可叠加；支持主动移除和 Overworld 游戏刻过期；效果存入玩家档案 NBT，旧档案缺字段时按空列表迁移。
 - 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 来源通过独立等级奖励注册表派生。扩展可为自己注册的技能定义明确阈值与属性值；Core 不从临时 XP 曲线推导奖励。基础属性仍由 PlayerStats 独立保存。
-- P1-02 RPG 生命系统：设计与测试计划已提交，尚未实现代码。设计明确 RPG Health=100 的基准、原版 20 点生命映射、Defense / True Defense 伤害分类、当前生命存档迁移、恢复与死亡/重生流程；具体见 `P1-02_RPG_HEALTH_DESIGN.md` 和 `P1-02_RPG_HEALTH_TEST_PLAN.md`。
+- P1-02 RPG 生命系统：设计与测试计划已提交；P1-02A 源码已提交，包含 PlayerProfile 当前 RPG Health、Health / Health Regen / Defense / True Defense 基准值、schema 10 的 currentHealth 持久化与 schema 9 旧档满血迁移。P1-02B 至 P1-02F 尚未实现。具体见 `P1-02_RPG_HEALTH_DESIGN.md` 和 `P1-02_RPG_HEALTH_TEST_PLAN.md`。
 - 技能等级增益、正式经验表和技能解锁。
 - HUD 与状态展示。
 - 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`；Core API v3 测试：`CORE_API_v3_TEST_PLAN.md`。
@@ -202,6 +202,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - P5.2 的 `runClient` 和完整游戏内行为仍需测试。
 - P5.3 尚未由用户本地 Gradle build 或游戏内测试。
 - 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照，并提交 BUFF / TEMPORARY / OTHER 效果生命周期、NBT 持久化、SKILL 等级奖励派生与 Core API v3；未执行 Gradle build 或游戏内测试。
+- 2026-11-27：P1-02 设计、测试计划和 P1-02A（当前 RPG Health 字段、schema 10 持久化迁移、Health / Health Regen / Defense / True Defense 基准）已提交；未执行 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
