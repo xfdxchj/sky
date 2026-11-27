@@ -63,9 +63,9 @@
 - [x] 建立独立 API smoke-test Mod 模板，验证四技能注册入口可编译调用。
 - [ ] 用户本地构建 smoke-test Mod，并在游戏中验证四技能注册、物品数据包加载、存档与奖励流程。
 
-**明确延期：** 任意 StatType 动态注册、属性修正写入 API、ItemInstance、原子多奖励事务、Quest Objective 和通用事件总线。不得把未发布接口写进 Life Skills 的编译依赖。
+**明确延期：** 任意 StatType 动态注册、对 BASE / EQUIPMENT / ACCESSORY / SKILL 的直接写入 API、ItemInstance、原子多奖励事务、Quest Objective 和通用事件总线。不得把未发布接口写进 Life Skills 的编译依赖。
 
-**验收：** 见 `CORE_API_v2_TEST_PLAN.md`.
+**验收：** 见 `CORE_API_v3_TEST_PLAN.md`（v2 文档保留作历史参考）。
 
 ## 3. P1：玩家系统完善
 
@@ -80,8 +80,9 @@
 - [x] PlayerProfile 提供统一 getStatModifiers() 快照与按来源过滤的 getFinalStat()。
 - [x] BUFF / TEMPORARY / OTHER 效果注册、按 ID 刷新/替换、主动移除与 Overworld 游戏刻过期清理。
 - [x] 效果 NBT 持久化与旧档案空列表迁移（schema 9）。
-- [ ] SKILL 等级属性奖励映射（等待核实正式技能奖励数据；不得使用占位 XP 曲线推导）。
-- [ ] 外部模块属性效果写入 API（需命名空间隔离和公共 API 合约）。
+- [x] SKILL 等级属性奖励映射框架：扩展为自己注册的技能声明精确阈值和奖励值，Core 按等级派生 SKILL 来源修正；未填充未经核实的 Hypixel 数值。
+- [x] 外部模块 BUFF / TEMPORARY / OTHER 属性效果写入 API（API v3，namespaced ID 校验）。
+- [ ] 核对当前 Hypixel 技能等级奖励数据并录入正式配置；项目 fixture 不可冒充官方数据。
 - 在现有 PlayerStats / StatModifier 上扩展。
 - 区分 Base、Equipment、Accessory、Skill、Buff、Temporary、Other 来源。
 - 统一最终属性查询和修正顺序。
