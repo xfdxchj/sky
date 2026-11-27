@@ -9,6 +9,7 @@ import com.skyrpg.skyblock.stats.StatType;
 import com.skyrpg.skyblock.accessory.AccessoryPowerManager;
 import com.skyrpg.skyblock.accessory.PowerRegistry;
 import com.skyrpg.skyblock.stats.StatModifier;
+import com.skyrpg.skyblock.stats.StatEffect;
 
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 
 /** Persistent SkyBlock profile data for one Minecraft player. */
 public final class PlayerProfile {
-    public static final int CURRENT_VERSION = 8;
+    public static final int CURRENT_VERSION = 9;
 
     private final UUID playerId;
     private String lastKnownName;
@@ -38,6 +39,7 @@ public final class PlayerProfile {
     private String selectedPower = "fortuitous";
     private final Set<String> unlockedPowers = new LinkedHashSet<>(Set.of("fortuitous", "pretty", "protected", "simple", "warrior"));
     private final Map<StatType, Integer> tuningAllocations = new EnumMap<>(StatType.class);
+    private final Map<String, StatEffect> statEffects = new LinkedHashMap<>();
 
     public PlayerProfile(UUID playerId, String playerName) {
         this.playerId = playerId;
@@ -202,6 +204,7 @@ public final class PlayerProfile {
         java.util.List<StatModifier> modifiers = new java.util.ArrayList<>(inventory.getStatModifiers());
         int accessoryPower = getAccessoryPower();
         modifiers.addAll(AccessoryPowerManager.getPowerModifiers(selectedPower, accessoryPower));
+        statEffects.values().forEach(effect -> modifiers.add(effect.modifier()));
         getTuningAllocations().forEach((stat, points) -> {
             double amount = AccessoryPowerManager.tuningValue(stat) * points;
             if (amount != 0.0) modifiers.add(new StatModifier(
@@ -209,6 +212,26 @@ public final class PlayerProfile {
                     StatModifier.Operation.ADDITIVE));
         });
         return java.util.List.copyOf(modifiers);
+    }
+
+    /** Adds or refreshes an effect by stable effect ID. */
+    public boolean putStatEffect(StatEffect effect) {
+        if (effect == null) return false;
+        statEffects.put(effect.id(), effect);
+        return true;
+    }
+
+    public boolean removeStatEffect(String effectId) {
+        return effectId != null && statEffects.remove(effectId.trim()) != null;
+    }
+
+    public java.util.List<StatEffect> getStatEffects() {
+        return java.util.List.copyOf(statEffects.values());
+    }
+
+    /** Removes effects whose absolute Overworld game-time expiry has been reached. */
+    public boolean removeExpiredStatEffects(long gameTime) {
+        return statEffects.values().removeIf(effect -> effect.isExpired(gameTime));
     }
 
     public double getFinalStat(StatType type) {
