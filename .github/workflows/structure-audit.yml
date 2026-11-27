@@ -1,0 +1,34 @@
+name: Structure Audit
+
+on:
+  push:
+    paths:
+      - "worlds/structures/**"
+      - "tools/inspect_structure_nbt.py"
+      - ".github/workflows/structure-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install nbtlib
+
+      - name: Compile auditor
+        run: python -m py_compile tools/inspect_structure_nbt.py
+
+      - name: Run structure audit
+        run: python tools/inspect_structure_nbt.py worlds/structures --output reports/structure_audit.json
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: structure-audit
+          path: reports/structure_audit.json
