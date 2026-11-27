@@ -64,7 +64,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `PlayerProfile`：UUID 玩家档案、Purse、Bank、技能经验、属性、逻辑背包及部分玩法进度。
 - `SkyBlockWorldData`：世界级 `PersistentState`。
 - `ProfileManager`：玩家档案获取、创建和保存管理。
-- `PlayerStats`、`StatType`、`StatModifier`：属性定义和最终属性修正。
+- `PlayerStats`、`StatType`、`StatModifier`、`StatSource`：属性定义、来源分类和最终属性修正。
+- `StatEffect`、`StatEffectManager`：BUFF / TEMPORARY / OTHER 效果应用、刷新、主动移除、持久化与过期清理。
 - `SkillType`：12 个内部技能 ID；它们是技术注册起点，不代表当前 Hypixel 所有技能玩法均已实现。
 - `SkillDefinition`：当前仍使用临时 XP 曲线，不是最终 Hypixel 经验表。
 - `CurrencyManager`、`BankManager`：Purse 和 Bank 的基础操作。
@@ -150,11 +151,12 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 装备词条与 Reforge 明确标记为 EQUIPMENT；饰品词条、Power、Tuning 明确标记为 ACCESSORY。
 - `PlayerStats` 支持按来源筛选计算；`PlayerProfile.getStatModifiers()` 提供统一修正快照，`getFinalStat(type, includedSources)` 可按来源过滤。
 - 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
-- SKILL、BUFF、TEMPORARY、OTHER 的注册、持续时间、叠加规则和移除生命周期尚未接入；基础属性仍由 PlayerStats 独立保存。
+- BUFF、TEMPORARY、OTHER 已接入效果生命周期：效果按 ID 刷新/替换，不同 ID 可叠加；支持主动移除和 Overworld 游戏刻过期；效果存入玩家档案 NBT，旧档案缺字段时按空列表迁移。
+- 当前效果管理器拒绝 BASE、EQUIPMENT、ACCESSORY、SKILL 来源；SKILL 等级属性奖励仍未实现，避免把临时 XP 曲线转化为未经核实的属性数据。基础属性仍由 PlayerStats 独立保存。
 - 玩家 RPG 生命与原版生命同步策略。
 - 技能等级增益、正式经验表和技能解锁。
 - HUD 与状态展示。
-- 当前属性来源管线测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`。
+- 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`。
 
 ### P2 物品与装备
 - `ItemInstance` 和实例 NBT 序列化。
@@ -195,7 +197,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 构建环境记录：Gradle 8.12.1、JDK 21。
 - P5.2 的 `runClient` 和完整游戏内行为仍需测试。
 - P5.3 尚未由用户本地 Gradle build 或游戏内测试。
-- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照；未执行 Gradle build 或游戏内测试。
+- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照，并提交 BUFF / TEMPORARY / OTHER 效果生命周期和 NBT 持久化；未执行 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
