@@ -146,12 +146,14 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 ## 4. 剩余工作按系统归类
 
 ### P1 玩家系统
-- 属性来源元数据第一步已提交：新增 `StatSource`（BASE、EQUIPMENT、ACCESSORY、SKILL、BUFF、TEMPORARY、OTHER），`StatModifier` 增加来源字段并保留四参数兼容构造；`PlayerStats` 增加按来源筛选的最终属性计算入口。
-- 当前来源分类对旧调用通过 `sourceId` 前缀推断；未识别来源归为 OTHER。现有装备/饰品修正尚未全面改为显式来源标记，技能/Buff/临时效果也尚未接入完整管线。
-- 统一属性来源层仍需完成：基础、装备、饰品、技能、Buff、其他。
+- 属性来源基础与现有装备体系迁移已提交：新增 `StatSource`（BASE、EQUIPMENT、ACCESSORY、SKILL、BUFF、TEMPORARY、OTHER），`StatModifier` 增加来源字段并保留四参数兼容构造。
+- 装备词条与 Reforge 明确标记为 EQUIPMENT；饰品词条、Power、Tuning 明确标记为 ACCESSORY。
+- `PlayerStats` 支持按来源筛选计算；`PlayerProfile.getStatModifiers()` 提供统一修正快照，`getFinalStat(type, includedSources)` 可按来源过滤。
+- 旧四参数构造仍按 sourceId 前缀推断来源，未知前缀归为 OTHER；新代码应显式传入 StatSource。
+- SKILL、BUFF、TEMPORARY、OTHER 的注册、持续时间、叠加规则和移除生命周期尚未接入；基础属性仍由 PlayerStats 独立保存。
 - 玩家 RPG 生命与原版生命同步策略。
 - 技能等级增益、正式经验表和技能解锁。
-- HUD 与状态展示。
+- HUD 与状态展示。\n- 当前属性来源管线测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`。
 
 ### P2 物品与装备
 - `ItemInstance` 和实例 NBT 序列化。
@@ -191,7 +193,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：用户记录 P5.2 本地 Gradle 构建成功（BUILD SUCCESSFUL，JAR 约 261.8 KB）。
 - 构建环境记录：Gradle 8.12.1、JDK 21。
 - P5.2 的 `runClient` 和完整游戏内行为仍需测试。
-- P5.3 尚未由用户本地 Gradle build 或游戏内测试。\n- 2026-11-27：P1-01 属性来源元数据第一步已提交（StatSource、StatModifier 来源字段与兼容构造、PlayerStats 来源筛选）；未执行 Gradle build 或游戏内测试。
+- P5.3 尚未由用户本地 Gradle build 或游戏内测试。\n- 2026-11-27：P1-01 已完成现有装备/饰品/Power/Tuning/Reforge 来源标记与统一修正快照；未执行 Gradle build 或游戏内测试。
 - 以上构建记录是特定提交上的结果；后续代码修改后应重新构建。
 - 本文不将未执行的测试标记为通过。
 
