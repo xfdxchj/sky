@@ -46,7 +46,8 @@ def main() -> int:
             continue
 
         size = fmt_size(item.get("size"))
-        volume_value = item.get("bounding_box_volume")\n        volume = f"{volume_value:,}" if isinstance(volume_value, int) else "unknown"
+        volume_value = item.get("bounding_box_volume")
+        volume = f"{volume_value:,}" if isinstance(volume_value, int) else "unknown"
         blocks = item.get("block_entries", 0)
         block_entities = item.get("block_entities", 0)
         entities = item.get("entities", 0)
