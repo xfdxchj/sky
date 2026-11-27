@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockBox;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -20,13 +20,13 @@ public final class StarterGraveyardManager {
     private static final int CENTER_X = 256;
     private static final int CENTER_Z = 0;
     private static final int SURFACE_Y = 180;
-    private static final String MARKER_TAG = "skyblockrpg_starter_graveyard_ready";
 
     private StarterGraveyardManager() {}
 
     public static void ensure(ServerWorld world) {
         BlockPos marker = new BlockPos(CENTER_X, SURFACE_Y + 1, CENTER_Z);
         if (!world.getBlockState(marker).isOf(Blocks.MOSSY_COBBLESTONE)) {
+            if (!world.getBlockState(marker).isAir()) return;
             IslandDefinition island = new IslandDefinition(
                     "starter_graveyard_fixture", "Starter Graveyard (Project Fixture)",
                     "minecraft:overworld", CENTER_X, CENTER_Z, SURFACE_Y,
@@ -38,7 +38,7 @@ public final class StarterGraveyardManager {
                 return;
             }
             buildLandmarks(world);
-            world.setBlockState(marker, Blocks.MOSSY_COBBLESTONE.getDefaultState(), Block.NOTIFY_ALL);
+            place(world, marker, Blocks.MOSSY_COBBLESTONE);
         }
         ensureZombies(world);
     }
@@ -46,7 +46,7 @@ public final class StarterGraveyardManager {
     private static void buildLandmarks(ServerWorld world) {
         int[][] graves = {{-10, -5}, {-4, -8}, {4, -7}, {10, -3}, {-8, 7}, {7, 8}};
         for (int[] grave : graves) {
-            BlockPos base = new BlockPos(CENTER_X + grave[0], SURFACE_Y + 2, CENTER_Z + grave[1]);
+            BlockPos base = new BlockPos(CENTER_X + grave[0], SURFACE_Y + 1, CENTER_Z + grave[1]);
             place(world, base, Blocks.COBBLESTONE);
             place(world, base.up(), Blocks.MOSSY_COBBLESTONE);
             place(world, base.up(2), Blocks.STONE_BRICK_WALL);
@@ -59,7 +59,7 @@ public final class StarterGraveyardManager {
     private static void ensureZombies(ServerWorld world) {
         MobDefinition definition = MobRegistry.getById("graveyard_zombie").orElse(null);
         if (definition == null) return;
-        BlockBox area = new BlockBox(CENTER_X - 24, SURFACE_Y - 4, CENTER_Z - 20,
+        Box area = new Box(CENTER_X - 24, SURFACE_Y - 4, CENTER_Z - 20,
                 CENTER_X + 24, SURFACE_Y + 16, CENTER_Z + 20);
         long existing = world.getEntitiesByClass(LivingEntity.class, area,
                 entity -> entity.getCommandTags().contains(MobRegistry.entityTag(definition.id()))).size();
