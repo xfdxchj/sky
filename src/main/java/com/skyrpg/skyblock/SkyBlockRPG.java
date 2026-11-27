@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import com.skyrpg.skyblock.profile.ProfileManager;
 import com.skyrpg.skyblock.profile.PlayerHealthManager;
+import com.skyrpg.skyblock.profile.PlayerHealthRegenManager;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import com.skyrpg.skyblock.stats.StatEffectManager;
 import com.skyrpg.skyblock.skill.SkillRegistry;
@@ -77,6 +78,7 @@ public final class SkyBlockRPG implements ModInitializer {
             for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 RegionManager.tick(player);
                 PlayerHealthManager.tick(player);
+                PlayerHealthRegenManager.tick(player);
             }
         });
 
@@ -109,15 +111,20 @@ public final class SkyBlockRPG implements ModInitializer {
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             RegionManager.remove(handler.getPlayer());
             PlayerHealthManager.remove(handler.getPlayer());
+            PlayerHealthRegenManager.remove(handler.getPlayer());
         });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             RegionManager.clear();
             PlayerHealthManager.clear();
+            PlayerHealthRegenManager.clear();
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
-                PlayerHealthManager.onRespawn(newPlayer));
+                {
+                    PlayerHealthManager.onRespawn(newPlayer);
+                    PlayerHealthRegenManager.onRespawn(newPlayer);
+                });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
