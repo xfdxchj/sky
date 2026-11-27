@@ -72,6 +72,11 @@
 **目标：形成所有玩法模块可统一调用的玩家成长与属性基础。**
 
 ### P1-01 属性来源管线
+- [x] 引入 StatSource 来源类别（BASE、EQUIPMENT、ACCESSORY、SKILL、BUFF、TEMPORARY、OTHER）。
+- [x] StatModifier 增加显式来源字段，并保留旧四参数构造兼容。
+- [x] PlayerStats 增加按来源筛选的最终属性计算入口。
+- [ ] 将现有装备、饰品、Power、Tuning 修正迁移为显式来源标记并核对来源归类。
+- [ ] 在统一管线接入 Skill、Buff、Temporary、Other 来源的注册/移除生命周期。
 - 在现有 PlayerStats / StatModifier 上扩展。
 - 区分 Base、Equipment、Accessory、Skill、Buff、Temporary、Other 来源。
 - 统一最终属性查询和修正顺序。
