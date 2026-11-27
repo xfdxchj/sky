@@ -4,6 +4,8 @@
 > 目标：尽可能还原当前 Hypixel SkyBlock 的核心系统，针对单人游戏做必要适配。
 > 技术基线：Minecraft 1.21.1、Fabric、Java 21。
 > 开发原则：先检查并复用现有实现，不重复造轮子；不把基础框架当成完整玩法。
+>
+> **当前最高优先级：可游玩的最小闭环。** 暂停横向扩张系统，按 [PLAYABLE_VERTICAL_SLICE_PLAN.md](PLAYABLE_VERTICAL_SLICE_PLAN.md) 推进 VS-0 至 VS-6。VS 是独立的整合里程碑编号，不替代或重编号 P 阶段。
 
 ---
 
