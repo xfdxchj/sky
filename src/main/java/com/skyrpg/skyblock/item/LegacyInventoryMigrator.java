@@ -8,7 +8,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
-import java.util.UUID;
 
 /**
  * Converts the legacy logical-inventory NBT shape into the versioned instance shape.
@@ -27,13 +26,42 @@ public final class LegacyInventoryMigrator {
             throw new IllegalArgumentException("Inventory capacities cannot be negative");
         }
 
+        if (legacy.contains("formatVersion") || legacy.contains("instances")) {
+            throw new IllegalArgumentException("Input already contains versioned item-instance data");
+        }
+
         NbtCompound migrated = new NbtCompound();
         migrated.putInt("formatVersion", INVENTORY_FORMAT_VERSION);
+        NbtCompound legacyExtensions = new NbtCompound();
+        for (String key : legacy.getKeys()) {
+            if (!key.equals("items") && !key.equals("equipment")
+                    && !key.equals("reforges") && !key.equals("accessoryBag")) {
+                legacyExtensions.put(key, legacy.get(key).copy());
+            }
+        }
+        if (!legacyExtensions.isEmpty()) migrated.put("legacyExtensions", legacyExtensions);
         NbtList instances = new NbtList();
         NbtList quarantine = new NbtList();
         NbtCompound equipmentRefs = new NbtCompound();
         NbtList accessoryRefs = new NbtList();
         int usedSlots = 0;
+
+        if (legacy.contains("items") && !legacy.contains("items", NbtElement.LIST_TYPE)) {
+            quarantine(quarantine, "items", "invalid_legacy_field_type", legacy.get("items"));
+        } else if (legacy.contains("items", NbtElement.LIST_TYPE)
+                && legacy.getList("items", NbtElement.LIST_TYPE).getHeldType() != NbtElement.COMPOUND_TYPE
+                && !legacy.getList("items", NbtElement.LIST_TYPE).isEmpty()) {
+            quarantine(quarantine, "items", "invalid_legacy_list_element_type", legacy.get("items"));
+        }
+        if (legacy.contains("equipment") && !legacy.contains("equipment", NbtElement.COMPOUND_TYPE)) {
+            quarantine(quarantine, "equipment", "invalid_legacy_field_type", legacy.get("equipment"));
+        }
+        if (legacy.contains("reforges") && !legacy.contains("reforges", NbtElement.COMPOUND_TYPE)) {
+            quarantine(quarantine, "reforges", "invalid_legacy_field_type", legacy.get("reforges"));
+        }
+        if (legacy.contains("accessoryBag") && !legacy.contains("accessoryBag", NbtElement.LIST_TYPE)) {
+            quarantine(quarantine, "accessoryBag", "invalid_legacy_field_type", legacy.get("accessoryBag"));
+        }
 
         NbtList oldItems = legacy.getList("items", NbtElement.COMPOUND_TYPE);
         for (int i = 0; i < oldItems.size(); i++) {
@@ -98,10 +126,8 @@ public final class LegacyInventoryMigrator {
             }
 
             try {
-                ItemInstance instance = ItemInstance.restore(UUID.randomUUID(),
-                        net.minecraft.util.Identifier.tryParse(definition.id().contains(":")
-                                ? definition.id() : "skyblockrpg:" + definition.id()),
-                        1, reforgeId, java.util.Map.of(), 0, 0, new NbtCompound(), definition);
+                ItemInstance instance = ItemInstance.create(definition, 1);
+                if (!reforgeId.isBlank()) instance = instance.withReforge(reforgeId, definition);
                 instances.add(ItemInstanceNbtCodec.encode(instance));
                 equipmentRefs.putString(slot.id(), instance.instanceId().toString());
             } catch (IllegalArgumentException exception) {
