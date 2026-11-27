@@ -52,9 +52,7 @@ The dependency ensures Core initializes before the extension. Do not add a rever
 
 ## 3. Public API packages
 
-Use only:
-- `com.skyrpg.skyblock.api.*`
-- Public data types explicitly referenced by those APIs, such as `SkillRegistration`, `ItemDefinition`, and `StatType`.
+Use `com.skyrpg.skyblock.api.*` as the supported Core integration surface. The API-owned `SkillDefinition` and `ItemView` types keep extensions away from Core registry implementation classes. `StatType` is the only current shared data type outside the API package.
 
 Avoid Core implementation packages such as `profile`, `economy`, `inventory`, `skill.SkillManager`, and `item.ItemRegistry`. They are not extension contracts.
 
