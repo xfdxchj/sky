@@ -1,6 +1,9 @@
 package com.skyrpg.skyblock.item;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtByteArray;
+import net.minecraft.nbt.NbtIntArray;
+import net.minecraft.nbt.NbtLongArray;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
@@ -11,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Immutable, player-owned item stack state.
@@ -26,6 +30,7 @@ public final class ItemInstance {
     public static final int MAX_CUSTOM_DATA_NODES = 1024;
     public static final int MAX_CUSTOM_DATA_KEY_LENGTH = 128;
     public static final int MAX_CUSTOM_DATA_STRING_LENGTH = 4096;
+    public static final int MAX_CUSTOM_DATA_BYTES = 65_536;
 
     private final UUID instanceId;
     private final Identifier definitionId;
@@ -83,7 +88,7 @@ public final class ItemInstance {
         this.stars = stars;
         this.upgradeLevel = upgradeLevel;
         this.customData = customData == null ? new NbtCompound() : customData.copy();
-        validateCustomData(this.customData, 0, new int[]{0});
+        validateCustomData(this.customData, 0, new int[]{0}, new long[]{0L});
 
         if (hasInstanceState() && count != 1) {
             throw new IllegalArgumentException("Stateful item instances must have count 1");
@@ -233,10 +238,11 @@ public final class ItemInstance {
         return parsed;
     }
 
-    private static void validateCustomData(NbtElement element, int depth, int[] nodes) {
+    private static void validateCustomData(NbtElement element, int depth, int[] nodes, long[] bytes) {
         if (depth > MAX_CUSTOM_DATA_DEPTH || ++nodes[0] > MAX_CUSTOM_DATA_NODES) {
             throw new IllegalArgumentException("Custom item data exceeds structural limits");
         }
+        bytes[0] += 8L;
         if (element instanceof NbtCompound compound) {
             if (compound.getKeys().size() > MAX_CUSTOM_DATA_NODES) {
                 throw new IllegalArgumentException("Custom item data contains too many keys");
@@ -245,16 +251,29 @@ public final class ItemInstance {
                 if (key.length() > MAX_CUSTOM_DATA_KEY_LENGTH) {
                     throw new IllegalArgumentException("Custom item data key is too long");
                 }
+                bytes[0] += key.getBytes(StandardCharsets.UTF_8).length;
                 NbtElement child = compound.get(key);
-                if (child != null) validateCustomData(child, depth + 1, nodes);
+                if (child != null) validateCustomData(child, depth + 1, nodes, bytes);
             }
         } else if (element instanceof NbtList list) {
             for (int i = 0; i < list.size(); i++) {
-                validateCustomData(list.get(i), depth + 1, nodes);
+                validateCustomData(list.get(i), depth + 1, nodes, bytes);
             }
-        } else if (element instanceof NbtString string
-                && string.asString().length() > MAX_CUSTOM_DATA_STRING_LENGTH) {
-            throw new IllegalArgumentException("Custom item data string is too long");
+        } else if (element instanceof NbtString string) {
+            String value = string.asString();
+            if (value.length() > MAX_CUSTOM_DATA_STRING_LENGTH) {
+                throw new IllegalArgumentException("Custom item data string is too long");
+            }
+            bytes[0] += value.getBytes(StandardCharsets.UTF_8).length;
+        } else if (element instanceof NbtByteArray array) {
+            bytes[0] += array.getByteArray().length;
+        } else if (element instanceof NbtIntArray array) {
+            bytes[0] += (long) array.getIntArray().length * Integer.BYTES;
+        } else if (element instanceof NbtLongArray array) {
+            bytes[0] += (long) array.getLongArray().length * Long.BYTES;
+        }
+        if (bytes[0] > MAX_CUSTOM_DATA_BYTES) {
+            throw new IllegalArgumentException("Custom item data exceeds " + MAX_CUSTOM_DATA_BYTES + " bytes");
         }
     }
 
