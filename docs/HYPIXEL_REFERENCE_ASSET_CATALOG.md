@@ -10,8 +10,8 @@
 
 | 资源 | 版本/状态 | 用途 | 地址 |
 |---|---|---|---|
-| 社区维护的全区域世界下载目录 | 2026-11-17 更新；含 Hub 1.8 与现代版 1.22 | 首选完整地图参考；现代版最接近当前重制 Hub | https://hypixel.net/threads/updated-hypixel-skyblock-world-downloads-for-every-single-island.5140617/ |
-| Hub Modern Version | 1.22 RAR，社区上传 | 当前 Hub 建筑与地形参考；目标项目 1.21.1，需先做版本兼容检查 | https://www.mediafire.com/file/aybs2t2t0l7snkk/The+Hub+(Modern+Version).rar/file |
+| 社区维护的全区域世界下载目录 | 2026-11-17 更新；含 Hub 1.8 与现代版 1.22（用户已确认地图在实际使用中基本可兼容项目目标版本） | 首选完整地图参考；现代版最接近当前重制 Hub | https://hypixel.net/threads/updated-hypixel-skyblock-world-downloads-for-every-single-island.5140617/ |
+| Hub Modern Version | 1.22 RAR，社区上传 | 当前 Hub 建筑与地形参考；用户反馈 1.22 地图基本没有不兼容多方块，可优先按直接读取/导入路线处理，仍需项目内扫描确认 | https://www.mediafire.com/file/aybs2t2t0l7snkk/The+Hub+(Modern+Version).rar/file |
 | Hub + Carnival | 1.22 RAR，社区上传 | 含 Carnival 的 Hub 变体 | https://www.mediafire.com/file/4iyjvqzslwmqcos/The+Hub+(incl.+Carnival).rar/file |
 | Hub 1.8 archive | 旧版 | 仅作历史建筑/布局参考，不作为当前版本基准 | https://www.mediafire.com/file/02wd269n5mdz1zw/The_Hub.zip/file |
 | 1.8.9 结束前 Hub 归档 | Planet Minecraft 社区存档，发布于 2026-03-09 | 历史参考；页面说明地图归档于 1.21.10 | https://www.planetminecraft.com/project/hypixel-skyblock-hub-last-day-of-1-8-9-archive-2026-02-24/ |
@@ -84,11 +84,11 @@
 
 1. **原始归档层**：用户本地保存下载的 ZIP/RAR，记录来源 URL、下载时间、文件哈希、声明的 Minecraft 版本。
 2. **隔离检查层**：在独立 Minecraft 实例打开地图，确认区块、方块、实体、方块实体、数据包和资源包；不在主开发世界测试。
-3. **版本转换层**：1.22 地图不可直接假定能由 1.21.1 安全读取。优先尝试在对应版本中打开，再导出为结构/区域切片；降版本可能丢失新方块、组件、实体数据。
-4. **结构切片层**：按功能区域导出为结构文件（例如 Hub Village、Bank/Auction/Bazaar 周边、Graveyard、Private Island 起始岛）。大地图不要整体塞入单个结构。
+3. **兼容性扫描层**：用户已确认该 1.22 地图在实际使用中基本可兼容，且不涉及大量不兼容多方块。不要预设必须整图降版本。先尝试在项目目标版本的隔离实例直接打开副本；扫描方块 ID、方块状态、方块实体、实体、数据包与维度数据。只有扫描发现不兼容项时，才对相关区块/切片做定点替换或转换。
+4. **结构切片层**：先保留整张地图作为只读基准，再按功能区域导出结构（Hub Village、Bank/Auction/Bazaar、Graveyard 等）。不要把整个 Hub 塞进单个结构；切片应保留相邻道路与过渡区，避免拼接断层。
 5. **坐标与锚点层**：每个切片记录 source_origin、target_origin、rotation、bounding_box、dimension、source_version、conversion_notes。
 6. **数据关联层**：NPC、Region、Warp、Mob Spawn、Quest 不要从地图几何自动猜测；结合 Wiki/API/人工核验，分别保存数据文件。
-7. **许可与来源层**：社区世界下载不等于获得再分发权。未经许可，不将完整地图二进制直接提交到公开仓库；仓库只存导入脚本、元数据、坐标索引和用户本地导入说明。
+7. **许可与来源层**：技术兼容与再分发许可是两件事。未经许可，不将完整地图二进制直接提交到公开仓库；仓库只存导入脚本、元数据、坐标索引和用户本地导入说明。
 
 ## 4. 对 Vertical Slice 的资源选择
 
@@ -143,6 +143,6 @@
 Wiki 记录 Hub 于 2026-02-24（0.24.2）进行重大重制，并与其他岛屿升级至 Minecraft 1.21.9+。因此：
 - 2026-11 的社区下载目录中 Hub Modern Version 是最值得优先检查的候选。
 - 1.8 Hub 归档不是当前 Hub，只适合历史布局和建筑参考。
-- 本项目 Minecraft 1.21.1 低于该重制地图标注的 1.21.9+ 基线；禁止把整个新版本世界直接覆盖或加载到项目世界。
-- 推荐在独立的 1.21.9+/对应版本实例打开现代 Hub，按 Village、Bank/Auction/Bazaar、Combat Settlement/Graveyard 等功能区切片；只导出 1.21.1 已支持的方块状态，遇到新方块要有显式替换表。
+- 本项目 Minecraft 1.21.1 低于该重制地图标注的 1.21.9+ 基线，但用户已反馈实际地图基本没有不兼容多方块。应以隔离实例的直接打开与扫描结果为准，不再默认必须降版本转换；仍禁止将原始地图直接覆盖玩家世界。
+- 优先在项目 1.21.1 的隔离实例中直接打开地图副本并做兼容性扫描。若可正常读取，则直接按 Village、Bank/Auction/Bazaar、Combat Settlement/Graveyard 等功能区切片；只有遇到实际不兼容的方块状态、方块实体或数据格式时，才建立显式替换表。
 - 如果不能可靠转换，则先使用地图作为坐标/视觉参考，在 1.21.1 用自有结构重建必要区域；不要静默丢方块或数据。
