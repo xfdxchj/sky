@@ -6,6 +6,8 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 
 - [Development status v0.4](docs/DEV_STATUS_v0.4.md): what is implemented and what has actually been verified.
 - [Development task list v0.4](docs/DEV_TASKS_v0.4.md): remaining work and acceptance criteria.
+- [First playable slice quick start](docs/QUICK_START_PLAYABLE_SLICE.md): new-player → Jerry → starter sword → Graveyard combat quest.
+- [VS-3 / VS-4 combat quest test plan](docs/VS3_COMBAT_QUEST_SLICE_TEST_PLAN.md): build and in-game acceptance steps.
 - [World map reconstruction plan](docs/VS_WORLD_MAP_IMPLEMENTATION_PLAN.md): Private Island, Hub and later islands.
 - [Hub map intake and slicing](docs/HUB_MAP_INTAKE_AND_SLICING.md): direct 1.22 map compatibility audit and structure slicing workflow.
 - [Core API v3](docs/CORE_API_v3.md): supported integration contract for optional gameplay modules.
@@ -21,7 +23,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - Fabric Loader 0.16.x
 - Fabric API 0.116.x
 
-## Current milestone: P5.3 (Hub location catalogue foundation; build/test pending)
+## Current milestone: Playable Vertical Slice (VS-1 through VS-4 implementation in progress; build/test pending)
 P3.1 connects the P2 equipment/stat model to server-authoritative melee combat against vanilla living entities.
 
 ### Implemented
