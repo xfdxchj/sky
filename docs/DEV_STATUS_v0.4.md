@@ -38,12 +38,12 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 | 阶段 | 状态 | 事实说明 |
 |---|---|---|
 | P0 工程与基础数据 | ✅ 基础完成 | Fabric 入口、玩家档案、金币、技能经验、基础属性、PersistentState 和命令 |
-| P1 玩家系统 | 🟡 基础已有 | 属性来源、BUFF 生命周期、SKILL 等级奖励框架已提交待测；RPG 生命、正式技能数据和 HUD 未完成 |
+| P1 玩家系统 | 🟡 基础已有 | 属性来源与效果生命周期、SKILL 奖励框架已提交；RPG Health 档案/同步/恢复首版源码已提交但未构建验收，伤害桥按用户决定暂缓；正式技能数据和 HUD 未完成 |
 | P2 物品与装备 | 🟡 基础已有 | JSON 物品定义、逻辑背包、装备、饰品包、Power、Tuning、Reforge 基础存在；物品实例、附魔、原版物品注册和完整 Tooltip 未完成 |
 | P3 战斗与怪物 | 🟡 基础已有 | 伤害计算、怪物 JSON、独立怪物 HP、玩家受伤桥接和手动生成存在；掉落闭环、自然刷怪、AI 与完整战斗反馈未完成 |
 | P4 成长与解锁 | 🟡 基础已有 | NPC、任务基础、对话和 GUI 框架存在；Collections、配方、Bestiary 和完整目标类型未完成 |
 | P5 世界与地图 | 🟡 框架与目录已有 | 区域、Warp、岛屿、NBT 结构导入、桥梁和传送路线已有；P5.3 已建立 25 个有来源的 Hub POI 坐标记录与查询命令；真实地形、建筑、NPC 实体布置、区域边界和私人岛完整玩法仍未完成 |
-| P6 生活职业 | ⬜ 未开始 | Mining、Farming、Fishing、Foraging 的完整循环未实现 |
+| P6 生活职业 | 🟡 独立模组首版已提交 | `life-skills/` 已加入四技能初版代码与数据；尚未完成运行验收，GUI、Collection、热点/地图与完整 Hypixel 规则仍缺。Core 不重复实现玩法本体 |
 | P7 自动化与经济扩展 | 🟡 经济基础已有 | Purse、Bank、商店已有；Minion、仓库扩展和单机市场模拟未完成 |
 | P8 Slayer 与 Boss | ⬜ 未开始 | 尚无完整 Slayer 任务和 Boss 战斗闭环 |
 | P9 Dungeon | ⬜ 未开始 | 尚无实例、房间、谜题、Secrets 和 Floor 流程 |
@@ -189,6 +189,15 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 地图资源来源、许可、版本、坐标变换和完整性检查仍需完善。
 - 更完整的桥梁、传送门表现与路线导航。
 
+### P6 生活模组交接状态（2026-11-27）
+
+- 最新提交 `e2ee2b3` 新增独立 `life-skills/` 工程：43 个 Java 源文件、119 个数据 JSON（含物品定义），覆盖 Mining / Fishing / Farming / Foraging 首版循环。
+- 模组依赖 Core API v3；Core 保持主模组地位，生活模组只通过公开 API 访问档案、技能、属性、物品、奖励和逻辑背包。
+- 当前提交尚不能等同于完整 P6：模块状态文档仍列出 GUI、图鉴/Collection、钓鱼热点、Garden/矿区地图等缺口；数据中部分 Fortune 与 XP 公式明确是占位值。
+- 交接审查发现 `life-skills/docs/CORE_API_REQUIREMENTS.md` 仍写 Core API v2 / 旧 `SkillRegistration` 签名，与当前 README、入口检查和 Core API v3 实际代码不一致，应由生活模组维护者统一文档。
+- 源码快速审查还发现 `SkyBlockLife` 的 `AFTER_DEATH` 回调参数已是 `LivingEntity`，却再次使用 `entity instanceof LivingEntity living` 模式匹配；这在 Java 21 下可能构成冗余且不可编译的模式匹配，需生活模组维护者本地构建确认并修正。此处尚未执行构建，故记为待确认问题。
+- Core 下一步不开发四种生活玩法本体，优先推进 P2-01 ItemInstance，为物品强化、装备、饰品及扩展模组后续物品能力建立统一底座。
+
 ### P6-PX
 具体任务和验收标准见 `DEV_TASKS_v0.4.md`。
 
@@ -231,3 +240,5 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 每次交付明确区分：代码已提交、静态检查、Gradle 构建通过、游戏内测试通过。
 
 - 2026-11-27：用户决定暂时跳过 P1-02D 字节码核验与原版伤害桥接，先推进 P1-02E。新增 `PlayerHealthRegenManager`，按世界游戏时间每 40 ticks 恢复一次；登录/重生重置计时，维度切换重新计时，离线不补算，满血/死亡不恢复。接入服务端 tick、断线和服务器停止清理。源码已提交，未执行 Gradle build、runClient 或游戏内测试。
+
+- 2026-11-27（最新 main 基线复核）：仓库最新提交为 `e2ee2b3`，新增 `life-skills/` 独立生活模组首版。Core 状态与任务文档已按该提交更新；P6 仍为未验收状态。P2-01 ItemInstance 设计和测试计划已新增，作为 Core 后续开发入口。
