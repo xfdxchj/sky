@@ -197,8 +197,8 @@ public final class PlayerProfile {
 
     /**
      * Returns the current derived modifier snapshot from equipment, reforges,
-     * accessory power and tuning. Skill/Buff/Temporary sources can be appended
-     * here as their lifecycle managers are introduced.
+     * accessory power, tuning and active persisted stat effects. Skill bonuses
+     * remain a separate level-derived source and are not populated with placeholder values.
      */
     public java.util.List<StatModifier> getStatModifiers() {
         java.util.List<StatModifier> modifiers = new java.util.ArrayList<>(inventory.getStatModifiers());
