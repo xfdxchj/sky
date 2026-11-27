@@ -194,3 +194,34 @@
 - 905db4f Jerry NPC 定义
 
 以上均为源码提交，尚未执行本轮改动后的 Gradle build / runClient / 游戏内验收。请重点验证双岛是否完整生成、箱子库存是否正确、Jerry 能否交互，以及保护范围是否覆盖两个岛。
+
+
+## 10. VS-3 / VS-4 首个战斗任务闭环实现（2026-11-28）
+
+本轮已提交以下源码与数据，状态为“已写入仓库，待本地构建和游戏内验收”：
+
+- Quest objective 新增 `kill_mob`，通过 `target_mob_id` 绑定 MobRegistry 定义；旧的 `talk_to_npc` 数据保持兼容。
+- QuestRegistry 加载时校验 NPC / Mob 目标存在，且启动顺序为 MobRegistry → NpcRegistry → QuestRegistry。
+- CombatManager 在玩家击杀已注册怪物后推进击杀任务，并调用物品掉落结算。
+- 物品掉落仅发放概率已知、且 Core ItemRegistry 已注册的 `item` 类型；未知概率不发放，不把未知概率当作 0% 或 100%。
+- 新增 Core 逻辑物品 `rotten_flesh`，用于 Graveyard Zombie 的已知掉落。
+- 新增项目自有 `StarterGraveyardManager`，在服务器启动时于 Overworld (256, 180, 0) 附近生成测试冒险浮岛，并确保启动时存在最多三只带有 `graveyard_zombie` 标签的僵尸。
+- 新增 `starter_graveyard` Region 与 Warp。
+- Jerry 的任务板会显示任务目标、接取命令和 Graveyard 路线。
+- 新增 `docs/VS3_COMBAT_QUEST_SLICE_TEST_PLAN.md`，列出构建、全新世界、击杀结算、重启持久化和边界验收步骤。
+
+新增项目任务数据：
+- `first_steps`：与 Jerry 对话，奖励 25 coins、10 Social XP。
+- `clear_the_graveyard`：击杀 3 只 Graveyard Zombie，奖励 50 coins、25 Combat XP。
+
+重要限制：
+- Starter Graveyard 是临时项目测试区域，不是 Hypixel 原版地图。
+- 僵尸目前只在服务器启动时补足；同一次运行期间击杀后不会自动重生。
+- Jerry 任务板仍是聊天 + 命令交互，不是最终 Quest GUI。
+- P1-02D 原版伤害桥接仍按此前决定暂缓。
+- 本轮未执行 Gradle build、runClient 或游戏内验收，不能标记 VS-3 / VS-4 完成。
+
+下一步：
+1. 用户本地构建并验证本轮代码。
+2. 根据反馈修复构建或运行问题。
+3. 再做 Jerry 任务接取 GUI、冒险区内怪物重生，以及真实地图切片替换。
