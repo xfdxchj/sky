@@ -42,8 +42,9 @@ public final class StatEffectAPI {
     }
 
     /** Removes only the effect addressed by its full namespaced ID. */
-    public static boolean remove(ServerPlayerEntity player, Identifier effectId) {
-        if (!isExtensionId(effectId)) return false;
+    public static boolean remove(ServerPlayerEntity player, String ownerNamespace, Identifier effectId) {
+        if (ownerNamespace == null || ownerNamespace.isBlank() || CORE_NAMESPACE.equals(ownerNamespace)
+                || !isExtensionId(effectId) || !ownerNamespace.equals(effectId.getNamespace())) return false;
         return StatEffectManager.remove(player, effectId.toString());
     }
 
