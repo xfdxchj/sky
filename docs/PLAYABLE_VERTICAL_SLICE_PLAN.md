@@ -168,3 +168,29 @@
 - 该改动复用现有天空网格分配、空域预检、浮岛生成和私人岛持久化，不覆盖玩家世界原有方块。
 - 代码提交：`837ccee`。当前仅为源码提交；未执行 Gradle build、runClient 或游戏内验收。
 - 后续还原目标：依据 `HYPIXEL_REFERENCE_ASSET_CATALOG.md` 的 Wiki 初始布局资料，将单岛升级为主岛+副岛，并分别生成树木、洞穴、箱子初始物资、Jerry、Hub Portal 和 Cobblestone Minion I。以上实体/物资应由玩法数据生成，不写死在结构 NBT 中。
+
+
+## 9. VS-1 私人岛双岛布局首版（2026-11-27）
+
+本轮源码提交将新玩家首次创建的单一椭圆浮岛升级为项目自有的双岛起始布局：
+
+- 主岛：草方块/泥土/石头浮岛、橡树、出生点。
+- 副岛：独立草方块浮岛、简易洞穴、火把和初始箱子。
+- 初始箱子：熔岩桶×1、水桶×1、骨粉×3、泥土×5、草方块×7、圆石×8；使用 Minecraft 原版物品作为首轮可操作内容。
+- Jerry：以无敌、静音、禁用 AI 的村民实体生成，绑定 Core NPC 定义 jerry，可触发现有 NPC 交互逻辑。
+- Hub Portal：黑曜石框与紫色玻璃的装饰性占位，尚未连接 Hub。
+- Cobblestone Minion：目前只有展示底座，不是可工作的 Minion；待 Core Minion 系统实现后接入。
+- 两岛在现有私人岛 64 格直径保护范围内生成，主岛出生点偏移到主岛中心；首次创建仍只写入一条玩家所有权记录。
+- 生成器只在空气位置放置结构块；既有地形不会被覆盖。洞穴开挖仅作用于新生成的副岛内部。
+
+相关代码：
+- PrivateIslandStarterLayout.java
+- PrivateIslandManager.java
+- data/skyblockrpg/skyblock/npcs/jerry.json
+
+提交：
+- 2a1a2fb 双岛布局生成器
+- fe46106 私人岛创建流程接入双岛生成
+- 905db4f Jerry NPC 定义
+
+以上均为源码提交，尚未执行本轮改动后的 Gradle build / runClient / 游戏内验收。请重点验证双岛是否完整生成、箱子库存是否正确、Jerry 能否交互，以及保护范围是否覆盖两个岛。
