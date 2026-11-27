@@ -38,10 +38,13 @@ public final class ItemRegistry {
                 String slotId = optional(j,"equipment_slot","");
                 EquipmentSlot slot = slotId.isBlank() ? null : EquipmentSlot.fromId(slotId).orElseThrow(() -> new IllegalArgumentException("Unknown slot: "+slotId));
                 int max = j.has("max_stack_size") ? j.get("max_stack_size").getAsInt() : 1;
+                if (max < 1 || max > 64) throw new IllegalArgumentException("max_stack_size must be between 1 and 64");
                 Map<StatType,Double> stats = new EnumMap<>(StatType.class);
                 if (j.has("stats") && j.get("stats").isJsonObject()) for (var stat : j.getAsJsonObject("stats").entrySet()) {
                     StatType key = StatType.fromId(stat.getKey()).orElseThrow(() -> new IllegalArgumentException("Unknown stat: "+stat.getKey()));
-                    stats.put(key,stat.getValue().getAsDouble());
+                    double amount = stat.getValue().getAsDouble();
+                    if (!Double.isFinite(amount)) throw new IllegalArgumentException("Non-finite stat value: " + stat.getKey());
+                    stats.put(key, amount);
                 }
                 List<String> lore = new ArrayList<>();
                 if (j.has("lore") && j.get("lore").isJsonArray()) j.getAsJsonArray("lore").forEach(line -> lore.add(line.getAsString()));
