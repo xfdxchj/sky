@@ -1,6 +1,6 @@
 # P2-01 ItemInstance 测试计划
 
-> 状态：P2-01A 源码已提交；测试尚未执行。旧版 PlayerInventory NBT 迁移测试留待 P2-01B。
+> 状态：P2-01A 与 P2-01B 编解码/纯迁移基础源码已提交；所有测试仍待执行。活动档案迁移验收需等待 P2-01C 接入。
 
 ## A. 实例身份与状态（P2-01A）
 
@@ -19,38 +19,37 @@
 13. split 对有状态实例必须失败；amount<=0 或 amount>=count 必须失败。
 14. 未知 definitionId、非法 UUID、负 count、超最大堆叠数、非法星级/升级等级、非法附魔等级和过大 customData 被拒绝或隔离。
 
-## B. NBT 编解码与旧档案迁移（P2-01B）
+## B. NBT 编解码（P2-01B）
 
 1. ItemInstance 编码后解码，UUID、definitionId、count、Reforge、Enchantments、Stars、Upgrade Level 和 customData 完全一致。
 2. 不支持的实例格式版本、非法 UUID、未知 definitionId、超堆叠数和不兼容 Reforge 被拒绝并由上层隔离。
-3. NBT customData 往返后内容一致；修改输入或读取副本不改变原实例。
-4. 仅含旧 items 列表的档案迁移后，各有效 itemId 总数完全一致。
-5. 超过单堆叠上限的物品按 maxStackSize 拆成多个实例，数量总和保持一致。
-6. inventoryRefs、equipmentRefs、accessoryRefs 均指向实例表中已编码的 UUID，且一个实例只属于一个容器位置。
-7. 旧 equipment 每个有效槽位迁移成独立 count=1 实例，装备槽引用该实例；合法 Reforge 跟随实例。
-8. 未知或不兼容 Reforge 单独进入 quarantine，装备本体仍保留为无 Reforge 实例。
-9. 旧 accessoryBag 的数量、顺序和重复饰品保留。
-10. 未知物品、无效数量、超容量、损坏字段、错误 NBT 类型进入 quarantine，不得静默丢失。
-11. 未识别的旧库存顶层字段原样保存在 legacyExtensions。
-12. 已迁移数据不得再次作为旧格式输入；重复迁移必须明确失败。
-13. 同一档案保存、重载多次后 instanceId 稳定，不重复生成实例 ID（需 P2-01C 接入活动档案后验收）。
+3. 缺少必需字段、字段类型错误、错误的 enchantment list 元素类型被拒绝，不得静默按空数据读取。
+4. NBT customData 往返后内容一致；修改输入或读取副本不改变原实例。
+5. 有状态实例解码后仍强制 count=1；无状态实例 count 不超过 ItemDefinition.maxStackSize。
 
-## C. 旧档案迁移后续接入
+## C. 旧格式纯迁移（P2-01B）
+
+1. 仅含旧 items 列表的档案迁移后，各有效 itemId 总数完全一致。
+2. 超过单堆叠上限的物品按 maxStackSize 拆成多个实例，数量总和保持一致。
+3. inventoryRefs、equipmentRefs、accessoryRefs 均指向实例表中已编码的 UUID，且一个实例只属于一个容器位置。
+4. 旧 equipment 每个有效槽位迁移成独立 count=1 实例，装备槽引用该实例；合法 Reforge 跟随实例。
+5. 未知或不兼容 Reforge 单独进入 quarantine，装备本体仍保留为无 Reforge 实例。
+6. 旧 accessoryBag 的数量、顺序和重复饰品保留。
+7. 未知物品、无效数量、超容量、损坏字段、错误 NBT 类型进入 quarantine，不得静默丢失。
+8. 未识别的旧库存顶层字段原样保存在 legacyExtensions。
+9. 已迁移数据不得再次作为旧格式输入；重复迁移必须明确失败。
+10. 迁移函数不得修改输入 NBT；迁移结果不得引用输入的可变 NBT 对象。
+
+## D. 活动档案接入（P2-01C，尚未实现）
+
 1. 缺少新字段的 schema 10 及更早档案均可加载。
 2. 迁移后的档案重新保存后，旧格式不再被重复导入。
-3. 迁移结果进入活动 PlayerInventory / PlayerProfile 存储后，备份恢复与版本回滚不丢失隔离数据。
+3. 同一档案保存、重载多次后 instanceId 稳定，不重复生成实例 ID。
+4. 备份恢复与版本回滚不丢失 quarantine 和 legacyExtensions。
+5. Core-only 与 Core + Life Skills 均能加载旧档案并正常保存。
 
-## D. Inventory 原子操作
-1. 添加/移除普通堆叠时容量和数量正确.
-2. 旧 equipment 每个槽位迁移成独立 count=1 实例，装备槽指向该实例。
-3. 旧 accessoryBag 的数量、顺序和重复饰品保留。
-4. 旧 reforges 正确迁移到对应装备实例。
-5. 缺少新字段的 schema 10 及更早档案均可加载。
-6. 同一档案保存、重载多次后 instanceId 稳定，不重复生成实例。
-7. 未知物品、超容量和损坏条目进入可审计暂存/警告路径，不静默丢失。
-8. 迁移后的档案重新保存后，旧格式不再被重复导入。
+## E. Inventory 原子操作（P2-01C，尚未实现）
 
-## C. Inventory 原子操作
 1. 添加/移除普通堆叠时容量和数量正确。
 2. 背包满时装备替换失败，原装备和待装备物品均保留。
 3. 装备成功时物品从背包移至槽位，实例 ID 不变。
@@ -59,7 +58,8 @@
 6. Reforge 只跟随目标实例，不会因同槽位替换污染新装备。
 7. 任何失败操作前后物品总量、实例 ID 集合和容器引用保持不变。
 
-## E. API 回归
+## F. API 回归（P2-01C/D）
+
 1. API v3 旧 InventoryAPI.getCount/add/remove 签名与行为继续可用。
 2. RewardAPI.giveItem 仍能添加无状态扩展材料。
 3. Life Skills 的 4 个 namespaced 技能、模块数据和物品奖励不受实例迁移影响。
