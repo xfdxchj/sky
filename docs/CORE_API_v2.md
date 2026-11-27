@@ -106,7 +106,7 @@ This is a fixed Core stat catalogue, not arbitrary runtime stat registration. Ne
 
 ## 5. Item API and extension item data
 
-Classes: `ItemAPI`, `ItemDefinition`
+Classes: `ItemAPI`, `ItemView`
 
 Item definitions remain owned by Core's shared item registry. The registry now discovers `data/<namespace>/skyblock/items/*.json` resources from all namespaces, not only Core's namespace.
 
