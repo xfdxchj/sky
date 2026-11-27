@@ -96,7 +96,7 @@
 - [x] 建立档案迁移、伤害公式、原版伤害兼容、恢复、死亡/重生测试计划。
 - [x] P1-02A：PlayerProfile 当前生命字段、schema 10 迁移、最大生命夹取；加入 Health Regen 属性标识和基础值。
 - [x] P1-02B：玩家实体生命同步与登录/重生/最大生命变化生命周期（服务端同步桥已提交，待本地构建与游戏验收）。
-- [ ] P1-02C：DamageKind 分类、Defense / True Defense 公式与单元测试。
+- [x] P1-02C：DamageKind 分类与 Defense / True Defense 纯计算层已提交；尚未接入 Minecraft 伤害流程，待构建与公式测试。
 - [ ] P1-02D：原版伤害桥接，避免双重护甲减伤和重复扣血。
 - [ ] P1-02E：Health Regen 服务端调度。
 - [ ] P1-02F：死亡、重生、断线、维度切换和环境伤害边界。
