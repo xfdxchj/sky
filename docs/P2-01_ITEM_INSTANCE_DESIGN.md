@@ -105,7 +105,7 @@ Inventory 统一持有 ItemInstance/堆叠条目；装备槽和 Accessory Bag �
 - 状态化实例强制 count=1；无状态堆叠才允许拆分/合并。
 - 拆分时原 UUID 留给余量，新堆叠生成 UUID；合并保留目标 UUID。
 - 实例状态更新返回新对象并保留 UUID；NBT 输入/输出均防御性复制。
-- 对星级、附魔等级、附魔数量、扩展 NBT 深度/节点/键长/字符串长度设定结构限制。
+- 对星级、附魔等级、附魔数量、扩展 NBT 深度/节点/键长/字符串长度设定结构限制；customData 总负载上限为 64 KiB。
 
 本阶段刻意不修改 `PlayerInventory`、`PlayerProfile` 或存档 schema；实例尚未进入玩家档案，也未改变 API v3 旧接口。扩展 NBT 的精确序列化字节上限将在 P2-01B 的 NBT 编解码层落实。
 
