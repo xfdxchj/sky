@@ -26,6 +26,7 @@
 3. 缺少必需字段、字段类型错误、错误的 enchantment list 元素类型被拒绝，不得静默按空数据读取。
 4. NBT customData 往返后内容一致；修改输入或读取副本不改变原实例。
 5. 有状态实例解码后仍强制 count=1；无状态实例 count 不超过 ItemDefinition.maxStackSize。
+6. customData 中的 byte/int/long array 与字符串合计超过 64 KiB 时拒绝；未超限的嵌套数据往返一致。
 
 ## C. 旧格式纯迁移（P2-01B）
 
