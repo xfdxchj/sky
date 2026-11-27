@@ -78,11 +78,14 @@
 - [x] 将装备词条、Reforge 修正显式标记为 EQUIPMENT 来源。
 - [x] 将饰品词条、Power、Tuning 修正显式标记为 ACCESSORY 来源。
 - [x] PlayerProfile 提供统一 getStatModifiers() 快照与按来源过滤的 getFinalStat()。
-- [ ] 在统一管线接入 Skill、Buff、Temporary、Other 来源的注册/移除生命周期。
+- [x] BUFF / TEMPORARY / OTHER 效果注册、按 ID 刷新/替换、主动移除与 Overworld 游戏刻过期清理。
+- [x] 效果 NBT 持久化与旧档案空列表迁移（schema 9）。
+- [ ] SKILL 等级属性奖励映射（等待核实正式技能奖励数据；不得使用占位 XP 曲线推导）。
+- [ ] 外部模块属性效果写入 API（需命名空间隔离和公共 API 合约）。
 - 在现有 PlayerStats / StatModifier 上扩展。
 - 区分 Base、Equipment、Accessory、Skill、Buff、Temporary、Other 来源。
 - 统一最终属性查询和修正顺序。
-- 支持上下限、持续时间和移除。
+- 支持持续时间、主动移除和过期清理；属性上下限与跨效果规则另行定义。
 - 防止模块绕过管线直接改最终属性。
 
 ### P1-02 RPG 生命与战斗状态
