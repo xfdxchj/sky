@@ -1,0 +1,13 @@
+{
+  "id": "jerry",
+  "name": "Jerry",
+  "entity_type": "minecraft:villager",
+  "required_region_id": "",
+  "interaction_radius": 5.0,
+  "dialogue": [
+    "Welcome to your Private Island!",
+    "This is your personal space. Build, explore, and develop it at your own pace.",
+    "The portal is decorative for now; the Hub destination will be connected in a later world-slice task."
+  ],
+  "action": "none"
+}
