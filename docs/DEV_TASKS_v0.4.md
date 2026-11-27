@@ -138,6 +138,11 @@
 **目标：把现有 ItemDefinition、逻辑背包、装备、Accessory Power、Tuning 和 Reforge foundation 整合为稳定物品体系。**
 
 ### P2-01 ItemInstance
+- [ ] P2-01A：ItemInstance 数据模型、UUID 身份、状态校验与堆叠规则。
+- [ ] P2-01B：版本化 NBT 持久化与旧 items/equipment/accessoryBag/reforges 无损迁移。
+- [ ] P2-01C：Inventory 实例存储、装备/饰品原子移动与旧 API 聚合兼容。
+- [ ] P2-01D：新增 API-owned 只读实例 DTO/查询能力，保持 API v3 现有方法签名。
+- 设计：`P2-01_ITEM_INSTANCE_DESIGN.md`；测试：`P2-01_ITEM_INSTANCE_TEST_PLAN.md`。
 - 明确区分静态 ItemDefinition 与动态 ItemInstance。
 - 实例字段至少考虑：唯一实例 ID、Reforge、Enchantments、Stars、Upgrade Level、附加数据。
 - 定义堆叠规则：有实例状态的物品不能错误合并。
@@ -306,6 +311,8 @@
 ## 8. P6：生活职业
 
 **目标：形成非战斗资源生产与成长循环。**
+
+**当前仓库情况（2026-11-27）：** 独立工程 `life-skills/` 已在 main 提交首版 Mining / Fishing / Farming / Foraging 代码与数据（提交 `e2ee2b3`）。这是 P6 的初始实现，不代表 P6 验收完成。Core 继续只维护公共 API、玩家档案、属性/物品/奖励底座；生活技能具体玩法由独立模组维护。首版仍缺 GUI、Collection、钓鱼热点、真实地图/矿区等，并需核验编译、运行和掉落/XP闭环。
 
 ### P6-01 Mining
 - 矿物、矿点刷新、Mining XP、Mining Fortune / Speed、工具、Collection 和配方。
