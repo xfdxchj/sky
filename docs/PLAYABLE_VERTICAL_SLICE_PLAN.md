@@ -211,7 +211,7 @@
 - 新增 `docs/VS3_COMBAT_QUEST_SLICE_TEST_PLAN.md`，列出构建、全新世界、击杀结算、重启持久化和边界验收步骤。
 
 新增项目任务数据：
-- `first_steps`：与 Jerry 对话，奖励 25 coins、10 Social XP。
+- `first_steps`：与 Jerry 对话，奖励 100 coins、10 Social XP。
 - `clear_the_graveyard`：击杀 3 只 Graveyard Zombie，奖励 50 coins、25 Combat XP。
 
 重要限制：
