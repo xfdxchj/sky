@@ -130,7 +130,10 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 保留 API v1 的 `SkillAPI` 与 `PlayerDataAPI`，不改变既有方法签名。
 - `CoreApi.API_VERSION` 更新为 2。
 - 新增只读 `StatAPI`：查询 Core 最终属性管线；补充生活技能所需的 `FARMING_SPEED`、`FISHING_FORTUNE`、`FORAGING_SPEED`、`FORAGING_FORTUNE`。
-- 新增 `ItemAPI`：查询 Core 与扩展数据包中的物品定义。
+- 新增 `ItemAPI`：查询 Core 与扩展数据包中的 API-owned `ItemView`。
+- 新增 `SkillDefinition`、`ItemView` DTO，避免扩展模组直接依赖 Core 的内部注册表数据类。
+- 对外部玩家数据保留命名空间隔离，禁止扩展写入 `skyblockrpg` 保留命名空间；技能查询接口补齐空值保护。
+- 加入物品最大堆叠数与属性数值校验，避免非法 JSON 进入背包计算。
 - `ItemRegistry` 现在扫描所有命名空间下的 `data/<namespace>/skyblock/items/*.json`，扩展物品使用 namespaced ID；保留 Core 旧 ID 查询兼容。
 - 新增 `InventoryAPI`：通过 Core 逻辑背包安全查询、增加和移除物品。
 - 新增 `CurrencyAPI`：统一访问 Purse / Bank。
