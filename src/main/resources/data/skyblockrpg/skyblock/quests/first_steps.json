@@ -1,0 +1,11 @@
+{
+  "id": "first_steps",
+  "title": "First Steps",
+  "description": "Speak with Jerry and learn how to begin exploring.",
+  "objective_type": "talk_to_npc",
+  "target_npc_id": "jerry",
+  "required_count": 1,
+  "reward_coins": 25,
+  "reward_skill": "social",
+  "reward_skill_xp": 10
+}
