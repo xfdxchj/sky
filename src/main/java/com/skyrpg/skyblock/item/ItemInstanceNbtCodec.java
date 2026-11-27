@@ -62,6 +62,13 @@ public final class ItemInstanceNbtCodec {
         ItemDefinition definition = ItemRegistry.get(definitionId.toString()).orElse(null);
         if (definition == null) throw new IllegalArgumentException("Unknown item definition: " + definitionId);
 
+        if (tag.contains("enchantments") && !tag.contains("enchantments", NbtElement.LIST_TYPE)) {
+            throw new IllegalArgumentException("Enchantments field must be an NBT list");
+        }
+        NbtList rawEnchantments = tag.getList("enchantments", NbtElement.LIST_TYPE);
+        if (!rawEnchantments.isEmpty() && rawEnchantments.getHeldType() != NbtElement.COMPOUND_TYPE) {
+            throw new IllegalArgumentException("Enchantments list must contain compounds");
+        }
         Map<Identifier, Integer> enchantments = new LinkedHashMap<>();
         NbtList enchantmentList = tag.getList("enchantments", NbtElement.COMPOUND_TYPE);
         for (int i = 0; i < enchantmentList.size(); i++) {
@@ -82,6 +89,9 @@ public final class ItemInstanceNbtCodec {
             }
         }
 
+        if (tag.contains("customData") && !tag.contains("customData", NbtElement.COMPOUND_TYPE)) {
+            throw new IllegalArgumentException("customData field must be an NBT compound");
+        }
         NbtCompound customData = tag.contains("customData", NbtElement.COMPOUND_TYPE)
                 ? tag.getCompound("customData").copy() : new NbtCompound();
         return ItemInstance.restore(instanceId, definitionId, tag.getInt("count"),
