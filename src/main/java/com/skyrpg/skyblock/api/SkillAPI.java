@@ -3,6 +3,9 @@ package com.skyrpg.skyblock.api;
 import com.skyrpg.skyblock.skill.SkillManager;
 import com.skyrpg.skyblock.skill.SkillRegistration;
 import com.skyrpg.skyblock.skill.SkillRegistry;
+import com.skyrpg.skyblock.skill.SkillStatRewardRegistry;
+import com.skyrpg.skyblock.stats.StatModifier;
+import com.skyrpg.skyblock.stats.StatType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import java.util.Collection;
@@ -58,6 +61,17 @@ public final class SkillAPI {
         double consumed = 0.0;
         for (int i = 0; i < level; i++) consumed += definition.xpToNextLevel().get(i);
         return Math.max(0.0, definition.xpToNextLevel().get(level) - (total - consumed));
+    }
+
+    /**
+     * Registers an exact stat reward for an extension-owned skill level.
+     * Reward values are supplied by the extension and are never inferred from XP curves.
+     */
+    public static boolean registerStatReward(Identifier skillId, int requiredLevel,
+                                             StatType stat, double amount,
+                                             StatModifier.Operation operation) {
+        if (skillId == null || "skyblockrpg".equals(skillId.getNamespace())) return false;
+        return SkillStatRewardRegistry.register(skillId, requiredLevel, stat, amount, operation);
     }
 
     public static boolean addExperience(ServerPlayerEntity player, Identifier skillId, double amount) {
