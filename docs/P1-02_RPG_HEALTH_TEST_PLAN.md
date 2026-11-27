@@ -5,14 +5,16 @@
 
 ## A. 档案与迁移
 
-1. 新玩家首次进入：最大 RPG Health 为 100，当前生命为 100。
-2. schema 9 旧档案加载：当前生命迁移为加载后的最大生命，不丢失 Purse、Bank、技能、装备、饰品、任务和 StatEffect。
+1. 新玩家首次进入：Health=100、Health Regen=100、Defense=0、True Defense=0；最大 RPG Health 为 100，当前生命为 100。
+2. schema 9 旧档案加载：当前生命迁移为加载后的最大生命，不丢失 Purse、Bank、技能、装备、饰品、任务和 StatEffect；保存后写入 schema 10 与 currentHealth。
 3. 当前生命保存后退出重进：数值保持。
 4. 当前生命为负数、NaN、正负无穷或超最大值：安全修复到合法范围。
 5. 最大 Health 增加：当前绝对值不自动增加。
 6. 最大 Health 降低：当前生命截断到新最大值。
 
 ## B. 属性与伤害公式
+
+0. Health Regen=100 时，首版自然恢复公式按 `(MaxHealth / 100 + 1.5) * 1.0` 计算，默认每 2 秒结算一次（以较新的 Healing Wiki 页面为待验证参考）。
 
 1. 默认 Health=100、Defense=0、True Defense=0。
 2. Defense=100 时，普通伤害减半。
