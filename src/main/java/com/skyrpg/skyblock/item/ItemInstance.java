@@ -207,7 +207,7 @@ public final class ItemInstance {
     private ItemInstance updated(String reforge, Map<Identifier, Integer> enchants,
                                  int nextStars, int nextUpgrade, NbtCompound data,
                                  ItemDefinition definition) {
-        ItemInstance updated = new ItemInstance(instanceId, definitionId, 1, reforge,
+        ItemInstance updated = new ItemInstance(instanceId, definitionId, count, reforge,
                 enchants, nextStars, nextUpgrade, data);
         updated.validateAgainst(definition);
         return updated;
