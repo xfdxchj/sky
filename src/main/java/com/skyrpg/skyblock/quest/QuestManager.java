@@ -33,11 +33,39 @@ public final class QuestManager {
         PlayerProfile profile = ProfileManager.get(player);
         boolean changed = false;
         for (QuestDefinition quest : QuestRegistry.all()) {
-            if (!quest.targetNpcId().equalsIgnoreCase(npcId) || !profile.isQuestActive(quest.id())) continue;
+            if (!"talk_to_npc".equals(quest.objectiveType())
+                    || !quest.targetNpcId().equalsIgnoreCase(npcId) || !profile.isQuestActive(quest.id())) continue;
             int progress = profile.addQuestProgress(quest.id(), 1);
             changed = true;
             if (progress >= quest.requiredCount()) {
                 profile.completeQuest(quest.id());
+                boolean coinsGranted = quest.rewardCoins() == 0 || profile.addCoins(quest.rewardCoins());
+                if (quest.rewardSkill() != null && quest.rewardSkillXp() > 0)
+                    SkillManager.addExperience(player, quest.rewardSkill(), quest.rewardSkillXp());
+                player.sendMessage(Text.literal("§aQuest completed: " + quest.title()), false);
+                player.sendMessage(Text.literal("Rewards: "
+                        + (coinsGranted ? quest.rewardCoins() + " coins" : "coin reward could not be added (Purse overflow)")
+                        + (quest.rewardSkillXp() > 0 ? ", " + quest.rewardSkillXp() + " " + quest.rewardSkill().id() + " XP" : "")), false);
+            } else {
+                player.sendMessage(Text.literal("Quest progress: " + quest.title() + " (" + progress
+                        + "/" + quest.requiredCount() + ")"), false);
+            }
+        }
+        if (changed) ProfileManager.markChanged(player);
+    }
+
+    public static void onMobKilled(ServerPlayerEntity player, String mobId) {
+        if (mobId == null || mobId.isBlank()) return;
+        PlayerProfile profile = ProfileManager.get(player);
+        boolean changed = false;
+        for (QuestDefinition quest : QuestRegistry.all()) {
+            if (!"kill_mob".equals(quest.objectiveType())
+                    || !quest.targetMobId().equalsIgnoreCase(mobId)
+                    || !profile.isQuestActive(quest.id())) continue;
+            int progress = profile.addQuestProgress(quest.id(), 1);
+            changed = true;
+            if (progress >= quest.requiredCount()) {
+                if (!profile.completeQuest(quest.id())) continue;
                 boolean coinsGranted = quest.rewardCoins() == 0 || profile.addCoins(quest.rewardCoins());
                 if (quest.rewardSkill() != null && quest.rewardSkillXp() > 0)
                     SkillManager.addExperience(player, quest.rewardSkill(), quest.rewardSkillXp());
