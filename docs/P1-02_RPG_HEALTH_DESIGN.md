@@ -26,7 +26,7 @@
 - Health 基础值 100。
 - Defense 基础值 0。
 - True Defense 基础值 0。
-- Health Regen 基础值需要以对应 Health Regen 页面和当前版本数据再次核对后录入，不在本任务中猜测。
+- Health Regen 基础值 100。当前社区 Wiki 的 Health Regen 页面仍写 1 秒间隔，但较新的 Healing 页面（2026-10-20 编辑）记载自然恢复间隔为 2 秒；本项目以较新的 Healing 页面作为首版参考。
 
 Defense 的基础减伤：
 ```
@@ -92,8 +92,11 @@ Core 采用 RPG Health 单位：
 ## 7. 恢复、死亡与重生
 
 ### 恢复
+- Health Regen 基础值为 100，新增共享属性标识 `HEALTH_REGEN`。
+- 当前社区 Wiki 的自然恢复公式：`(MaxHealth / 100 + 1.5) * HealthRegen / 100`。
+- 当前较新的 Healing 页面记载自然恢复间隔为 2 秒；较旧的 Health Regen 页面仍记载 1 秒且标注内容过时。首版采用 2 秒作为待游戏验证的配置默认值。
 - Health Regen 采用服务端定时恢复，不在每 tick 创建临时对象或反复保存。
-- 具体恢复公式、频率和战斗中/战斗外规则，在查清当前 Hypixel 规则后配置；首版只实现可测试的固定间隔恢复框架。
+- 首版按固定 2 秒间隔执行上述自然恢复公式；战斗中/战斗外规则、特殊区域和 Vitality / Mending 不在本阶段扩展。
 - 最大生命变化、死亡、重生、维度切换时重算或重置恢复状态。
 
 ### 死亡
