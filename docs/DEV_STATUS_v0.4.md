@@ -74,6 +74,9 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 ### 3.2 物品、装备与饰品
 
+- `ItemInstance`：P2-01A 新增不可变动态实例模型，含 UUID、definition ID、count、Reforge、Enchantments、Stars、Upgrade Level 和 custom NBT；支持定义级校验、状态更新、普通堆叠拆分/合并。
+- 当前仅有实例模型，`PlayerInventory` 仍使用旧 Map / equipment / accessoryBag / reforges 结构；尚未持久化或接入容器。
+
 - `ItemDefinition`、`ItemRegistry`：从 JSON 加载物品定义。
 - `PlayerInventory`：逻辑背包和装备槽数据。
 - `EquipmentSlot`：Weapon、Helmet、Chestplate、Leggings、Boots、Accessory。
@@ -163,7 +166,8 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 属性来源测试计划：`P1-01_STAT_PIPELINE_TEST_PLAN.md`；效果生命周期设计与测试：`P1-01_STAT_EFFECT_LIFECYCLE.md`、`P1-01_STAT_EFFECT_TEST_PLAN.md`；Core API v3 测试：`CORE_API_v3_TEST_PLAN.md`。
 
 ### P2 物品与装备
-- `ItemInstance` 和实例 NBT 序列化。
+- P2-01A `ItemInstance` 数据模型已提交：不可变实例、UUID 身份、状态字段、定义校验、拆分/合并规则。
+- P2-01B 实例 NBT 序列化与旧档案迁移尚未开始。
 - Minecraft 原版 Item 注册、图标和物品交互。
 - 附魔、冲突规则与效果结算。
 - Tooltip、稀有度、属性和强化信息。
@@ -242,3 +246,5 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27：用户决定暂时跳过 P1-02D 字节码核验与原版伤害桥接，先推进 P1-02E。新增 `PlayerHealthRegenManager`，按世界游戏时间每 40 ticks 恢复一次；登录/重生重置计时，维度切换重新计时，离线不补算，满血/死亡不恢复。接入服务端 tick、断线和服务器停止清理。源码已提交，未执行 Gradle build、runClient 或游戏内测试。
 
 - 2026-11-27（最新 main 基线复核）：仓库最新提交为 `e2ee2b3`，新增 `life-skills/` 独立生活模组首版。Core 状态与任务文档已按该提交更新；P6 仍为未验收状态。P2-01 ItemInstance 设计和测试计划已新增，作为 Core 后续开发入口。
+
+- 2026-11-27：P2-01A 新增 `ItemInstance.java`，并更新设计/测试/任务文档。源码已提交至 main；未执行 Gradle build、单元测试、runClient 或游戏内验证。当前 PlayerInventory 和档案存储仍保持旧格式，未开始迁移。
