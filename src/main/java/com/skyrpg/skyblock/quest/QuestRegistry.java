@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.skyrpg.skyblock.SkyBlockRPG;
 import com.skyrpg.skyblock.npc.NpcRegistry;
+import com.skyrpg.skyblock.combat.MobRegistry;
 import com.skyrpg.skyblock.skill.SkillType;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -34,10 +35,13 @@ public final class QuestRegistry {
                 QuestDefinition quest = new QuestDefinition(
                         required(json, "id"), optional(json, "title", ""),
                         optional(json, "description", ""), required(json, "objective_type"),
-                        required(json, "target_npc_id"), integer(json, "required_count", 1),
+                        optional(json, "target_npc_id", ""), optional(json, "target_mob_id", ""),
+                        integer(json, "required_count", 1),
                         longNumber(json, "reward_coins", 0), skill, number(json, "reward_skill_xp", 0));
-                if (NpcRegistry.get(quest.targetNpcId()).isEmpty())
+                if ("talk_to_npc".equals(quest.objectiveType()) && NpcRegistry.get(quest.targetNpcId()).isEmpty())
                     throw new IllegalArgumentException("Unknown target NPC: " + quest.targetNpcId());
+                if ("kill_mob".equals(quest.objectiveType()) && MobRegistry.getById(quest.targetMobId()).isEmpty())
+                    throw new IllegalArgumentException("Unknown target mob: " + quest.targetMobId());
                 if (quest.rewardSkillXp() > 0 && quest.rewardSkill() == null)
                     throw new IllegalArgumentException("reward_skill is required when reward_skill_xp > 0");
                 String key = quest.id().toLowerCase(Locale.ROOT);
