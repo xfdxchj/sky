@@ -53,6 +53,8 @@ Core 采用 RPG Health 单位：
 
 ## 5. 受伤结算原则
 
+Core 已建立纯计算层 `DamageKind` / `PlayerDamageMath`：`NORMAL` 使用 Defense，`TRUE` 使用 True Defense，`BYPASS_RPG_DEFENSE` 跳过 RPG 防御。该计算层尚未接入 Minecraft 伤害桥；在 P1-02D 完成前，不应声称玩家已实际获得 RPG Defense 减伤。
+
 ### 5.1 统一入口
 
 服务端玩家的受伤统一经过 Core 伤害协调器。先识别来源，再确定伤害类别、Defense 规则、原版兼容规则和最终 RPG HP 损失。客户端不拥有权威生命值。
