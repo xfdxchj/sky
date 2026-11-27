@@ -17,9 +17,9 @@ import net.minecraft.util.math.BlockPos;
  * before the measured Hypixel Graveyard map slice is ready.
  */
 public final class StarterGraveyardManager {
-    private static final int CENTER_X = 256;
-    private static final int CENTER_Z = 0;
-    private static final int SURFACE_Y = 180;
+    private static final int CENTER_X = 512;
+    private static final int CENTER_Z = 512;
+    private static final int SURFACE_Y = 220;
 
     private StarterGraveyardManager() {}
 
