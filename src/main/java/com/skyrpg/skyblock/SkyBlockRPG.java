@@ -36,6 +36,7 @@ import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.minecraft.text.Text;
 
 /**
  * Main entry point for SkyBlock RPG.
@@ -126,11 +127,37 @@ public final class SkyBlockRPG implements ModInitializer {
         });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            var profile = ProfileManager.get(handler.getPlayer());
-            PlayerHealthManager.onJoin(handler.getPlayer());
-            PlayerHealthRegenManager.onJoin(handler.getPlayer());
+            var player = handler.getPlayer();
+            var profile = ProfileManager.get(player);
+            PlayerHealthManager.onJoin(player);
+            PlayerHealthRegenManager.onJoin(player);
+
+            // Hypixel-style first-entry flow: a player without a private island
+            // receives one and is sent directly to it. Existing players keep
+            // their current location on subsequent joins.
+            if (PrivateIslandManager.get(player) == null) {
+                PrivateIslandManager.CreationResult creation = PrivateIslandManager.create(player);
+                if (creation.success() && PrivateIslandManager.visitHome(player)) {
+                    player.sendMessage(Text.literal(
+                            "Your Private Island is ready. Use /skyblock island home to return here."
+                    ), false);
+                    LOGGER.info("Created the first private island for {} ({}).",
+                            player.getName().getString(), profile.getPlayerId());
+                } else {
+                    String reason = creation.success()
+                            ? "The island was created, but its home location could not be reached."
+                            : creation.message();
+                    player.sendMessage(Text.literal(
+                            "SkyBlock could not prepare your Private Island: " + reason
+                                    + " An administrator can retry with /skyblock island create."
+                    ), false);
+                    LOGGER.error("Could not initialize first private island for {}: {}",
+                            player.getName().getString(), reason);
+                }
+            }
+
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
-                    handler.getPlayer().getName().getString(), profile.getPlayerId());
+                    player.getName().getString(), profile.getPlayerId());
         });
 
         LOGGER.info("{} v{} initialized. P5.4 Private Island foundation is ready.", MOD_NAME, "0.1.0-alpha.3");
