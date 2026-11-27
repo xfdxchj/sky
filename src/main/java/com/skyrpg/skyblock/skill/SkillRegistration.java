@@ -13,8 +13,11 @@ public record SkillRegistration(Identifier id, String displayName, int maxLevel,
         if (maxLevel < 1 || maxLevel > 1000) throw new IllegalArgumentException("maxLevel must be between 1 and 1000");
         xpToNextLevel = List.copyOf(xpToNextLevel);
         if (xpToNextLevel.size() != maxLevel) throw new IllegalArgumentException("XP curve size must equal maxLevel");
+        double cumulativeXp = 0.0;
         for (double xp : xpToNextLevel) {
             if (!Double.isFinite(xp) || xp <= 0) throw new IllegalArgumentException("XP requirements must be finite and positive");
+            cumulativeXp += xp;
+            if (!Double.isFinite(cumulativeXp)) throw new IllegalArgumentException("Cumulative XP curve must remain finite");
         }
     }
 
