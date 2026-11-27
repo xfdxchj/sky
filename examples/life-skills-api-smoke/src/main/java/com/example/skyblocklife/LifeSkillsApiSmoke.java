@@ -3,6 +3,8 @@ package com.example.skyblocklife;
 import com.skyrpg.skyblock.api.CoreApi;
 import com.skyrpg.skyblock.api.SkillAPI;
 import com.skyrpg.skyblock.api.SkillDefinition;
+import com.skyrpg.skyblock.stats.StatModifier;
+import com.skyrpg.skyblock.stats.StatType;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -17,8 +19,8 @@ public final class LifeSkillsApiSmoke implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        if (CoreApi.API_VERSION < 2) {
-            throw new IllegalStateException("SkyBlock RPG Core API v2 or newer is required");
+        if (CoreApi.API_VERSION < 3) {
+            throw new IllegalStateException("SkyBlock RPG Core API v3 or newer is required");
         }
 
         register("mining");
@@ -37,6 +39,12 @@ public final class LifeSkillsApiSmoke implements ModInitializer {
         if (!registered) {
             throw new IllegalStateException("Could not register smoke-test skill " + id
                     + " (duplicate ID or registration lifecycle issue)");
+        }
+        if ("mining".equals(path)) {
+            // Fixture-only reward for API compilation; not a Hypixel balance value.
+            boolean reward = SkillAPI.registerStatReward(id, 1, StatType.MINING_FORTUNE,
+                    1.0, StatModifier.Operation.ADDITIVE);
+            if (!reward) throw new IllegalStateException("Could not register smoke-test stat reward for " + id);
         }
         LOGGER.info("Registered test skill {}", id);
     }
