@@ -9,7 +9,7 @@
 - CombatManager 在已注册怪物被玩家击杀时推进对应任务。
 - 击杀奖励会尝试发放已知概率、且已在 Core ItemRegistry 注册的物品；未知概率不会被当成 0% 或 100%。
 - 新增 Core 材料 `rotten_flesh`，使 Graveyard Zombie 的已知掉落可以进入逻辑背包。
-- 新增 `StarterGraveyardManager`：首次服务器启动时在 Overworld (256, 180, 0) 附近生成项目自有浮岛测试区，并确保最多存在三只带有 `graveyard_zombie` 标签的僵尸。
+- 新增 `StarterGraveyardManager`：首次服务器启动时在 Overworld (512, 220, 512) 附近生成项目自有浮岛测试区，并确保最多存在三只带有 `graveyard_zombie` 标签的僵尸。
 - 新增 `starter_graveyard` Region 与 Warp。
 - Jerry 作为私人岛上的任务板，显示任务目标、接取命令和 Graveyard 路线。
 
