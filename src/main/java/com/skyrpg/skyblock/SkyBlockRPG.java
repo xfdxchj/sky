@@ -120,15 +120,15 @@ public final class SkyBlockRPG implements ModInitializer {
             PlayerHealthRegenManager.clear();
         });
 
-        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
-                {
-                    PlayerHealthManager.onRespawn(newPlayer);
-                    PlayerHealthRegenManager.onRespawn(newPlayer);
-                });
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            PlayerHealthManager.onRespawn(newPlayer);
+            PlayerHealthRegenManager.onRespawn(newPlayer);
+        });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var profile = ProfileManager.get(handler.getPlayer());
             PlayerHealthManager.onJoin(handler.getPlayer());
+            PlayerHealthRegenManager.onJoin(handler.getPlayer());
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
                     handler.getPlayer().getName().getString(), profile.getPlayerId());
         });
