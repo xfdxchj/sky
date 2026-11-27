@@ -100,6 +100,10 @@
 - [ ] P1-02D：原版伤害桥接，避免双重护甲减伤和重复扣血。
   - [x] P1-02D-0：建立 `PlayerDamageClassifier`，将 OUT_OF_WORLD / GENERIC_KILL 标记为 BYPASS_RPG_DEFENSE；其余来源默认 NORMAL。
   - [ ] P1-02D-1：基于项目实际 Loom/Yarn 1.21.1+build.3 字节码核对 damage 调用顺序，确定护甲与 RPG Defense 的唯一减伤方案。
+  - [x] 核对 Yarn 1.21.1+build.3 Javadoc 中 damage / applyArmorToDamage / modifyAppliedDamage / applyDamage 的签名与职责。
+  - [ ] 获取项目实际 Loom mapped jar，核对方法体、盾牌/无敌帧、护甲耐久、DamageTracker 与 setHealth 的顺序。
+  - [ ] 根据字节码证据选定唯一注入点；Javadoc 核对不等于调用顺序核验。
+  - 调查记录：`P1-02D_DAMAGE_PIPELINE_INVESTIGATION.md`。
   - [ ] P1-02D-2：接入玩家近战、登记怪物攻击，并验证环境来源与原版反馈。
 - [ ] P1-02E：Health Regen 服务端调度。
 - [ ] P1-02F：死亡、重生、断线、维度切换和环境伤害边界。
