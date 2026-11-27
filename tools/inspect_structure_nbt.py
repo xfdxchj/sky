@@ -182,6 +182,10 @@ def inspect_file(path: Path) -> dict:
         entity_types[str(entity_id)] += 1
 
     volume = math.prod(size) if size else None
+    block_id_counts: Counter[str] = Counter()
+    for state, count in state_counts.items():
+        block_id_counts[state.split("[", 1)[0]] += count
+
     return {
         "file": str(path),
         "file_bytes": len(raw),
@@ -201,10 +205,7 @@ def inspect_file(path: Path) -> dict:
         "block_position_max": max_pos if all(v is not None for v in max_pos) else None,
         "invalid_state_indices": invalid_state_indices,
         "block_state_counts": dict(sorted(state_counts.items())),
-        "top_block_ids": dict(Counter(
-            state.split("[", 1)[0] for state, count in state_counts.items()
-            for _ in range(count)
-        ).most_common(30)),
+        "top_block_ids": dict(block_id_counts.most_common(30)),
     }
 
 
