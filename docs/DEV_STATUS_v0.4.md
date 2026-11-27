@@ -254,3 +254,5 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 
 - 2026-11-27：VS-1 首次进入流程首版已提交（837ccee）：新玩家没有私人岛记录时自动分配并生成私人岛，随后传送到岛屿出生点；已有私人岛的玩家重连时不强制传送。失败时向玩家提示并记录日志。当前岛屿仍为单一椭圆浮岛，尚未还原 Wiki 描述的 Hypixel 主岛+副岛布局；未执行 Gradle build、runClient 或游戏内测试。
+
+- 2026-11-27：VS-1 私人岛布局升级已提交：新增 PrivateIslandStarterLayout，生成主/副两座浮岛、橡树、连接桥、洞穴、初始箱子、Jerry NPC、装饰性 Hub Portal 和仅展示用 Minion 底座；PrivateIslandManager 已接入该生成器。箱子内容按社区 Wiki 参考目录记录，使用原版物品近似。代码提交 2a1a2fb / fe46106 / 905db4f / 415e275；设计与测试文档同步更新。用户此前的 BUILD SUCCESSFUL 发生在本轮双岛代码之前，因此本轮新代码仍待重新 build、runClient 和游戏验收。
