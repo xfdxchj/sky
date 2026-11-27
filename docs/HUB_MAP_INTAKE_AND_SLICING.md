@@ -128,7 +128,7 @@ Core 已有原生 Minecraft Structure NBT 导入器：
 python tools/inspect_structure_nbt.py worlds/structures --output reports/structure_audit.json
 ```
 
-脚本支持 gzip/zlib/未压缩 NBT，输出结构尺寸、包围盒体积、DataVersion、palette、方块状态计数、方块实体数、实体类型和方块坐标范围；不会修改 NBT。注意：GitHub 文件浏览器/连接器无法解码这些二进制 NBT，必须在本地仓库运行脚本才能得到真实测量结果。
+脚本支持 gzip/zlib/未压缩 NBT，输出结构尺寸、包围盒体积、DataVersion、单/多 palette 方块状态计数、方块实体数、实体类型、方块坐标范围，以及超出结构 size 的方块坐标数量；不会修改 NBT。多 palette 结构会分别按每套 palette 统计，`invalid_state_indices` 以第一套 palette 为主，同时在 `palette_variants` 中保留每套 palette 的独立校验结果。注意：GitHub 文件浏览器/连接器无法解码这些二进制 NBT，必须在本地仓库运行脚本才能得到真实测量结果。
 
 **当前已确认的是 12 个结构 NBT 已提交；尚未确认它们的实际尺寸、坐标、方块统计和游戏内兼容性。** 不能把这些结构文件误称为完整可运行的世界存档，也不能在审计前假设 Hub NBT 的坐标就是目标世界坐标。
 
