@@ -11,16 +11,15 @@ public final class AccessoryPowerManager {
 
     public static int getAccessoryPower(PlayerInventory inv, boolean dungeon) {
         if (inv == null) return 0;
-        int total = 0;
+        long total = 0L;
         for (String id : inv.getEffectiveAccessories()) {
             var definition = com.skyrpg.skyblock.item.ItemRegistry.get(id).orElse(null);
             if (definition == null) continue;
-            int value = definition.accessoryPower();
-            if (dungeon && definition.dungeonAccessory()) value *= 2;
-            if (total > Integer.MAX_VALUE - value) return Integer.MAX_VALUE;
-            total += value;
+            long value = definition.accessoryPower();
+            if (dungeon && definition.dungeonAccessory()) value *= 2L;
+            total = Math.min(Integer.MAX_VALUE, total + value);
         }
-        return total;
+        return (int) total;
     }
 
     public static double getStatsMultiplier(int ap) {
