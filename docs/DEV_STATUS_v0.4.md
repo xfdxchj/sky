@@ -66,6 +66,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - `ProfileManager`：玩家档案获取、创建和保存管理。
 - `PlayerStats`、`StatType`、`StatModifier`、`StatSource`：属性定义、来源分类和最终属性修正。
 - `StatEffect`、`StatEffectManager`：BUFF / TEMPORARY / OTHER 效果应用、刷新、主动移除、持久化与过期清理。
+- `StatEffectAPI`（API v3）：为外部扩展开放命名空间隔离的 BUFF / TEMPORARY / OTHER 写入与移除入口。
 - `SkillType`：12 个内部技能 ID；它们是技术注册起点，不代表当前 Hypixel 所有技能玩法均已实现。
 - `SkillDefinition`：当前仍使用临时 XP 曲线，不是最终 Hypixel 经验表。
 - `CurrencyManager`、`BankManager`：Purse 和 Bank 的基础操作。
