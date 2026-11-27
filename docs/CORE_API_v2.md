@@ -202,6 +202,7 @@ These are not implied by the read APIs above. Submit a request before depending 
 
 - Do not change a published method signature without an API version plan.
 - New API classes may be added without breaking existing v1 entry points.
+- Extension-facing method signatures should use API-owned DTOs rather than Core implementation classes.
 - Breaking changes require a Core API marker increment and migration notes.
 - Core-only startup must continue to work with no Life Skills or Dungeons installed.
 - Extension data must survive uninstall/reinstall of an optional module.
