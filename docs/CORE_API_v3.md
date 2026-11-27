@@ -24,6 +24,7 @@ Public entry points live under `com.skyrpg.skyblock.api`.
 | `CurrencyAPI` | 1 | Purse and Bank operations |
 | `RewardAPI` | 1 | Common item, coin and skill-XP reward facade |
 | `StatEffectAPI` | 1 | Namespaced BUFF / TEMPORARY / OTHER stat effects |
+| `StatEffectAPI` | 1 | Namespaced BUFF / TEMPORARY / OTHER stat effects |
 
 The individual API versions are independent. Check `CoreApi.API_VERSION >= 3` before using the v3 surface.
 
