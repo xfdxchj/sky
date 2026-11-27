@@ -34,7 +34,9 @@
 4. Defense=0 时普通伤害不变。
 5. True Defense 不影响普通伤害。
 6. True Damage 只使用 True Defense；Defense 不参与。
-7. 非有限值和极端数值不会产生 NaN、负伤害或溢出。
+7. BYPASS_RPG_DEFENSE 不受 Defense / True Defense 影响。
+8. null DamageKind 按不应用 RPG 防御处理。
+9. 非有限值和极端数值不会产生 NaN、负伤害或溢出。
 
 ## D. 原版伤害兼容
 
