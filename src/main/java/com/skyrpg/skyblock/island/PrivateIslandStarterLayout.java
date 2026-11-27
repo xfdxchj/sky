@@ -41,7 +41,7 @@ public final class PrivateIslandStarterLayout {
 
         int placed = first.placedBlocks() + second.placedBlocks();
         placed += buildOakTree(world, new BlockPos(mainX, surfaceY + 1, centerZ - 4));
-        placed += buildBridge(world, mainX + 15, centerZ, sideX - 14, surfaceY);
+        placed += buildBridge(world, mainX + 14, centerZ, sideX - 12, surfaceY);
         placed += carveCaveAndChest(world, sideX, centerZ, surfaceY);
         placed += buildPortalLandmark(world, sideX, centerZ, surfaceY);
         placed += buildMinionDisplay(world, sideX, centerZ, surfaceY);
