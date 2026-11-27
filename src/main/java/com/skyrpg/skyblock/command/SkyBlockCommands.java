@@ -425,7 +425,9 @@ public final class SkyBlockCommands {
                             var profile = ProfileManager.get(player);
                             context.getSource().sendFeedback(() -> Text.literal(quest.title() + " [" + quest.id() + "]"), false);
                             context.getSource().sendFeedback(() -> Text.literal(quest.description()), false);
-                            context.getSource().sendFeedback(() -> Text.literal("Objective: talk to " + quest.targetNpcId()
+                            context.getSource().sendFeedback(() -> Text.literal("Objective: "
+                                    + ("talk_to_npc".equals(quest.objectiveType())
+                                    ? "Talk to " + quest.targetNpcId() : "Defeat " + quest.targetMobId())
                                     + " (" + profile.getQuestProgress(quest.id()) + "/" + quest.requiredCount() + ")"), false);
                             context.getSource().sendFeedback(() -> Text.literal("Status: " + QuestManager.status(profile, quest)), false);
                             context.getSource().sendFeedback(() -> Text.literal("Rewards: " + quest.rewardCoins() + " coins"
