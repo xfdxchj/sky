@@ -4,6 +4,7 @@ import com.skyrpg.skyblock.item.ItemDefinition;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.item.ItemType;
 import com.skyrpg.skyblock.stats.StatModifier;
+import com.skyrpg.skyblock.stats.StatSource;
 import com.skyrpg.skyblock.stats.StatType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -123,17 +124,19 @@ public final class PlayerInventory {
     public List<StatModifier> getStatModifiers() {
         List<StatModifier> result = new ArrayList<>();
         equipment.forEach((slot, id) -> {
-            addItemModifiers(result, "equipment:" + slot.id() + ":" + id, id);
+            addItemModifiers(result, "equipment:" + slot.id() + ":" + id, id, StatSource.EQUIPMENT);
             String reforgeId = reforges.get(slot);
             if (reforgeId != null) result.addAll(com.skyrpg.skyblock.reforge.ReforgeManager.modifiers(slot, reforgeId));
         });
-        for (String id : getEffectiveAccessories()) addItemModifiers(result, "accessory:" + id, id);
-        return result;
+        for (String id : getEffectiveAccessories()) {
+            addItemModifiers(result, "accessory:" + id, id, StatSource.ACCESSORY);
+        }
+        return List.copyOf(result);
     }
 
-    private static void addItemModifiers(List<StatModifier> result, String source, String id) {
+    private static void addItemModifiers(List<StatModifier> result, String source, String id, StatSource category) {
         ItemRegistry.get(id).ifPresent(def -> def.stats().forEach((stat, amount) ->
-                result.add(new StatModifier(source, stat, amount, StatModifier.Operation.ADDITIVE))));
+                result.add(new StatModifier(source, stat, amount, StatModifier.Operation.ADDITIVE, category))));
     }
 
     public NbtCompound toNbt() {
