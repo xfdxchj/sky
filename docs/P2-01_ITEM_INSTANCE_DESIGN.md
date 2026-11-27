@@ -1,6 +1,6 @@
 # P2-01 ItemInstance 设计
 
-> 状态：设计稿；尚未修改 Core 物品/背包源码。
+> 状态：P2-01A 数据模型源码已提交；尚未完成本地构建与单元/游戏测试。
 > 基线：main @ e2ee2b3（2026-11-27）；Core API v3；Minecraft 1.21.1 / Fabric / Java 21。
 > 目标：在不破坏现有物品定义、逻辑背包和 Life Skills API v3 的前提下，引入可持久化、可独立强化的物品实例。
 
@@ -94,3 +94,19 @@ Inventory 统一持有 ItemInstance/堆叠条目；装备槽和 Accessory Bag �
 - 任何装备/饰品移动先校验、后提交；不依赖“失败后再尽力补回”。
 - API v3 的扩展数据、技能 XP、资源物品奖励必须在 Core-only 与 Core + Life Skills 两种环境保持兼容。
 - 所有物品来源数据仍须标注官方、社区 Wiki、项目 fixture 或未知，不得把测试数据写成 Hypixel 正式内容。
+
+
+## 8. P2-01A 当前实现边界（2026-11-27）
+
+已新增 `com.skyrpg.skyblock.item.ItemInstance`：
+
+- 不可变实例对象：UUID、namespaced definition ID、数量、Reforge、Enchantments、Stars、Upgrade Level、扩展 NBT。
+- `create` / `restore` 工厂与 `validateAgainst` 定义级校验；旧 Core 无命名空间 ID 按 `skyblockrpg:` 解析。
+- 状态化实例强制 count=1；无状态堆叠才允许拆分/合并。
+- 拆分时原 UUID 留给余量，新堆叠生成 UUID；合并保留目标 UUID。
+- 实例状态更新返回新对象并保留 UUID；NBT 输入/输出均防御性复制。
+- 对星级、附魔等级、附魔数量、扩展 NBT 深度/节点/键长/字符串长度设定结构限制。
+
+本阶段刻意不修改 `PlayerInventory`、`PlayerProfile` 或存档 schema；实例尚未进入玩家档案，也未改变 API v3 旧接口。扩展 NBT 的精确序列化字节上限将在 P2-01B 的 NBT 编解码层落实。
+
+**待验证：** Java 21 / Loom 编译、实例规则测试、ItemRegistry 加载后 definition 校验，以及后续 P2-01B 的真实 NBT 往返。
