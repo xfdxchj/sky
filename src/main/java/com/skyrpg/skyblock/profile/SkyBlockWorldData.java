@@ -130,6 +130,13 @@ public final class SkyBlockWorldData extends PersistentState {
                         if (Double.isFinite(value)) profile.getStats().setBase(type, value);
                     });
                 }
+                if (entry.contains("currentHealth", NbtElement.NUMBER_TYPE)) {
+                    profile.loadCurrentHealth(entry.getDouble("currentHealth"));
+                } else {
+                    // Schema <= 9 profiles predate persistent RPG HP; migrate them at full derived health.
+                    profile.initializeCurrentHealthIfMissing();
+                }
+                profile.setProfileVersion(PlayerProfile.CURRENT_VERSION);
                 data.profiles.put(uuid, profile);
             } catch (IllegalArgumentException ignored) {
                 // Ignore malformed profile entries; other players' profiles remain loadable.
@@ -153,6 +160,7 @@ public final class SkyBlockWorldData extends PersistentState {
             entry.putInt("profileVersion", profile.getProfileVersion());
             entry.putLong("coins", profile.getCoins());
             entry.putLong("bankCoins", profile.getBankCoins());
+            entry.putDouble("currentHealth", profile.getCurrentHealth());
             NbtList discovered = new NbtList();
             profile.getDiscoveredRegions().forEach(id -> discovered.add(NbtString.of(id)));
             entry.put("discoveredRegions", discovered);
@@ -205,7 +213,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 9);
+        nbt.putInt("dataVersion", 10);
         return nbt;
     }
 }
