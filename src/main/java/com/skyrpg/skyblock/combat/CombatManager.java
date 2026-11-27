@@ -7,6 +7,7 @@ import com.skyrpg.skyblock.profile.PlayerProfile;
 import com.skyrpg.skyblock.profile.ProfileManager;
 import com.skyrpg.skyblock.skill.SkillType;
 import com.skyrpg.skyblock.quest.QuestManager;
+import com.skyrpg.skyblock.combat.MobDropDefinition;
 import com.skyrpg.skyblock.stats.StatType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -99,6 +100,7 @@ public final class CombatManager {
             if (mob.coinReward() > 0) profile.addCoins(mob.coinReward());
             if (mob.combatXpReward() > 0) profile.addSkillExperience(SkillType.COMBAT, mob.combatXpReward());
             if (!mob.id().equals("unregistered")) QuestManager.onMobKilled(player, mob.id());
+            grantConfiguredDrops(player, profile, mob);
             ProfileManager.markChanged(player);
             if (mob.coinReward() > 0 || mob.combatXpReward() > 0) {
                 player.sendMessage(Text.literal("Defeated " + mob.displayName() + "! +" + mob.coinReward()
