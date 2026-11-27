@@ -41,6 +41,7 @@ public final class LegacyInventoryMigrator {
         }
         if (!legacyExtensions.isEmpty()) migrated.put("legacyExtensions", legacyExtensions);
         NbtList instances = new NbtList();
+        NbtList inventoryRefs = new NbtList();
         NbtList quarantine = new NbtList();
         NbtCompound equipmentRefs = new NbtCompound();
         NbtList accessoryRefs = new NbtList();
@@ -61,6 +62,10 @@ public final class LegacyInventoryMigrator {
         }
         if (legacy.contains("accessoryBag") && !legacy.contains("accessoryBag", NbtElement.LIST_TYPE)) {
             quarantine(quarantine, "accessoryBag", "invalid_legacy_field_type", legacy.get("accessoryBag"));
+        } else if (legacy.contains("accessoryBag", NbtElement.LIST_TYPE)
+                && legacy.getList("accessoryBag", NbtElement.LIST_TYPE).getHeldType() != NbtElement.STRING_TYPE
+                && !legacy.getList("accessoryBag", NbtElement.LIST_TYPE).isEmpty()) {
+            quarantine(quarantine, "accessoryBag", "invalid_legacy_list_element_type", legacy.get("accessoryBag"));
         }
 
         NbtList oldItems = legacy.getList("items", NbtElement.COMPOUND_TYPE);
@@ -90,6 +95,7 @@ public final class LegacyInventoryMigrator {
                 try {
                     ItemInstance instance = ItemInstance.create(definition, stackCount);
                     instances.add(ItemInstanceNbtCodec.encode(instance));
+                    inventoryRefs.add(NbtString.of(instance.instanceId().toString()));
                     usedSlots++;
                     remaining -= stackCount;
                 } catch (IllegalArgumentException exception) {
@@ -158,6 +164,7 @@ public final class LegacyInventoryMigrator {
         }
 
         migrated.put("instances", instances);
+        migrated.put("inventoryRefs", inventoryRefs);
         migrated.put("equipmentRefs", equipmentRefs);
         migrated.put("accessoryRefs", accessoryRefs);
         migrated.put("quarantine", quarantine);
