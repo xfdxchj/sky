@@ -2,6 +2,9 @@ package com.skyrpg.skyblock.profile;
 
 import net.minecraft.util.Identifier;
 import com.skyrpg.skyblock.stats.StatType;
+import com.skyrpg.skyblock.stats.StatModifier;
+import com.skyrpg.skyblock.stats.StatSource;
+import com.skyrpg.skyblock.stats.StatEffect;
 import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -99,6 +102,27 @@ public final class SkyBlockWorldData extends PersistentState {
                 });
                 profile.loadTuningAllocations(tuningValues);
 
+                NbtList statEffects = entry.getList("statEffects", NbtElement.COMPOUND_TYPE);
+                for (int j = 0; j < statEffects.size(); j++) {
+                    NbtCompound effectTag = statEffects.getCompound(j);
+                    try {
+                        String effectId = effectTag.getString("id");
+                        String sourceId = effectTag.getString("sourceId");
+                        StatType stat = StatType.fromId(effectTag.getString("stat")).orElse(null);
+                        double amount = effectTag.getDouble("amount");
+                        StatModifier.Operation operation = StatModifier.Operation.valueOf(effectTag.getString("operation"));
+                        StatSource source = StatSource.valueOf(effectTag.getString("source"));
+                        long expiresAt = effectTag.contains("expiresAt") ? effectTag.getLong("expiresAt") : -1L;
+                        if (stat != null && Double.isFinite(amount)
+                                && (source == StatSource.BUFF || source == StatSource.TEMPORARY || source == StatSource.OTHER)) {
+                            profile.putStatEffect(new StatEffect(effectId,
+                                    new StatModifier(sourceId, stat, amount, operation, source), expiresAt));
+                        }
+                    } catch (IllegalArgumentException ignored) {
+                        // Ignore malformed effects without invalidating the rest of this player profile.
+                    }
+                }
+
                 NbtCompound stats = entry.getCompound("stats");
                 for (String key : stats.getKeys()) {
                     StatType.fromId(key).ifPresent(type -> {
@@ -156,6 +180,19 @@ public final class SkyBlockWorldData extends PersistentState {
             NbtCompound stats = new NbtCompound();
             profile.getStats().getBaseValues().forEach((type, value) -> stats.putDouble(type.id(), value));
             entry.put("stats", stats);
+            NbtList statEffects = new NbtList();
+            for (StatEffect effect : profile.getStatEffects()) {
+                NbtCompound effectTag = new NbtCompound();
+                effectTag.putString("id", effect.id());
+                effectTag.putString("sourceId", effect.modifier().sourceId());
+                effectTag.putString("stat", effect.modifier().stat().id());
+                effectTag.putDouble("amount", effect.modifier().amount());
+                effectTag.putString("operation", effect.modifier().operation().name());
+                effectTag.putString("source", effect.modifier().source().name());
+                effectTag.putLong("expiresAt", effect.expiresAtGameTime());
+                statEffects.add(effectTag);
+            }
+            entry.put("statEffects", statEffects);
             entry.put("inventory", profile.getInventory().toNbt());
             entry.putString("selectedPower", profile.getSelectedPower());
             NbtList unlockedPowers = new NbtList();
@@ -168,7 +205,7 @@ public final class SkyBlockWorldData extends PersistentState {
             list.add(entry);
         }
         nbt.put("profiles", list);
-        nbt.putInt("dataVersion", 8);
+        nbt.putInt("dataVersion", 9);
         return nbt;
     }
 }
