@@ -46,14 +46,14 @@ def main() -> int:
             continue
 
         size = fmt_size(item.get("size"))
-        volume = item.get("bounding_box_volume", "unknown")
+        volume_value = item.get("bounding_box_volume")\n        volume = f"{volume_value:,}" if isinstance(volume_value, int) else "unknown"
         blocks = item.get("block_entries", 0)
         block_entities = item.get("block_entities", 0)
         entities = item.get("entities", 0)
         palette_errors = item.get("invalid_state_indices", 0)
         oob = item.get("out_of_bounds_block_positions", 0)
         lines.append(
-            f"| {name} | {size} | {volume:,} | {blocks:,} | {block_entities:,} | "
+            f"| {name} | {size} | {volume} | {blocks:,} | {block_entities:,} | "
             f"{entities:,} | {palette_errors:,} | {oob:,} |"
         )
 
