@@ -37,7 +37,7 @@ Life Skills registers these IDs during its mod initialization:
 - `skyblock_life:farming`
 - `skyblock_life:foraging`
 
-Use `SkillRegistration` to define display name, max level and XP curve. It is currently located at `com.skyrpg.skyblock.skill.SkillRegistration`.
+Use the API-owned `SkillDefinition` record to define display name, max level and XP curve. It is located at `com.skyrpg.skyblock.api.SkillDefinition`.
 
 ```java
 Identifier mining = Identifier.of("skyblock_life", "mining");
