@@ -205,7 +205,7 @@
 - CombatManager 在玩家击杀已注册怪物后推进击杀任务，并调用物品掉落结算。
 - 物品掉落仅发放概率已知、且 Core ItemRegistry 已注册的 `item` 类型；未知概率不发放，不把未知概率当作 0% 或 100%。
 - 新增 Core 逻辑物品 `rotten_flesh`，用于 Graveyard Zombie 的已知掉落。
-- 新增项目自有 `StarterGraveyardManager`，在服务器启动时于 Overworld (256, 180, 0) 附近生成测试冒险浮岛，并确保启动时存在最多三只带有 `graveyard_zombie` 标签的僵尸。
+- 新增项目自有 `StarterGraveyardManager`，在服务器启动时于 Overworld (512, 220, 512) 附近生成测试冒险浮岛，并确保启动时存在最多三只带有 `graveyard_zombie` 标签的僵尸。
 - 新增 `starter_graveyard` Region 与 Warp。
 - Jerry 的任务板会显示任务目标、接取命令和 Graveyard 路线。
 - 新增 `docs/VS3_COMBAT_QUEST_SLICE_TEST_PLAN.md`，列出构建、全新世界、击杀结算、重启持久化和边界验收步骤。
