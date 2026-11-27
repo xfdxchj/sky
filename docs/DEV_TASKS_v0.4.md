@@ -139,7 +139,7 @@
 
 ### P2-01 ItemInstance
 - [x] P2-01A：ItemInstance 数据模型、UUID 身份、状态校验与堆叠规则（源码已提交；待本地构建与规则测试）。
-- [ ] P2-01B：版本化 NBT 持久化与旧 items/equipment/accessoryBag/reforges 无损迁移。
+- [ ] P2-01B：版本化 NBT 持久化与旧 items/equipment/accessoryBag/reforges 无损迁移（已提交编解码器和纯迁移基础；尚未接入活动档案，待构建与迁移测试）。
 - [ ] P2-01C：Inventory 实例存储、装备/饰品原子移动与旧 API 聚合兼容。
 - [ ] P2-01D：新增 API-owned 只读实例 DTO/查询能力，保持 API v3 现有方法签名。
 - 设计：`P2-01_ITEM_INSTANCE_DESIGN.md`；测试：`P2-01_ITEM_INSTANCE_TEST_PLAN.md`。
@@ -148,6 +148,9 @@
 - [ ] P2-01A：Java 21 Gradle 构建及规则测试；未通过前不得进入 P2-01B 存档迁移。
 - 实例字段至少考虑：唯一实例 ID、Reforge、Enchantments、Stars、Upgrade Level、附加数据。
 - 定义堆叠规则：有实例状态的物品不能错误合并。
+- [x] P2-01B 基础：ItemInstance NBT v1 编解码器与 Reforge 兼容校验。
+- [x] P2-01B 基础：旧库存纯迁移器，生成实例及容器引用，隔离未知/超容量/损坏数据并保留未知顶层扩展。
+- [ ] P2-01B 完成：接入活动档案存储、版本化迁移入口、重复加载稳定性和备份恢复测试。
 - NBT 序列化、反序列化、旧数据迁移和复制安全。
 
 ### P2-02 Minecraft 物品表现
