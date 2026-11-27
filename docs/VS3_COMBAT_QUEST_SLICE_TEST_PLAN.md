@@ -33,17 +33,18 @@
    - `/skyblock quest accept clear_the_graveyard`
    - `/skyblock warp starter_graveyard`
 5. 接取 `first_steps`，再次与 Jerry 交互，应完成一次且只完成一次，获得 100 coins 与 10 Social XP。
-6. 接取 `clear_the_graveyard`，传送至 Graveyard。
-7. 确认 Graveyard 区域有三只带有 `skyblockrpg_mob_graveyard_zombie` 标签的可攻击僵尸。
-8. 装备 Core 训练武器，击杀三只僵尸。
-9. 每次击杀应只结算一次：
+6. 使用 `/skyblock shop buy training_sword 1` 购买训练剑，再使用 `/skyblock equip training_sword` 装备；确认 DAMAGE / STRENGTH 属性发生变化。
+7. 接取 `clear_the_graveyard`，使用 Jerry 提供的路线命令传送至 Graveyard。
+8. 确认 Graveyard 区域有三只带有 `skyblockrpg_mob_graveyard_zombie` 标签的可攻击僵尸。
+9. 使用已装备的训练剑击杀三只僵尸。
+10. 每次击杀应只结算一次：
    - 1 coin；
    - 5 Combat XP；
    - 已知概率的 Core 物品掉落（Graveyard Zombie 的 Rotten Flesh）；
    - 任务进度 +1。
-10. 第三次击杀后任务完成，奖励 50 coins 与 25 Combat XP。
-11. 使用 `/skyblock quest list` 确认两个任务状态；使用 `/skyblock inventory` 或现有背包查看入口确认 Rotten Flesh 数量。
-12. 退出并重进世界，确认任务状态、金币、技能经验和逻辑背包保持。
+11. 第三次击杀后任务完成，奖励 50 coins 与 25 Combat XP。
+12. 使用 `/skyblock quest list` 确认两个任务状态；使用 `/skyblock inventory` 或现有背包查看入口确认 Rotten Flesh 数量。
+13. 退出并重进世界，确认任务状态、金币、技能经验和逻辑背包保持。
 
 ## 边界测试
 
