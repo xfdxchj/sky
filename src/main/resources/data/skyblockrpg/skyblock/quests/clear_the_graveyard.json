@@ -1,0 +1,11 @@
+{
+  "id": "clear_the_graveyard",
+  "title": "Clear the Graveyard",
+  "description": "Defeat three Graveyard Zombies.",
+  "objective_type": "kill_mob",
+  "target_mob_id": "graveyard_zombie",
+  "required_count": 3,
+  "reward_coins": 50,
+  "reward_skill": "combat",
+  "reward_skill_xp": 25
+}
