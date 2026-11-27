@@ -95,7 +95,7 @@ boolean applied = StatEffectAPI.apply(
     20L * 60L * 5L
 );
 
-boolean removed = StatEffectAPI.remove(player, effectId);
+boolean removed = StatEffectAPI.remove(player, "skyblock_life", effectId);
 ```
 
 Both identifiers must use the same non-Core namespace. Use a stable effect ID when refreshing an existing effect; use distinct IDs only when contributions should coexist. Duration is measured in Overworld game ticks; `-1` means no automatic expiry. The effect is persisted in the player's Core profile and removed on expiry or explicit removal.
