@@ -167,7 +167,7 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 
 ### P2 物品与装备
 - P2-01A `ItemInstance` 数据模型已提交：不可变实例、UUID 身份、状态字段、定义校验、拆分/合并规则。
-- P2-01B 实例 NBT 序列化与旧档案迁移尚未开始。
+- P2-01B 已提交 `ItemInstanceNbtCodec`（NBT 格式 v1）和 `LegacyInventoryMigrator`（旧 items/equipment/accessoryBag/reforges 转实例及容器引用；未知、损坏、超容量数据进入 quarantine；未识别顶层字段进入 legacyExtensions）。当前只是编解码与纯迁移基础，尚未接入 `PlayerInventory` / `SkyBlockWorldData` 活动档案；P2-01B 未完成。
 - Minecraft 原版 Item 注册、图标和物品交互。
 - 附魔、冲突规则与效果结算。
 - Tooltip、稀有度、属性和强化信息。
@@ -248,3 +248,6 @@ P5.2 的功能代码已通过双父提交整合进 main。后续开发与测试�
 - 2026-11-27（最新 main 基线复核）：仓库最新提交为 `e2ee2b3`，新增 `life-skills/` 独立生活模组首版。Core 状态与任务文档已按该提交更新；P6 仍为未验收状态。P2-01 ItemInstance 设计和测试计划已新增，作为 Core 后续开发入口。
 
 - 2026-11-27：P2-01A 新增 `ItemInstance.java`，并更新设计/测试/任务文档。源码已提交至 main；未执行 Gradle build、单元测试、runClient 或游戏内验证。当前 PlayerInventory 和档案存储仍保持旧格式，未开始迁移。
+
+
+- 2026-11-27：P2-01B 基础源码已提交：新增 `ItemInstanceNbtCodec` 与 `LegacyInventoryMigrator`。迁移结果采用独立 inventory format v1，生成 instances / inventoryRefs / equipmentRefs / accessoryRefs，并保留 quarantine 与 legacyExtensions。未改动 PlayerProfile schema 10、PlayerInventory 活动读写路径；未执行 Gradle build、自动化测试或游戏内迁移验收。
