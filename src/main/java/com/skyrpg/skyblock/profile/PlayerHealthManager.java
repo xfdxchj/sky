@@ -82,6 +82,12 @@ public final class PlayerHealthManager {
         }
     }
 
+    /** Pushes a profile-side HP change to the vanilla health bar immediately. */
+    public static void syncFromProfile(ServerPlayerEntity player, PlayerProfile profile) {
+        if (player == null || profile == null) return;
+        applyProfileHealth(player, profile);
+    }
+
     public static void remove(ServerPlayerEntity player) {
         if (player != null) STATES.remove(player.getUuid());
     }
