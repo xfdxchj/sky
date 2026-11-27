@@ -145,7 +145,7 @@
 - 设计：`P2-01_ITEM_INSTANCE_DESIGN.md`；测试：`P2-01_ITEM_INSTANCE_TEST_PLAN.md`。
 - [x] 明确区分静态 ItemDefinition 与动态 ItemInstance。
 - [x] P2-01A：新增不可变 ItemInstance、实例 UUID、定义级校验、状态更新、拆分/合并规则与扩展 NBT 防御性复制。
-- [ ] P2-01A：Java 21 Gradle 构建及规则测试；未通过前不得进入 P2-01B 存档迁移。
+- [ ] P2-01A：Java 21 Gradle 构建及规则测试；未通过前不得接入活动档案迁移（P2-01B 的编解码/纯迁移基础可独立静态审查）。
 - 实例字段至少考虑：唯一实例 ID、Reforge、Enchantments、Stars、Upgrade Level、附加数据。
 - 定义堆叠规则：有实例状态的物品不能错误合并。
 - [x] P2-01B 基础：ItemInstance NBT v1 编解码器与 Reforge 兼容校验。
