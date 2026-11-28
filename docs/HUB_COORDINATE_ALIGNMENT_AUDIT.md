@@ -22,30 +22,23 @@ The source asset is `worlds/structures/the_hub_incl_carnival.nbt`.
 
 These facts confirm the NBT is structurally readable. They do not establish a world-coordinate origin, the player's spawn point, or the exact position of the Village within the structure.
 
-## Coordinate alignment: not yet established
+## Placement decision: original-world alignment is not required
 
-A vanilla structure NBT stores block positions relative to its own structure origin. This asset does not carry the original world selection's absolute X/Y/Z anchor. The community-wiki Hub POI catalogue contains world-reference coordinates, but those points cannot be directly equated with the NBT-relative coordinates.
+The project has adopted a teleport-first architecture: Hub, public islands and adventure areas are separate destinations inside the dedicated void-based SkyBlock world. They are not being reconstructed as one continuous map using Hypixel's original global X/Z coordinates.
 
-Therefore:
+Consequently, the original source world's absolute coordinate transform is **not a production blocker**. The NBT-relative coordinates are sufficient to place this structure at a project-controlled target origin. The old proposed Hub origin `(0, 80, 0)` remains an unverified historical placeholder and must not be treated as a chosen production origin.
 
-- Do not use `(0, 80, 0)` as a production Hub origin. It remains an old planning placeholder only.
-- Do not assume the Village POI coordinate `(-3, 70, -85)` is the structure origin or the player's safe spawn.
-- Do not enable first-join teleport or automatic production assembly yet.
-- Do not infer a source-to-destination transform from the NBT dimensions alone.
+What remains necessary before player routing:
 
-## Required alignment procedure
+1. Preview the actual NBT geometry in a disposable test world.
+2. Identify a safe standing block and facing direction within the Village area.
+3. Record that spawn relative to the NBT structure origin.
+4. Choose a project-controlled destination origin in the SkyBlock void world and calculate the resulting spawn from the relative offset.
+5. Reserve the complete Hub bounds so they do not overlap another public destination or the private-island allocation area.
 
-Before production placement, establish a reproducible coordinate transform:
+Do not assume the Wiki Village POI coordinate `(-3, 70, -85)` is the structure origin or safe spawn. It is no longer needed to derive a source-world transform.
 
-1. Open the exact source world/version from which this NBT was exported, or obtain a trustworthy coordinate-bearing reference for the same map revision.
-2. Identify at least three non-collinear landmarks that are unambiguous both in the source world and in the NBT (for example, distinctive building corners or fixed road intersections).
-3. Record each landmark's NBT-relative block coordinate and its source-world coordinate.
-4. Derive the rotation/mirror and translation from those correspondences. Validate the transform against at least one additional landmark not used to derive it.
-5. Identify a safe standing block and player-facing direction at the Village spawn, separately from the Village POI reference point.
-6. Check the complete transformed Hub bounds against world height, world border, the private-island allocation region, and all other reserved areas.
-7. Only then write the production map origin, spawn anchor, and first-join routing configuration.
-
-If the exact source world is unavailable, the alignment remains unresolved and must be treated as a blocking input rather than guessed.
+The NBT audit remains important for dimensions, block-state compatibility and content integrity. The safe spawn must still be measured from the actual map; teleport-first architecture does not make that a guessable value.
 
 ## Runtime restoration requirements
 
