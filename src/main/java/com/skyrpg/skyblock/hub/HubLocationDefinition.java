@@ -38,6 +38,11 @@ public record HubLocationDefinition(
         warpId = warpId == null ? "" : warpId;
     }
 
+    /** True only when coordinates were authored for this project's runtime world. */
+    public boolean hasRuntimeCoordinates() {
+        return "project_fixture".equals(sourceType) && !testFixture;
+    }
+
     public double squaredDistance(double px, double py, double pz) {
         double dx = x - px;
         double dy = y - py;
