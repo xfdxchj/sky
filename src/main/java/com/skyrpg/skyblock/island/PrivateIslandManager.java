@@ -63,7 +63,11 @@ public final class PrivateIslandManager {
         for (MapWorldData.Record allocated : MapWorldData.get(player.getServer()).all()) {
             if (!allocated.dimension().equals(islandBounds.dimension())) continue;
             MapDefinition map = MapRegistry.get(allocated.mapId()).orElse(null);
-            if (map == null) continue;
+            if (map == null) {
+                return new CreationResult(false, false,
+                        "Cannot safely verify saved map allocation '" + allocated.mapId()
+                                + "' because its map definition is unavailable. No island was created.", null);
+            }
             WorldRegionBounds mapBounds;
             try {
                 mapBounds = WorldRegionBounds.from(allocated.dimension(),
