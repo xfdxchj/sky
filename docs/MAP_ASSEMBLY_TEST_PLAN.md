@@ -10,11 +10,13 @@
 
 ## Safe generation
 
-1. Use a new creative test world.
-2. Choose an isolated empty target cuboid. Keep the production Hub origin unassigned until
-   the original NBT coordinate frame is verified.
-3. Run /skyblock map generate hub <x> <y> <z>.
-4. Poll /skyblock map status hub.
+1. Create a new creative **Superflat** test world. The flat ground is below the test volume,
+   leaving the upper build area empty.
+2. Use origin 0,80,0 for this isolated assembly test only. This is not the production Hub
+   coordinate transform and must not be copied into the final Hub POI / Warp data.
+3. Run /skyblock map generate hub 0 80 0.
+4. Poll /skyblock map status hub. After completion, teleport to the middle of the map
+   (approximately 192,160,168) to inspect the assembled terrain.
 5. Verify PREFLIGHT advances without placing blocks, then PLACING advances one slice at a
    time, and finally COMPLETE is recorded.
 6. Verify all source blocks appear at origin + source-local coordinates.
