@@ -178,8 +178,12 @@ def slice_structure(source: Path, out_dir: Path, sx: int, sy: int, sz: int):
     child_tag, block_values = blocks
     if child_tag != 10: raise NBTError("blocks list is not a compound list")
     entities_item = root.get("entities")
-    entities = get(root, "entities", 9) if entities_item else []
-    if entities_item and entities_item[1][0] != 10: raise NBTError("entities list is not a compound list")
+    if entities_item:
+        entity_child_tag, entities = get(root, "entities", 9)
+        if entity_child_tag != 10:
+            raise NBTError("entities list is not a compound list")
+    else:
+        entities = []
     if sx * sy * sz > 4_000_000: raise NBTError("Slice bounding volume exceeds importer limit")
 
     nx, ny, nz = (math.ceil(size[0]/sx), math.ceil(size[1]/sy), math.ceil(size[2]/sz))
