@@ -1,6 +1,8 @@
 package com.skyrpg.skyblock.hub;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.skyrpg.skyblock.map.MapRegistry;
+import com.skyrpg.skyblock.map.MapWorldData;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
@@ -13,11 +15,45 @@ public final class HubCommands {
     public static com.mojang.brigadier.builder.LiteralArgumentBuilder<ServerCommandSource> command() {
         return literal("hub")
                 .executes(context -> {
-                    context.getSource().sendFeedback(() -> Text.literal("Hub location catalogue | Loaded points: "
-                            + HubRegistry.all().size()
-                            + " | Coordinates are sourced reference points, not generated map terrain."), false);
+                    context.getSource().sendFeedback(() -> Text.literal("Hub | Map: "
+                            + (MapRegistry.get("hub").isPresent() ? "loaded" : "not loaded")
+                            + " | Points of interest: " + HubRegistry.all().size()
+                            + " | Spawn: " + (HubManager.isConfigured(context.getSource().getPlayer()) ? "configured" : "not configured")), false);
                     return 1;
                 })
+                .then(literal("status").executes(context -> {
+                    var source = context.getSource();
+                    var map = MapRegistry.get("hub").orElse(null);
+                    var record = MapWorldData.get(source.getServer()).get("hub");
+                    source.sendFeedback(() -> Text.literal("Hub map resource: " + (map == null ? "MISSING" :
+                            map.sizeX() + "x" + map.sizeY() + "x" + map.sizeZ() + " / " + map.slices().size() + " slices")), false);
+                    source.sendFeedback(() -> Text.literal("Assembly: " + (record == null ? "NOT STARTED" : record.status()
+                            + " | origin " + record.originX() + " " + record.originY() + " " + record.originZ())), false);
+                    source.sendFeedback(() -> Text.literal("Safe spawn: " +
+                            (source.getPlayer() != null && HubManager.isConfigured(source.getPlayer()) ? "CONFIGURED" : "NOT CONFIGURED")), false);
+                    source.sendFeedback(() -> Text.literal("First-join/rejoin routing activates only when the map is COMPLETE and a safe spawn is saved."), false);
+                    return 1;
+                }))
+                .then(literal("setspawn").requires(source -> source.hasPermissionLevel(2)).executes(context -> {
+                    var player = context.getSource().getPlayerOrThrow();
+                    HubManager.Result result = HubManager.configureSpawn(player);
+                    if (!result.success()) {
+                        context.getSource().sendError(Text.literal(result.message()));
+                        return 0;
+                    }
+                    context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
+                    return 1;
+                }))
+                .then(literal("visit").executes(context -> {
+                    var player = context.getSource().getPlayerOrThrow();
+                    HubManager.Result result = HubManager.visit(player);
+                    if (!result.success()) {
+                        context.getSource().sendError(Text.literal(result.message()));
+                        return 0;
+                    }
+                    context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
+                    return 1;
+                }))
                 .then(literal("list").executes(context -> {
                     context.getSource().sendFeedback(() -> Text.literal("Hub points of interest: "
                             + HubRegistry.all().size()), false);
