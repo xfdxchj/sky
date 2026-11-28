@@ -11,6 +11,7 @@ on:
       - "worlds/map_datapack/**"
       - "worlds/structures/gold_mine_modern_version.nbt"
       - "tools/slice_structure_nbt.py"
+      - "tools/stage_hub_datapack.py"
       - "docs/HUB_MAP_SLICER.md"
   workflow_dispatch:
 
@@ -28,6 +29,8 @@ jobs:
           gradle-version: "8.11.1"
       - name: Test structure NBT slicer
         run: python3 tools/slice_structure_nbt.py --self-test
+      - name: Validate Hub datapack staging tool
+        run: python3 -m py_compile tools/stage_hub_datapack.py
       - name: Build mod
         run: gradle build
       - name: Stage local Gold Mine datapack
