@@ -166,6 +166,7 @@ def inspect_file(path: Path) -> dict:
     variant_counts: list[Counter[str]] = [Counter() for _ in palette_variants]
     invalid_by_variant = [0 for _ in palette_variants]
     block_entity_count = 0
+    block_entity_types = Counter()
     min_pos = [None, None, None]
     max_pos = [None, None, None]
     out_of_bounds_positions = 0
@@ -186,6 +187,7 @@ def inspect_file(path: Path) -> dict:
 
         if isinstance(block.get("nbt"), dict):
             block_entity_count += 1
+            block_entity_types[str(block["nbt"].get("id", "<unknown>"))] += 1
         pos = int_list(block.get("pos"))
         if pos:
             for axis in range(3):
@@ -232,6 +234,7 @@ def inspect_file(path: Path) -> dict:
         "palette_variants": palette_reports,
         "block_entries": len(blocks),
         "block_entities": block_entity_count,
+        "block_entity_types": dict(sorted(block_entity_types.items())),
         "entities": len(entities),
         "entity_types": dict(sorted(entity_types.items())),
         "block_position_min": min_pos if all(v is not None for v in min_pos) else None,
