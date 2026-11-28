@@ -38,11 +38,12 @@ These are operator/development commands, not a player installation workflow:
 /skyblock map status <mapId>
 ~~~
 
-Generation is deliberately explicit for now. The final Hub destination and source-to-world
-coordinate transform have not yet been verified against the original NBT and the Hub POI
-catalogue. We therefore do not silently choose a world coordinate or move players to a
-possibly incorrect location. The generation command takes an explicit origin so the map
-can be tested in a disposable world first.
+Generation remains explicit for development and map validation. Under the teleport-first
+world architecture, each map receives a project-controlled destination origin inside the
+void-based SkyBlock world. The original source world's absolute X/Z coordinates are not
+required and must not be inferred from Wiki POIs. The Hub's safe player spawn is a separate
+structure-relative anchor that must be identified by previewing the actual NBT before
+first-join routing is enabled.
 
 The preflight checks the complete map cuboid in bounded batches (32,768 block checks per
 server tick). No structures are placed unless the whole cuboid is air. After preflight,
@@ -67,12 +68,12 @@ one structure slice is placed per tick. A failed placement is recorded and logge
 
 ## Important current limitations
 
-- Hub map origin and Y offset are not yet bound to the published Hub POI coordinates.
+- The Hub's project-controlled destination origin and safe spawn offset still need to be selected after preview; source-world absolute coordinate alignment is intentionally not required.
 - Hub NPCs, containers, block entities, portals and other runtime interactions must be
   restored by Core systems; the audit found no serialized block-entity/entity payloads
   in the source structure.
-- Automatic first-world generation and first-join Hub routing are intentionally deferred
-  until destination coordinates and the coordinate transform are verified.
+- Automatic first-world map assembly and first-join Hub routing are deferred until the
+  destination area and safe spawn offset are configured and tested.
 - Map generation has not yet been tested in Minecraft. CI only verifies the build and
   resource packaging.
 - Publicly redistributing community map assets is not authorized by this project until
