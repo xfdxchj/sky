@@ -111,7 +111,10 @@ public final class MapAssemblyManager {
             if (allocated.mapId().equalsIgnoreCase(definition.id())
                     || !allocated.dimension().equals(definition.dimension())) continue;
             MapDefinition allocatedDefinition = MapRegistry.get(allocated.mapId()).orElse(null);
-            if (allocatedDefinition == null) continue;
+            if (allocatedDefinition == null) {
+                return fail("Cannot safely verify saved map allocation '" + allocated.mapId()
+                        + "' because its map definition is unavailable.");
+            }
             WorldRegionBounds allocatedBounds;
             try {
                 allocatedBounds = WorldRegionBounds.from(allocated.dimension(),
