@@ -1,6 +1,7 @@
 package com.skyrpg.skyblock.warp;
 
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.world.SkyBlockWorldResolver;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,6 +17,11 @@ public final class WarpManager {
     private WarpManager() {}
 
     public static WarpResult teleport(ServerPlayerEntity player, String warpId) {
+        if (player == null || player.getServer() == null
+                || SkyBlockWorldResolver.resolve(player.getServer()) == null) {
+            return fail("Warps require the dedicated void-based SkyBlock world preset.");
+        }
+
         WarpDefinition warp = WarpRegistry.get(warpId).orElse(null);
         if (warp == null) return fail("Unknown warp: " + warpId);
         if (!warp.requiredRegionId().isBlank()
@@ -27,12 +33,19 @@ public final class WarpManager {
         RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, dimensionId);
         ServerWorld targetWorld = player.getServer().getWorld(worldKey);
         if (targetWorld == null) return fail("Warp dimension is not loaded: " + warp.dimension());
+        if (!SkyBlockWorldResolver.isSkyBlockWorld(targetWorld))
+            return fail("SkyBlock destinations must be placed in the dedicated SkyBlock overworld.");
 
         if (warp.y() < targetWorld.getBottomY() || warp.y() >= targetWorld.getTopY())
             return fail("Warp Y coordinate is outside the target world's build height.");
         BlockPos targetPos = BlockPos.ofFloored(warp.x(), warp.y(), warp.z());
         if (!targetWorld.getWorldBorder().contains(targetPos))
             return fail("Warp destination is outside the world border.");
+        if (!targetWorld.getBlockState(targetPos.down()).isSolidBlock(targetWorld, targetPos.down())
+                || !targetWorld.getBlockState(targetPos).isAir()
+                || !targetWorld.getBlockState(targetPos.up()).isAir()) {
+            return fail("Warp destination is not a safe two-block landing space.");
+        }
 
         player.teleport(targetWorld, warp.x(), warp.y(), warp.z(), Set.of(), warp.yaw(), warp.pitch());
         return new WarpResult(true, "Warped to " + warp.displayName()
