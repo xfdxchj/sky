@@ -74,7 +74,8 @@ public final class HubCommands {
                     for (HubLocationDefinition location : HubRegistry.all()) {
                         context.getSource().sendFeedback(() -> Text.literal(location.id() + " | "
                                 + location.displayName() + " | " + location.category()
-                                + " | " + format(location.x(), location.y(), location.z())), false);
+                                + " | Reference XYZ " + format(location.x(), location.y(), location.z())
+                                + (location.hasRuntimeCoordinates() ? " | runtime" : " | reference only")), false);
                     }
                     return 1;
                 }))
@@ -90,7 +91,8 @@ public final class HubCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Category: " + location.category()
                             + " | Parent: " + (location.parentId().isBlank() ? "none" : location.parentId())), false);
                     context.getSource().sendFeedback(() -> Text.literal("Dimension: " + location.dimension()
-                            + " | Reference coordinates: " + format(location.x(), location.y(), location.z())), false);
+                            + " | " + (location.hasRuntimeCoordinates() ? "Runtime coordinates: " : "Reference coordinates only: ")
+                            + format(location.x(), location.y(), location.z())), false);
                     if (!location.description().isBlank())
                         context.getSource().sendFeedback(() -> Text.literal(location.description()), false);
                     context.getSource().sendFeedback(() -> Text.literal("Source: " + location.sourceType()
@@ -105,6 +107,10 @@ public final class HubCommands {
                     HubLocationDefinition location = HubRegistry.get(id).orElse(null);
                     if (location == null) {
                         context.getSource().sendError(Text.literal("Unknown Hub location: " + id));
+                        return 0;
+                    }
+                    if (!location.hasRuntimeCoordinates()) {
+                        context.getSource().sendError(Text.literal("This POI uses reference-world coordinates. It cannot be located in the imported map until a verified coordinate transform or project-local anchor is recorded."));
                         return 0;
                     }
                     String currentDimension = player.getServerWorld().getRegistryKey().getValue().toString();
@@ -122,9 +128,10 @@ public final class HubCommands {
                 .then(literal("nearest").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     String dimension = player.getServerWorld().getRegistryKey().getValue().toString();
-                    var nearest = HubRegistry.nearest(dimension, player.getX(), player.getY(), player.getZ(), 5);
+                    var nearest = HubRegistry.nearest(dimension, player.getX(), player.getY(), player.getZ(), 5)
+                            .stream().filter(HubLocationDefinition::hasRuntimeCoordinates).toList();
                     if (nearest.isEmpty()) {
-                        context.getSource().sendFeedback(() -> Text.literal("No Hub points are registered in this dimension."), false);
+                        context.getSource().sendFeedback(() -> Text.literal("No Hub POIs have verified project-local coordinates in this dimension. Reference coordinates are excluded."), false);
                         return 1;
                     }
                     context.getSource().sendFeedback(() -> Text.literal("Nearest Hub points:"), false);
