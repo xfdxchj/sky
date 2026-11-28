@@ -14,6 +14,10 @@ public final class StructureImportManager {
     private StructureImportManager() {}
 
     public static PasteResult paste(ServerWorld world, StructureDefinition definition) {
+        return paste(world, definition, new BlockPos(definition.originX(), definition.originY(), definition.originZ()));
+    }
+
+    public static PasteResult paste(ServerWorld world, StructureDefinition definition, BlockPos origin) {
         if (!world.getRegistryKey().getValue().toString().equals(definition.dimension()))
             return fail("Structure dimension does not match the selected world.");
 
@@ -22,7 +26,7 @@ public final class StructureImportManager {
         StructureTemplate template = world.getStructureTemplateManager().getTemplate(templateId).orElse(null);
         if (template == null) {
             return fail("Template not found: " + templateId
-                    + ". Add a vanilla structure NBT file under data/<namespace>/structures/.");
+                    + ". Ensure the map datapack is installed and run /reload.");
         }
 
         var size = template.getSize();
@@ -32,7 +36,6 @@ public final class StructureImportManager {
         if (volume > definition.maxBlocks())
             return fail("Structure volume " + volume + " exceeds manifest max_blocks " + definition.maxBlocks() + ".");
 
-        BlockPos origin = new BlockPos(definition.originX(), definition.originY(), definition.originZ());
         StructurePlacementData placement = new StructurePlacementData()
                 .setPosition(origin)
                 .setRotation(definition.rotation())
