@@ -140,28 +140,13 @@ public final class SkyBlockRPG implements ModInitializer {
             PlayerHealthManager.onJoin(player);
             PlayerHealthRegenManager.onJoin(player);
 
-            // Hypixel-style first-entry flow: a player without a private island
-            // receives one and is sent directly to it. Existing players keep
-            // their current location on subsequent joins.
+            // Joining the game never creates a Private Island. The intended
+            // opening flow starts in the public Hub; players create their island
+            // explicitly from the Hub when they choose to do so.
             if (PrivateIslandManager.get(player) == null) {
-                PrivateIslandManager.CreationResult creation = PrivateIslandManager.create(player);
-                if (creation.success() && PrivateIslandManager.visitHome(player)) {
-                    player.sendMessage(Text.literal(
-                            "Your Private Island is ready. Use /skyblock island home to return here."
-                    ), false);
-                    LOGGER.info("Created the first private island for {} ({}).",
-                            player.getName().getString(), profile.getPlayerId());
-                } else {
-                    String reason = creation.success()
-                            ? "The island was created, but its home location could not be reached."
-                            : creation.message();
-                    player.sendMessage(Text.literal(
-                            "SkyBlock could not prepare your Private Island: " + reason
-                                    + " An administrator can retry with /skyblock island create."
-                    ), false);
-                    LOGGER.error("Could not initialize first private island for {}: {}",
-                            player.getName().getString(), reason);
-                }
+                player.sendMessage(Text.literal(
+                        "Welcome to SkyBlock. Visit the Hub and choose Create Private Island when you are ready."
+                ), false);
             }
 
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
