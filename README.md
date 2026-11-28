@@ -8,9 +8,10 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - [Development task list v0.4](docs/DEV_TASKS_v0.4.md): remaining work and acceptance criteria.
 - [First playable slice quick start](docs/QUICK_START_PLAYABLE_SLICE.md): new-player → Jerry → starter sword → Graveyard combat quest.
 - [VS-3 / VS-4 combat quest test plan](docs/VS3_COMBAT_QUEST_SLICE_TEST_PLAN.md): build and in-game acceptance steps.
-- [World map reconstruction plan](docs/VS_WORLD_MAP_IMPLEMENTATION_PLAN.md): Private Island, Hub and later islands.
+- [SkyBlock world and teleport architecture](docs/SKYBLOCK_WORLD_AND_TELEPORT_ARCHITECTURE.md): one void world, separate map destinations and teleport-first navigation.
+- [World map reconstruction plan](docs/VS_WORLD_MAP_IMPLEMENTATION_PLAN.md): Private Island, Hub and later islands, updated for the teleport-first layout.
 - [Hub map intake and slicing](docs/HUB_MAP_INTAKE_AND_SLICING.md): direct 1.22 map compatibility audit and structure slicing workflow.
-- [Hub coordinate alignment audit](docs/HUB_COORDINATE_ALIGNMENT_AUDIT.md): verified NBT bounds and the evidence required before production spawn routing.
+- [Hub NBT audit](docs/HUB_COORDINATE_ALIGNMENT_AUDIT.md): verified NBT bounds, compatibility facts and the remaining safe-spawn inspection task.
 - [In-mod map runtime implementation](docs/MAP_RUNTIME_IMPLEMENTATION.md): opt-in in-JAR map resources and logical map registry foundation.
 - [Map assembly test plan](docs/MAP_ASSEMBLY_TEST_PLAN.md): map preflight, incremental placement, persistence and recovery acceptance.
 - [Core API v3](docs/CORE_API_v3.md): supported integration contract for optional gameplay modules.
