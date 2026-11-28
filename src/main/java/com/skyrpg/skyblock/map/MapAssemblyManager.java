@@ -187,32 +187,45 @@ public final class MapAssemblyManager {
 
     /** Rebuild in-memory jobs from safe checkpoints after a server restart. */
     public static void recover(MinecraftServer server) {
+        ACTIVE.clear();
         MapWorldData data = MapWorldData.get(server);
         for (MapWorldData.Record saved : data.all()) {
+            if (saved.status() != MapWorldData.Status.PREFLIGHT
+                    && saved.status() != MapWorldData.Status.PLACING) continue;
+
+            MapDefinition definition = MapRegistry.get(saved.mapId()).orElse(null);
+            ServerWorld world = resolveWorld(server, saved.dimension());
+            if (saved.status() == MapWorldData.Status.PLACING && saved.sliceInProgress()) {
+                data.put(new MapWorldData.Record(saved.mapId(), saved.dimension(), saved.originX(), saved.originY(),
+                        saved.originZ(), MapWorldData.Status.INTERRUPTED, saved.preflightCursor(), saved.nextSlice(),
+                        true, "Server stopped during slice placement; inspect this slice before retrying."));
+                continue;
+            }
+
+            if (definition == null || world == null || !definition.dimension().equals(saved.dimension())) {
+                data.put(new MapWorldData.Record(saved.mapId(), saved.dimension(), saved.originX(), saved.originY(),
+                        saved.originZ(), MapWorldData.Status.FAILED, saved.preflightCursor(), saved.nextSlice(),
+                        false, "Recovery refused: map definition or saved dimension is missing or no longer matches."));
+                SkyBlockRPG.LOGGER.error("Could not recover map '{}': missing definition/world or dimension mismatch.",
+                        saved.mapId());
+                continue;
+            }
+
+            BlockPos origin = new BlockPos(saved.originX(), saved.originY(), saved.originZ());
             if (saved.status() == MapWorldData.Status.PREFLIGHT) {
-                MapDefinition definition = MapRegistry.get(saved.mapId()).orElse(null);
-                ServerWorld world = resolveWorld(server, saved.dimension());
-                if (definition != null && world != null) {
-                    Job job = new Job(definition, world, new BlockPos(saved.originX(), saved.originY(), saved.originZ()),
-                            0L, 0, Phase.PREFLIGHT);
-                    ACTIVE.put(definition.id().toLowerCase(java.util.Locale.ROOT), job);
-                    data.put(record(job, MapWorldData.Status.PREFLIGHT, false, "Restarted preflight from the beginning."));
-                }
-            } else if (saved.status() == MapWorldData.Status.PLACING) {
-                if (saved.sliceInProgress()) {
-                    data.put(new MapWorldData.Record(saved.mapId(), saved.dimension(), saved.originX(), saved.originY(),
-                            saved.originZ(), MapWorldData.Status.INTERRUPTED, saved.preflightCursor(), saved.nextSlice(),
-                            true, "Server stopped during slice placement; inspect this slice before retrying."));
-                } else {
-                    MapDefinition definition = MapRegistry.get(saved.mapId()).orElse(null);
-                    ServerWorld world = resolveWorld(server, saved.dimension());
-                    if (definition != null && world != null && saved.nextSlice() <= definition.slices().size()) {
-                        Job job = new Job(definition, world, new BlockPos(saved.originX(), saved.originY(), saved.originZ()),
-                                (long) definition.sizeX() * definition.sizeY() * definition.sizeZ(),
-                                saved.nextSlice(), Phase.PLACING);
-                        ACTIVE.put(definition.id().toLowerCase(java.util.Locale.ROOT), job);
-                    }
-                }
+                Job job = new Job(definition, world, origin, 0L, 0, Phase.PREFLIGHT);
+                ACTIVE.put(definition.id().toLowerCase(java.util.Locale.ROOT), job);
+                data.put(record(job, MapWorldData.Status.PREFLIGHT, false,
+                        "Restarted preflight from the beginning."));
+            } else if (saved.nextSlice() <= definition.slices().size()) {
+                Job job = new Job(definition, world, origin,
+                        (long) definition.sizeX() * definition.sizeY() * definition.sizeZ(),
+                        saved.nextSlice(), Phase.PLACING);
+                ACTIVE.put(definition.id().toLowerCase(java.util.Locale.ROOT), job);
+            } else {
+                data.put(new MapWorldData.Record(saved.mapId(), saved.dimension(), saved.originX(), saved.originY(),
+                        saved.originZ(), MapWorldData.Status.FAILED, saved.preflightCursor(), saved.nextSlice(),
+                        false, "Recovery refused: saved slice cursor exceeds the current map definition."));
             }
         }
     }
