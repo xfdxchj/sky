@@ -22,7 +22,6 @@ import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpRegistry;
 import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.island.PrivateIslandManager;
-import com.skyrpg.skyblock.island.StarterGraveyardManager;
 import com.skyrpg.skyblock.structure.StructureRegistry;
 import com.skyrpg.skyblock.map.MapRegistry;
 import com.skyrpg.skyblock.map.MapAssemblyManager;
@@ -31,6 +30,7 @@ import com.skyrpg.skyblock.hub.HubRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
+import com.skyrpg.skyblock.world.SkyBlockWorldResolver;
 import com.skyrpg.skyblock.gui.SkyBlockGui;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -76,7 +76,11 @@ public final class SkyBlockRPG implements ModInitializer {
             MapAssemblyManager.recover(server);
             NpcRegistry.reload(server.getResourceManager());
             QuestRegistry.reload(server.getResourceManager());
-            StarterGraveyardManager.ensure(server.getOverworld());
+            if (SkyBlockWorldResolver.resolve(server) == null) {
+                LOGGER.warn("The active Overworld is not the void-based SkyBlock preset. SkyBlock-only world operations are disabled until a new world is created with the SkyBlock RPG preset.");
+            } else {
+                LOGGER.info("Resolved dedicated SkyBlock overworld for '{}'.", server.getSaveProperties().getLevelName());
+            }
             LOGGER.info("SkyBlock RPG is active in world '{}'.", server.getSaveProperties().getLevelName());
         });
 
