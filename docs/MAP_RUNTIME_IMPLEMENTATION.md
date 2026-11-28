@@ -66,4 +66,4 @@ into a world. The next runtime stage must provide:
 4. persistent per-world generation records and recovery after restart;
 5. automatic map POI/warp activation only after successful generation.
 
-The legacy datapack staging task remains only as a development/export utility.
+The current runtime registry exposes diagnostics through /skyblock map list and /skyblock map info <mapId>. Map definitions are loaded after structure manifests at server startup. The registry rejects missing structure references, out-of-bounds slices, overlapping slices, and incomplete map coverage.\n\nThe legacy datapack staging task remains only as a development/export utility.
