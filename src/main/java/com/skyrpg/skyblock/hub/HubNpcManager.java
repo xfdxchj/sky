@@ -7,7 +7,6 @@ import com.skyrpg.skyblock.map.MapWorldData;
 import com.skyrpg.skyblock.npc.NpcDefinition;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.npc.NpcRegistry;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
@@ -16,7 +15,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 
 /** Manual, map-relative Hub NPC placement. Wiki POI coordinates are intentionally never used as spawn coordinates. */
 public final class HubNpcManager {
@@ -46,10 +44,14 @@ public final class HubNpcManager {
         if (!world.getBlockState(pos.down()).isSolidBlock(world, pos.down())
                 || !world.getBlockState(pos).isAir() || !world.getBlockState(pos.up()).isAir())
             return fail("NPC placement requires a solid floor and two clear blocks above your feet.");
+        HubNpcWorldData placements = HubNpcWorldData.get(player.getServer());
+        HubNpcWorldData.Placement existing = placements.get(poi.id());
+        if (existing != null) {
+            return fail("This Hub POI already has a persistent NPC placement ("
+                    + existing.npcId() + ", UUID " + existing.entityUuid() + "). Remove the old entity, then run /skyblock hub npc forget "
+                    + poi.id() + " before replacing it.");
+        }
         String poiTag = POI_TAG_PREFIX + poi.id().toLowerCase(java.util.Locale.ROOT);
-        Box nearby = new Box(pos).expand(1.5);
-        if (!world.getEntitiesByClass(Entity.class, nearby, entity -> entity.getCommandTags().contains(poiTag)).isEmpty())
-            return fail("An NPC is already placed for this Hub point in the loaded area. Remove its entity before replacing it.");
         Identifier entityId = Identifier.tryParse(npc.entityType());
         EntityType<?> type = entityId == null ? null : Registries.ENTITY_TYPE.getOrEmpty(entityId).orElse(null);
         if (type == null) return fail("Unknown configured entity type: " + npc.entityType());
@@ -64,9 +66,12 @@ public final class HubNpcManager {
         entity.setSilent(true);
         if (entity instanceof MobEntity mob) mob.setAiDisabled(true);
         if (!world.spawnEntity(entity)) return fail("Minecraft rejected the NPC entity spawn.");
-        SkyBlockRPG.LOGGER.info("Placed Hub NPC '{}' ({}) at {} in {}.", npc.id(), poi.id(), pos, dimension);
+        placements.put(new HubNpcWorldData.Placement(poi.id(), npc.id(), entity.getUuidAsString(),
+                dimension, entity.getX(), entity.getY(), entity.getZ()));
+        SkyBlockRPG.LOGGER.info("Placed Hub NPC '{}' ({}) UUID {} at {} in {}.",
+                npc.id(), poi.id(), entity.getUuidAsString(), pos, dimension);
         return new Result(true, "Placed " + npc.displayName() + " for Hub POI '" + poi.displayName()
-                + "'. Entity is saved by Minecraft with its chunk; this position was set manually in map-local coordinates.");
+                + "'. Its UUID is recorded in world data to prevent duplicate placement across unloaded chunks and restarts.");
     }
 
     private static Result fail(String message) { return new Result(false, message); }
