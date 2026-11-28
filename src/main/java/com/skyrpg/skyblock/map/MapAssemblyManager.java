@@ -4,6 +4,7 @@ import com.skyrpg.skyblock.SkyBlockRPG;
 import com.skyrpg.skyblock.structure.StructureDefinition;
 import com.skyrpg.skyblock.structure.StructureImportManager;
 import com.skyrpg.skyblock.structure.StructureRegistry;
+import com.skyrpg.skyblock.world.WorldRegionBounds;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
@@ -84,6 +85,34 @@ public final class MapAssemblyManager {
                 || !world.getWorldBorder().contains(origin)
                 || !world.getWorldBorder().contains(new BlockPos((int) maxX, (int) maxY, (int) maxZ)))
             return fail("Map bounds exceed the target world border.");
+
+        WorldRegionBounds requestedBounds;
+        try {
+            requestedBounds = WorldRegionBounds.from(definition.dimension(), origin,
+                    definition.sizeX(), definition.sizeY(), definition.sizeZ());
+        } catch (IllegalArgumentException exception) {
+            return fail("Invalid map allocation bounds: " + exception.getMessage());
+        }
+        for (MapWorldData.Record allocated : data.all()) {
+            if (allocated.mapId().equalsIgnoreCase(definition.id())
+                    || !allocated.dimension().equals(definition.dimension())) continue;
+            MapDefinition allocatedDefinition = MapRegistry.get(allocated.mapId()).orElse(null);
+            if (allocatedDefinition == null) continue;
+            WorldRegionBounds allocatedBounds;
+            try {
+                allocatedBounds = WorldRegionBounds.from(allocated.dimension(),
+                        new BlockPos(allocated.originX(), allocated.originY(), allocated.originZ()),
+                        allocatedDefinition.sizeX(), allocatedDefinition.sizeY(), allocatedDefinition.sizeZ());
+            } catch (IllegalArgumentException exception) {
+                return fail("Cannot safely verify existing map allocation '" + allocated.mapId()
+                        + "': " + exception.getMessage());
+            }
+            if (requestedBounds.overlaps(allocatedBounds)) {
+                return fail("Map area overlaps the reserved area of '" + allocated.mapId()
+                        + "' at " + allocated.originX() + " " + allocated.originY() + " " + allocated.originZ()
+                        + ". Choose a separate destination.");
+            }
+        }
 
         for (MapDefinition.Slice slice : definition.slices()) {
             StructureDefinition structure = StructureRegistry.get(slice.structureId()).orElse(null);
