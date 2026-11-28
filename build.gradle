@@ -121,6 +121,10 @@ tasks.register('prepareBundledMapResources') {
     }
 }
 
+tasks.named('sourcesJar') {
+    dependsOn tasks.named('prepareBundledMapResources')
+}
+
 tasks.named('processResources') {
     dependsOn tasks.named('prepareBundledMapResources')
     inputs.property 'version', project.version
