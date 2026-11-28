@@ -1,6 +1,7 @@
 package com.skyrpg.skyblock.gui;
 
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.economy.BankManager;
 import com.skyrpg.skyblock.hub.HubManager;
 import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
@@ -54,13 +55,21 @@ public final class GuiMenuManager {
         open(player, inventory, "profile", "Your Profile", Map.of(15, "main"));
     }
 
-    private static void openBank(ServerPlayerEntity player) {
+    public static void openBank(ServerPlayerEntity player) {
         var profile = ProfileManager.get(player);
         SimpleInventory inventory = new SimpleInventory(27);
-        set(inventory, 11, Items.GOLD_INGOT, "Purse", profile.getCoins() + " coins");
-        set(inventory, 13, Items.GOLD_BLOCK, "Bank", profile.getBankCoins() + " coins");
-        set(inventory, 15, Items.ARROW, "Back", "Return to the SkyBlock Menu");
-        open(player, inventory, "bank", "Bank", Map.of(15, "main"));
+        Map<Integer, String> actions = new HashMap<>();
+        set(inventory, 4, Items.GOLD_BLOCK, "Bank",
+                "Purse: " + profile.getCoins() + " coins",
+                "Bank balance: " + profile.getBankCoins() + " coins");
+        button(inventory, 10, Items.GOLD_INGOT, "Deposit 100", "Move 100 coins to the Bank", actions, "bank_deposit:100");
+        button(inventory, 11, Items.GOLD_INGOT, "Deposit 1,000", "Move 1,000 coins to the Bank", actions, "bank_deposit:1000");
+        button(inventory, 12, Items.CHEST, "Deposit All", "Move your entire purse to the Bank", actions, "bank_deposit_all");
+        button(inventory, 14, Items.GOLD_NUGGET, "Withdraw 100", "Move 100 coins to your Purse", actions, "bank_withdraw:100");
+        button(inventory, 15, Items.GOLD_NUGGET, "Withdraw 1,000", "Move 1,000 coins to your Purse", actions, "bank_withdraw:1000");
+        button(inventory, 16, Items.BARREL, "Withdraw All", "Move the maximum possible amount to your Purse", actions, "bank_withdraw_all");
+        button(inventory, 22, Items.ARROW, "Back", "Return to the SkyBlock Menu", actions, "main");
+        open(player, inventory, "bank", "Bank", actions);
     }
 
     /** Blacksmith menu backed by the same server-side reforge service as /skyblock reforge roll. */
@@ -186,6 +195,29 @@ public final class GuiMenuManager {
 
     public static void handleClick(ServerPlayerEntity player, String action) {
         if (action == null) return;
+        if (action.startsWith("bank_deposit:") || action.startsWith("bank_withdraw:")) {
+            String[] parts = action.split(":", 2);
+            long amount = Long.parseLong(parts[1]);
+            boolean changed = parts[0].equals("bank_deposit")
+                    ? BankManager.deposit(player, amount) : BankManager.withdraw(player, amount);
+            player.sendMessage(Text.literal(changed
+                    ? (parts[0].equals("bank_deposit") ? "Deposited " : "Withdrew ") + amount + " coins."
+                    : "Bank transfer failed: check your balance and purse/bank limits."), false);
+            openBank(player);
+            return;
+        }
+        if (action.equals("bank_deposit_all") || action.equals("bank_withdraw_all")) {
+            var profile = ProfileManager.get(player);
+            long amount = action.equals("bank_deposit_all") ? profile.getCoins()
+                    : Math.min(profile.getBankCoins(), Long.MAX_VALUE - profile.getCoins());
+            boolean changed = amount > 0 && (action.equals("bank_deposit_all")
+                    ? BankManager.deposit(player, amount) : BankManager.withdraw(player, amount));
+            player.sendMessage(Text.literal(changed
+                    ? (action.equals("bank_deposit_all") ? "Deposited " : "Withdrew ") + amount + " coins."
+                    : "No transferable coins, or the balance limit would be exceeded."), false);
+            openBank(player);
+            return;
+        }
         if (action.startsWith("reforge_roll:")) {
             String slotId = action.substring("reforge_roll:".length());
             EquipmentSlot slot = EquipmentSlot.fromId(slotId).orElse(null);
