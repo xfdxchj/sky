@@ -100,7 +100,7 @@ public final class SkyBlockCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Source: " + map.source()
                             + " | License: " + map.license()), false);
                     return 1;
-                })))
+                }))))
                 .then(HubCommands.command())
                 .then(literal("island")
                         .then(literal("list").executes(context -> {
