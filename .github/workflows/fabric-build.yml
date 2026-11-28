@@ -1,0 +1,36 @@
+name: Fabric Build
+
+on:
+  push:
+    paths:
+      - "src/**"
+      - "build.gradle"
+      - "gradle.properties"
+      - "gradle/**"
+      - "gradlew"
+      - "gradlew.bat"
+      - ".github/workflows/fabric-build.yml"
+      - "worlds/map_datapack/**"
+      - "worlds/structures/gold_mine_modern_version.nbt"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build mod
+        run: ./gradlew build
+      - name: Stage local Gold Mine datapack
+        run: ./gradlew stageGoldMineMapDatapack
+      - name: Upload local map datapack
+        uses: actions/upload-artifact@v4
+        with:
+          name: skyblockrpg-gold-mine-datapack
+          path: build/skyblockrpg-map-datapack/
+          if-no-files-found: error
