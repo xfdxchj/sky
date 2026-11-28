@@ -121,7 +121,7 @@ tasks.register('prepareBundledMapResources') {
     }
 }
 
-tasks.named('sourcesJar') {
+tasks.matching { it.name == 'sourcesJar' }.configureEach {
     dependsOn tasks.named('prepareBundledMapResources')
 }
 
