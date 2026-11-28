@@ -43,15 +43,12 @@ def main():
                 if block is None:
                     unknown.append({"state": rendered, "count": count})
                     continue
-                allowed = {s.get("name"): set(map(str, s.get("values", []))) for s in block.get("states", [])}
-                allowed_names = set(allowed)
+                # PrismarineJS exposes property names/types, but not enumerated values.
+                # Structure palettes may omit default-valued properties, so absence is valid.
+                allowed_names = {state.get("name") for state in block.get("states", []) if state.get("name")}
                 for key, value in props.items():
                     if key not in allowed_names:
                         invalid.append({"state": rendered, "property": key, "value": value, "reason": "unknown_property", "count": count})
-                    elif allowed[key] and value not in allowed[key]:
-                        invalid.append({"state": rendered, "property": key, "value": value, "reason": "unknown_value", "count": count})
-                for key in allowed_names - set(props):
-                    invalid.append({"state": rendered, "property": key, "value": None, "reason": "missing_property", "count": count})
         total_unknown += len(unknown)
         total_invalid += len(invalid)
         results.append({
@@ -78,7 +75,8 @@ def main():
         "invalid_block_state_kinds_total": total_invalid,
         "structures": results,
         "limitations": [
-            "Registry comparison validates block IDs and declared block-state properties, not full game loading.",
+            "Registry comparison validates block IDs and explicitly serialized block-state property names, not full game loading.",
+            "Omitted block-state properties are treated as defaults; PrismarineJS blocks.json does not expose enumerated property values, so value-domain validation is not performed.",
             "DataVersion older than target is a data-fixer/upgrade review flag, not by itself proof of incompatibility.",
             "Block-entity payload schemas and entity behavior require a real 1.21.1 load test.",
             "This report does not validate datapacks, dimensions, world metadata, or redistribution rights."
@@ -98,7 +96,8 @@ def main():
     for r in results:
         lines.append(f"| {r['file']} | {r['data_version']} | {'yes' if r['older_than_target'] else 'no/unknown'} | {r['unknown_block_id_kinds']} | {r['invalid_block_state_kinds']} | {r['block_entities']} | {r['entities']} |")
     lines += ["", "## Interpretation", "",
-        "- Unknown IDs or invalid properties require investigation before import.",
+        "- Unknown IDs or explicitly unknown property names require investigation before import.",
+        "- Omitted state properties are treated as defaults; this registry source does not provide enumerated values for validating explicit property values.",
         "- Older DataVersion is a review flag; Minecraft's data fixer may upgrade old data.",
         "- Non-zero block entities/entities require separate payload and behavior review.",
         "- A clean registry comparison does not replace opening and saving a copy in Minecraft 1.21.1.",
