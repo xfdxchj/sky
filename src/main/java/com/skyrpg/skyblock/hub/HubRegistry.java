@@ -82,6 +82,7 @@ public final class HubRegistry {
     public static List<HubLocationDefinition> nearest(String dimension, double x, double y, double z, int limit) {
         if (limit < 1) return List.of();
         return LOCATIONS.values().stream()
+                .filter(HubLocationDefinition::hasRuntimeCoordinates)
                 .filter(location -> location.dimension().equals(dimension))
                 .sorted(Comparator.comparingDouble((HubLocationDefinition location) -> location.squaredDistance(x, y, z))
                         .thenComparing(HubLocationDefinition::id, String.CASE_INSENSITIVE_ORDER))
