@@ -1,6 +1,8 @@
 package com.skyrpg.skyblock.gui;
 
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.hub.HubManager;
+import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
 import com.skyrpg.skyblock.quest.QuestDefinition;
 import com.skyrpg.skyblock.quest.QuestManager;
@@ -33,6 +35,9 @@ public final class GuiMenuManager {
         button(inventory, 16, Items.EMERALD, "Shop", "Browse registered shop offers", actions, "shop");
         button(inventory, 20, Items.IRON_CHESTPLATE, "Equipment", "View equipped armor and weapon", actions, "equipment");
         button(inventory, 22, Items.AMETHYST_SHARD, "Accessories", "Manage your Accessory Bag", actions, "accessories");
+        button(inventory, 18, Items.GRASS_BLOCK, "Create Private Island", "Create your own persistent island", actions, "island_create");
+        button(inventory, 24, Items.OAK_DOOR, "Private Island Home", "Return to your existing island", actions, "island_home");
+        button(inventory, 26, Items.COMPASS, "Hub", "Return to the public Hub", actions, "hub_visit");
         open(player, inventory, "main", "SkyBlock Menu", actions);
     }
 
@@ -164,6 +169,31 @@ public final class GuiMenuManager {
             case "shop" -> openShop(player);
             case "equipment" -> openEquipment(player);
             case "accessories" -> openAccessories(player);
+            case "island_create" -> {
+                PrivateIslandManager.CreationResult result = PrivateIslandManager.create(player);
+                if (!result.success()) {
+                    player.sendMessage(Text.literal(result.message()), false);
+                    openMain(player);
+                    return;
+                }
+                player.closeHandledScreen();
+                if (!PrivateIslandManager.visitHome(player)) {
+                    player.sendMessage(Text.literal("Island exists, but its spawn could not be reached."), false);
+                    return;
+                }
+                player.sendMessage(Text.literal(result.message()), false);
+            }
+            case "island_home" -> {
+                player.closeHandledScreen();
+                if (!PrivateIslandManager.visitHome(player)) {
+                    player.sendMessage(Text.literal("You do not have a Private Island yet. Use Create Private Island first."), false);
+                }
+            }
+            case "hub_visit" -> {
+                player.closeHandledScreen();
+                HubManager.Result result = HubManager.visit(player);
+                player.sendMessage(Text.literal(result.message()), false);
+            }
             default -> { }
         }
     }
