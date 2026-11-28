@@ -1,6 +1,10 @@
 package com.skyrpg.skyblock.island;
 
 import com.skyrpg.skyblock.world.SkyBlockWorldResolver;
+import com.skyrpg.skyblock.world.WorldRegionBounds;
+import com.skyrpg.skyblock.map.MapDefinition;
+import com.skyrpg.skyblock.map.MapRegistry;
+import com.skyrpg.skyblock.map.MapWorldData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -50,6 +54,30 @@ public final class PrivateIslandManager {
         int centerZ = BASE_Z + row * ISLAND_SPACING;
         if (SURFACE_Y + 8 >= world.getTopY() || SURFACE_Y - THICKNESS - 2 < world.getBottomY()) {
             return new CreationResult(false, false, "The configured private island height is outside this world's build range.", null);
+        }
+
+        WorldRegionBounds islandBounds = new WorldRegionBounds(
+                world.getRegistryKey().getValue().toString(),
+                centerX - RADIUS, SURFACE_Y - THICKNESS - 2, centerZ - RADIUS,
+                centerX + RADIUS, SURFACE_Y + 64, centerZ + RADIUS);
+        for (MapWorldData.Record allocated : MapWorldData.get(player.getServer()).all()) {
+            if (!allocated.dimension().equals(islandBounds.dimension())) continue;
+            MapDefinition map = MapRegistry.get(allocated.mapId()).orElse(null);
+            if (map == null) continue;
+            WorldRegionBounds mapBounds;
+            try {
+                mapBounds = WorldRegionBounds.from(allocated.dimension(),
+                        new BlockPos(allocated.originX(), allocated.originY(), allocated.originZ()),
+                        map.sizeX(), map.sizeY(), map.sizeZ());
+            } catch (IllegalArgumentException exception) {
+                return new CreationResult(false, false,
+                        "Cannot safely verify map allocation '" + allocated.mapId() + "': " + exception.getMessage(), null);
+            }
+            if (islandBounds.overlaps(mapBounds)) {
+                return new CreationResult(false, false,
+                        "Private island allocation overlaps reserved map '" + allocated.mapId()
+                                + "'. No island was created.", null);
+            }
         }
 
         if (!volumeIsClear(world, centerX, centerZ)) {
