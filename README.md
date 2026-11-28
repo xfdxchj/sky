@@ -10,6 +10,7 @@ A single-player, Hypixel SkyBlock-inspired Fabric mod foundation.
 - [VS-3 / VS-4 combat quest test plan](docs/VS3_COMBAT_QUEST_SLICE_TEST_PLAN.md): build and in-game acceptance steps.
 - [World map reconstruction plan](docs/VS_WORLD_MAP_IMPLEMENTATION_PLAN.md): Private Island, Hub and later islands.
 - [Hub map intake and slicing](docs/HUB_MAP_INTAKE_AND_SLICING.md): direct 1.22 map compatibility audit and structure slicing workflow.
+- [In-mod map runtime implementation](docs/MAP_RUNTIME_IMPLEMENTATION.md): opt-in in-JAR map resources and logical map registry foundation.
 - [Core API v3](docs/CORE_API_v3.md): supported integration contract for optional gameplay modules.
 - [Life Skills specification](docs/LIFE_SKILLS_MOD_SPEC.md): Mining, Fishing, Farming and Foraging extension requirements.
 - [Core API v3 test plan](docs/CORE_API_v3_TEST_PLAN.md): integration and regression checklist.
