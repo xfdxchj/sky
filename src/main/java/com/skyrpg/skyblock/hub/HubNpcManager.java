@@ -13,17 +13,35 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-/** Manual, map-relative Hub NPC placement. Wiki POI coordinates are intentionally never used as spawn coordinates. */
+/** Hub NPC placement from either an operator's current position or a measured project-local POI anchor. */
 public final class HubNpcManager {
     public record Result(boolean success, String message) {}
     private static final String POI_TAG_PREFIX = "skyblockrpg_hub_poi_";
     private HubNpcManager() {}
 
     public static Result place(ServerPlayerEntity player, String poiId, String npcId) {
+        if (player == null) return fail("A server player is required.");
+        return placeAt(player, poiId, npcId, player.getX(), player.getY(), player.getZ(), player.getYaw(), 0.0F, true);
+    }
+
+    public static Result placeAtAnchor(ServerPlayerEntity player, String poiId, String npcId) {
+        if (player == null || player.getServer() == null) return fail("A server player is required.");
+        HubPoiWorldData.Anchor anchor = HubPoiWorldData.get(player.getServer()).get(poiId);
+        if (anchor == null) return fail("No measured runtime anchor exists for POI '" + poiId
+                + "'. Record it first with /skyblock hub anchor " + poiId + ".");
+        String currentDimension = player.getServerWorld().getRegistryKey().getValue().toString();
+        if (!currentDimension.equals(anchor.dimension()))
+            return fail("The POI anchor is in " + anchor.dimension() + "; enter that dimension before placing its NPC.");
+        return placeAt(player, poiId, npcId, anchor.x(), anchor.y(), anchor.z(), anchor.yaw(), anchor.pitch(), false);
+    }
+
+    private static Result placeAt(ServerPlayerEntity player, String poiId, String npcId,
+                                  double x, double y, double z, float yaw, float pitch, boolean requirePlayerAtLocation) {
         if (player == null || player.getServer() == null) return fail("A server player is required.");
         HubLocationDefinition poi = HubRegistry.get(poiId).orElse(null);
         if (poi == null || !poi.category().equals("npc")) return fail("Unknown Hub NPC point of interest: " + poiId);
@@ -33,18 +51,27 @@ public final class HubNpcManager {
         MapWorldData.Record record = MapWorldData.get(player.getServer()).get("hub");
         if (map == null || record == null || record.status() != MapWorldData.Status.COMPLETE)
             return fail("Hub map must be fully assembled before placing NPCs.");
-        String dimension = player.getServerWorld().getRegistryKey().getValue().toString();
+
+        ServerWorld world = player.getServerWorld();
+        String dimension = world.getRegistryKey().getValue().toString();
         if (!dimension.equals(record.dimension()) || !dimension.equals(poi.dimension()))
-            return fail("Stand inside the assembled Hub map in its configured dimension.");
-        BlockPos pos = player.getBlockPos();
+            return fail("The NPC location must be in the assembled Hub map's configured dimension.");
+        BlockPos pos = BlockPos.ofFloored(x, y, z);
         if (pos.getX() < record.originX() || pos.getX() >= (long) record.originX() + map.sizeX()
                 || pos.getY() < record.originY() || pos.getY() >= (long) record.originY() + map.sizeY()
                 || pos.getZ() < record.originZ() || pos.getZ() >= (long) record.originZ() + map.sizeZ())
-            return fail("You must stand inside the assembled Hub map. The POI reference coordinates are not local spawn coordinates.");
-        var world = player.getServerWorld();
+            return fail("NPC location is outside the assembled Hub map bounds.");
+        if (requirePlayerAtLocation) {
+            BlockPos playerPos = player.getBlockPos();
+            if (playerPos.getX() < record.originX() || playerPos.getX() >= (long) record.originX() + map.sizeX()
+                    || playerPos.getY() < record.originY() || playerPos.getY() >= (long) record.originY() + map.sizeY()
+                    || playerPos.getZ() < record.originZ() || playerPos.getZ() >= (long) record.originZ() + map.sizeZ())
+                return fail("You must stand inside the assembled Hub map. The POI reference coordinates are not local spawn coordinates.");
+        }
         if (!world.getBlockState(pos.down()).isSolidBlock(world, pos.down())
                 || !world.getBlockState(pos).isAir() || !world.getBlockState(pos.up()).isAir())
-            return fail("NPC placement requires a solid floor and two clear blocks above your feet.");
+            return fail("NPC placement requires a solid floor and two clear blocks above the recorded feet position.");
+
         HubNpcWorldData placements = HubNpcWorldData.get(player.getServer());
         HubNpcWorldData.Placement existing = placements.get(poi.id());
         if (existing != null) {
@@ -58,7 +85,7 @@ public final class HubNpcManager {
         if (type == null) return fail("Unknown configured entity type: " + npc.entityType());
         Entity entity = type.create(world);
         if (!(entity instanceof LivingEntity)) return fail("Configured NPC entity must be living: " + npc.entityType());
-        entity.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), player.getYaw(), 0.0F);
+        entity.refreshPositionAndAngles(x, y, z, yaw, pitch);
         entity.addCommandTag(NpcManager.entityTag(npc.id()));
         entity.addCommandTag(poiTag);
         entity.setCustomName(Text.literal(npc.displayName()));
@@ -72,7 +99,8 @@ public final class HubNpcManager {
         SkyBlockRPG.LOGGER.info("Placed Hub NPC '{}' ({}) UUID {} at {} in {}.",
                 npc.id(), poi.id(), entity.getUuidAsString(), pos, dimension);
         return new Result(true, "Placed " + npc.displayName() + " for Hub POI '" + poi.displayName()
-                + "'. Its UUID is recorded in world data to prevent duplicate placement across unloaded chunks and restarts.");
+                + "' at " + String.format(java.util.Locale.ROOT, "%.1f, %.1f, %.1f", x, y, z)
+                + ". Its UUID is recorded in world data.");
     }
 
     private static Result fail(String message) { return new Result(false, message); }
