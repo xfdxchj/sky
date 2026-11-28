@@ -16,7 +16,7 @@ public record NpcDefinition(
             throw new IllegalArgumentException("NPC interaction_radius must be > 0 and <= 16");
         dialogue = dialogue == null ? List.of() : List.copyOf(dialogue);
         action = action == null ? "none" : action.toLowerCase(Locale.ROOT);
-        if (!List.of("none", "bank", "shop", "warp", "quest_board").contains(action))
+        if (!List.of("none", "bank", "shop", "warp", "quest_board", "reforge").contains(action))
             throw new IllegalArgumentException("Unsupported NPC action: " + action);
         actionTarget = actionTarget == null ? "" : actionTarget;
         if (action.equals("warp") && actionTarget.isBlank())
