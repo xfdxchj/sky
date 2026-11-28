@@ -24,6 +24,7 @@ import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.island.StarterGraveyardManager;
 import com.skyrpg.skyblock.structure.StructureRegistry;
+import com.skyrpg.skyblock.map.MapRegistry;
 import com.skyrpg.skyblock.connection.ConnectionRegistry;
 import com.skyrpg.skyblock.hub.HubRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
@@ -70,6 +71,7 @@ public final class SkyBlockRPG implements ModInitializer {
             ConnectionRegistry.reload(server.getResourceManager());
             IslandRegistry.reload(server.getResourceManager());
             StructureRegistry.reload(server.getResourceManager());
+            MapRegistry.reload(server.getResourceManager());
             NpcRegistry.reload(server.getResourceManager());
             QuestRegistry.reload(server.getResourceManager());
             StarterGraveyardManager.ensure(server.getOverworld());
