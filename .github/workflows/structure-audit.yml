@@ -23,7 +23,9 @@ jobs:
         run: python -m py_compile tools/inspect_structure_nbt.py tools/summarize_structure_audit.py tools/audit_structure_compat.py
 
       - name: Download Minecraft 1.21.1 block registry
-        run: curl --fail --location --retry 3 https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.1/blocks.json --output reports/minecraft_1.21.1_blocks.json
+        run: |
+          mkdir -p reports
+          curl --fail --location --retry 3 https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.1/blocks.json --output reports/minecraft_1.21.1_blocks.json
 
       - name: Run structure audit
         run: python tools/inspect_structure_nbt.py worlds/structures --output reports/structure_audit.json
