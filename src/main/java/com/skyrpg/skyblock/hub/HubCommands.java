@@ -18,7 +18,7 @@ public final class HubCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Hub | Map: "
                             + (MapRegistry.get("hub").isPresent() ? "loaded" : "not loaded")
                             + " | Points of interest: " + HubRegistry.all().size()
-                            + " | Spawn: " + (HubManager.isConfigured(context.getSource().getPlayer()) ? "configured" : "not configured")), false);
+                            + " | Spawn: " + (HubWorldData.get(context.getSource().getServer()).getSpawn() != null ? "configured" : "not configured")), false);
                     return 1;
                 })
                 .then(literal("status").executes(context -> {
@@ -30,7 +30,7 @@ public final class HubCommands {
                     source.sendFeedback(() -> Text.literal("Assembly: " + (record == null ? "NOT STARTED" : record.status()
                             + " | origin " + record.originX() + " " + record.originY() + " " + record.originZ())), false);
                     source.sendFeedback(() -> Text.literal("Safe spawn: " +
-                            (source.getPlayer() != null && HubManager.isConfigured(source.getPlayer()) ? "CONFIGURED" : "NOT CONFIGURED")), false);
+                            (HubWorldData.get(source.getServer()).getSpawn() != null ? "CONFIGURED" : "NOT CONFIGURED")), false);
                     source.sendFeedback(() -> Text.literal("First-join/rejoin routing activates only when the map is COMPLETE and a safe spawn is saved."), false);
                     return 1;
                 }))
