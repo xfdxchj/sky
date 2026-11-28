@@ -7,6 +7,7 @@ import com.skyrpg.skyblock.map.MapWorldData;
 import com.skyrpg.skyblock.npc.NpcDefinition;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.npc.NpcRegistry;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
