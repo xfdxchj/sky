@@ -78,3 +78,14 @@ After the Hub map is assembled, an operator can stand at the actual in-map locat
 The command rejects positions outside the assembled Hub bounds, in another dimension, or before map assembly is COMPLETE. Anchors store dimension, exact position and facing. They can be inspected with `/skyblock hub info <poiId>`, listed with `/skyblock hub list`, and used by `/skyblock hub locate <poiId>` and `/skyblock hub nearest`. Anchors are project-local measurements; they do not claim to be derived from Wiki coordinates.
 
 The anchor workflow is implemented but the actual Hub map still needs in-game inspection and manual measurement. No production Village, NPC or service coordinates are bundled as guessed values.
+
+
+## Placing NPCs at measured POI anchors
+
+After recording a runtime anchor for an NPC POI, operators can place its configured NPC directly at that saved position without standing there again:
+
+```mcfunction
+/skyblock hub place-npc-at-anchor banker_npc hub_banker
+```
+
+The command requires the player to be in the anchor's dimension, verifies the anchor remains inside the completed Hub map bounds, checks the floor and two-block clearance, and uses the recorded facing. It shares the same persistent duplicate guard as manual placement. The existing `/skyblock hub place-npc <poiId> <npcId>` command remains available for manual placement when no anchor has been recorded.
