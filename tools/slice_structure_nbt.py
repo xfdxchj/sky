@@ -187,7 +187,7 @@ def slice_structure(source: Path, out_dir: Path, sx: int, sy: int, sz: int):
                         if list_tag == 6 and len(coords) == 3:
                             e["pos"] = (9, (6, [coords[0]-ox, coords[1]-oy, coords[2]-oz]))
                     local_entities.append(e)
-                out_root = copy.deepcopy(root)
+                out_root = dict(root)  # Share immutable palette/data tags; replace only sliced lists
                 set_tag(out_root, "size", 11, list(actual))
                 set_tag(out_root, "blocks", 9, (10, local_blocks))
                 if entities_item: set_tag(out_root, "entities", 9, (10, local_entities))
