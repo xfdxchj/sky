@@ -1,10 +1,10 @@
 package com.skyrpg.skyblock.island;
 
+import com.skyrpg.skyblock.world.SkyBlockWorldResolver;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.Set;
 
@@ -27,6 +27,12 @@ public final class PrivateIslandManager {
         if (player == null || player.getServer() == null) {
             return new CreationResult(false, false, "A server player is required.", null);
         }
+        ServerWorld world = SkyBlockWorldResolver.resolve(player.getServer());
+        if (world == null) {
+            return new CreationResult(false, false,
+                    "Private Islands require the dedicated void-based SkyBlock world preset. No island was created.", null);
+        }
+
         PrivateIslandWorldData data = PrivateIslandWorldData.get(player.getServer());
         PrivateIslandRecord existing = data.get(player.getUuid());
         if (existing != null) {
@@ -42,7 +48,6 @@ public final class PrivateIslandManager {
         int row = slot / GRID_COLUMNS;
         int centerX = BASE_X + column * ISLAND_SPACING;
         int centerZ = BASE_Z + row * ISLAND_SPACING;
-        ServerWorld world = player.getServer().getOverworld();
         if (SURFACE_Y + 8 >= world.getTopY() || SURFACE_Y - THICKNESS - 2 < world.getBottomY()) {
             return new CreationResult(false, false, "The configured private island height is outside this world's build range.", null);
         }
@@ -53,8 +58,6 @@ public final class PrivateIslandManager {
                     "The reserved sky volume is not clear. That allocation slot was skipped; run the create command again.", null);
         }
 
-        // The main island is offset to the west; the secondary island hosts the cave,
-        // starter chest, Jerry, decorative Hub portal and a visual Minion pedestal.
         double spawnX = centerX - 14.5;
         double spawnY = SURFACE_Y + 6.0;
         double spawnZ = centerZ + 0.5;
@@ -86,7 +89,8 @@ public final class PrivateIslandManager {
         if (dimensionId == null) return false;
         var key = net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.WORLD, dimensionId);
         ServerWorld target = player.getServer().getWorld(key);
-        if (target == null || island.spawnY() < target.getBottomY() || island.spawnY() >= target.getTopY()) return false;
+        if (target == null || !SkyBlockWorldResolver.isSkyBlockWorld(target)
+                || island.spawnY() < target.getBottomY() || island.spawnY() >= target.getTopY()) return false;
         BlockPos spawn = BlockPos.ofFloored(island.spawnX(), island.spawnY(), island.spawnZ());
         if (!target.getWorldBorder().contains(spawn)) return false;
         player.teleport(target, island.spawnX(), island.spawnY(), island.spawnZ(), Set.of(), player.getYaw(), player.getPitch());
