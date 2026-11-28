@@ -4,6 +4,9 @@ import com.skyrpg.skyblock.profile.ProfileManager;
 import com.skyrpg.skyblock.hub.HubManager;
 import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
+import com.skyrpg.skyblock.reforge.ReforgeDefinition;
+import com.skyrpg.skyblock.reforge.ReforgeManager;
+import com.skyrpg.skyblock.reforge.ReforgeRegistry;
 import com.skyrpg.skyblock.quest.QuestDefinition;
 import com.skyrpg.skyblock.quest.QuestManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
@@ -58,6 +61,48 @@ public final class GuiMenuManager {
         set(inventory, 13, Items.GOLD_BLOCK, "Bank", profile.getBankCoins() + " coins");
         set(inventory, 15, Items.ARROW, "Back", "Return to the SkyBlock Menu");
         open(player, inventory, "bank", "Bank", Map.of(15, "main"));
+    }
+
+    /** Blacksmith menu backed by the same server-side reforge service as /skyblock reforge roll. */
+    public static void openBlacksmith(ServerPlayerEntity player) {
+        var profile = ProfileManager.get(player);
+        var data = profile.getInventory();
+        SimpleInventory inventory = new SimpleInventory(27);
+        Map<Integer, String> actions = new HashMap<>();
+        EquipmentSlot[] slots = {EquipmentSlot.WEAPON, EquipmentSlot.HELMET, EquipmentSlot.CHESTPLATE,
+                EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS};
+        int[] positions = {10, 12, 14, 16, 22};
+        Item[] icons = {Items.IRON_SWORD, Items.IRON_HELMET, Items.IRON_CHESTPLATE,
+                Items.IRON_LEGGINGS, Items.IRON_BOOTS};
+        set(inventory, 4, Items.ANVIL, "Blacksmith",
+                "Select an equipped item to roll a random compatible reforge.",
+                "The displayed price range depends on the available reforge pool.",
+                "Reforging replaces the item's current reforge.");
+        for (int i = 0; i < slots.length; i++) {
+            EquipmentSlot slot = slots[i];
+            String itemId = data.getEquipment().get(slot);
+            if (itemId == null) {
+                set(inventory, positions[i], Items.BARRIER, slot.id(), "No item equipped");
+                continue;
+            }
+            var pool = ReforgeRegistry.forSlot(slot.id());
+            long minCost = pool.stream().mapToLong(ReforgeDefinition::cost).min().orElse(0L);
+            long maxCost = pool.stream().mapToLong(ReforgeDefinition::cost).max().orElse(0L);
+            String currentId = data.getReforge(slot);
+            String currentName = ReforgeRegistry.get(currentId).map(ReforgeDefinition::name)
+                    .orElse(currentId == null ? "None" : currentId);
+            set(inventory, positions[i], icons[i], slot.id(),
+                    "Equipped: " + itemId,
+                    "Current reforge: " + currentName,
+                    "Compatible reforges: " + pool.size(),
+                    pool.isEmpty() ? "No reforge data available"
+                            : "Roll cost: " + minCost + (minCost == maxCost ? "" : " - " + maxCost) + " coins",
+                    "Click to roll");
+            if (!pool.isEmpty()) actions.put(positions[i], "reforge_roll:" + slot.id());
+        }
+        set(inventory, 26, Items.ARROW, "Close", "Close the Blacksmith menu");
+        actions.put(26, "close");
+        open(player, inventory, "blacksmith", "Blacksmith", actions);
     }
 
     private static void openQuests(ServerPlayerEntity player) {
@@ -141,6 +186,28 @@ public final class GuiMenuManager {
 
     public static void handleClick(ServerPlayerEntity player, String action) {
         if (action == null) return;
+        if (action.startsWith("reforge_roll:")) {
+            String slotId = action.substring("reforge_roll:".length());
+            EquipmentSlot slot = EquipmentSlot.fromId(slotId).orElse(null);
+            if (slot == null || slot == EquipmentSlot.ACCESSORY) {
+                player.sendMessage(Text.literal("Invalid equipment slot."), false);
+                openBlacksmith(player);
+                return;
+            }
+            ReforgeManager.Result result = ReforgeManager.roll(player, slot);
+            if (result == ReforgeManager.Result.SUCCESS) {
+                String id = ProfileManager.get(player).getInventory().getReforge(slot);
+                ReforgeDefinition reforge = ReforgeRegistry.get(id).orElse(null);
+                player.sendMessage(Text.literal("Blacksmith applied "
+                        + (reforge == null ? id : reforge.name()) + " to " + slot.id()
+                        + (reforge == null ? "." : " for " + reforge.cost() + " coins.")), false);
+            } else {
+                player.sendMessage(Text.literal("Reforge failed: "
+                        + result.name().toLowerCase(java.util.Locale.ROOT).replace('_', ' ')), false);
+            }
+            openBlacksmith(player);
+            return;
+        }
         if (action.startsWith("accessory_remove:")) {
             String itemId = action.substring("accessory_remove:".length());
             var profile = ProfileManager.get(player);
@@ -165,6 +232,8 @@ public final class GuiMenuManager {
             case "main" -> openMain(player);
             case "profile" -> openProfile(player);
             case "bank" -> openBank(player);
+            case "blacksmith" -> openBlacksmith(player);
+            case "close" -> player.closeHandledScreen();
             case "quests" -> openQuests(player);
             case "shop" -> openShop(player);
             case "equipment" -> openEquipment(player);
