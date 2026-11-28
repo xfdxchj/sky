@@ -25,6 +25,7 @@ import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.island.StarterGraveyardManager;
 import com.skyrpg.skyblock.structure.StructureRegistry;
 import com.skyrpg.skyblock.map.MapRegistry;
+import com.skyrpg.skyblock.map.MapAssemblyManager;
 import com.skyrpg.skyblock.connection.ConnectionRegistry;
 import com.skyrpg.skyblock.hub.HubRegistry;
 import com.skyrpg.skyblock.npc.NpcRegistry;
@@ -72,6 +73,7 @@ public final class SkyBlockRPG implements ModInitializer {
             IslandRegistry.reload(server.getResourceManager());
             StructureRegistry.reload(server.getResourceManager());
             MapRegistry.reload(server.getResourceManager());
+            MapAssemblyManager.recover(server);
             NpcRegistry.reload(server.getResourceManager());
             QuestRegistry.reload(server.getResourceManager());
             StarterGraveyardManager.ensure(server.getOverworld());
@@ -79,6 +81,7 @@ public final class SkyBlockRPG implements ModInitializer {
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            MapAssemblyManager.tick(server);
             StatEffectManager.tick(server);
             for (net.minecraft.server.network.ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 RegionManager.tick(player);
@@ -120,6 +123,7 @@ public final class SkyBlockRPG implements ModInitializer {
         });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            MapAssemblyManager.clear();
             RegionManager.clear();
             PlayerHealthManager.clear();
             PlayerHealthRegenManager.clear();
