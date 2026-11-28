@@ -459,3 +459,18 @@ Mod 构建、资源整理、配置、默认存档、安装说明、版本说明�
 - [x] 加入装饰性 Hub Portal 与 Minion 展示底座（均非功能实现，已在文档标明）。
 - [ ] 最新提交后重新执行 Gradle build。
 - [ ] runClient 验收首次生成、箱子物品、Jerry 交互、保护边界和重连不重复生成。
+
+
+### P5 地图内置组装进度补充（2026-11-28）
+
+- [x] 将地图资源交付方向改为 Mod JAR 内资源（社区资产仅本地/私有构建 opt-in，许可未确认前不默认公开打包）。
+- [x] Hub NBT 构建时切成 48 个 vanilla structure slices，并生成逻辑地图 manifest。
+- [x] 新增 MapRegistry / MapDefinition，验证结构引用、切片边界、不重叠与完整覆盖。
+- [x] 新增 MapWorldData / MapAssemblyManager：整图空气预检、分 tick 放置、保存检查点和安全恢复策略。
+- [x] 新增 /skyblock map generate 与 /skyblock map status 管理命令。
+- [x] 移除 CI 的外置 datapack staging / artifact 上传步骤及 Gradle 导出任务。
+- [ ] 本地构建与游戏内验证地图生成、预检失败保护和重启恢复。
+- [ ] 实测 Hub NBT 源坐标框架、生产目标原点与 POI 坐标变换。
+- [ ] 根据真实地图测量结果调整 Hub POI / Region / Warp / NPC 坐标。
+- [ ] 完成地图自动首次生成、首次进入 Hub 路由与功能实体恢复。
+- [ ] 核验社区地图再分发许可，未授权前不得公开发布内置地图的 JAR。
