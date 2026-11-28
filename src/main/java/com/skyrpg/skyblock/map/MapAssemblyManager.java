@@ -1,6 +1,8 @@
 package com.skyrpg.skyblock.map;
 
 import com.skyrpg.skyblock.SkyBlockRPG;
+import com.skyrpg.skyblock.island.PrivateIslandRecord;
+import com.skyrpg.skyblock.island.PrivateIslandWorldData;
 import com.skyrpg.skyblock.structure.StructureDefinition;
 import com.skyrpg.skyblock.structure.StructureImportManager;
 import com.skyrpg.skyblock.structure.StructureRegistry;
@@ -92,6 +94,18 @@ public final class MapAssemblyManager {
                     definition.sizeX(), definition.sizeY(), definition.sizeZ());
         } catch (IllegalArgumentException exception) {
             return fail("Invalid map allocation bounds: " + exception.getMessage());
+        }
+        for (PrivateIslandRecord island : PrivateIslandWorldData.get(server).all()) {
+            if (!island.dimension().equals(definition.dimension())) continue;
+            WorldRegionBounds islandBounds = new WorldRegionBounds(island.dimension(),
+                    island.centerX() - island.radius(), island.surfaceY() - island.thickness() - 2,
+                    island.centerZ() - island.radius(),
+                    island.centerX() + island.radius(), island.surfaceY() + 64,
+                    island.centerZ() + island.radius());
+            if (requestedBounds.overlaps(islandBounds)) {
+                return fail("Map area overlaps a reserved private island owned by "
+                        + island.ownerId() + ". Choose a separate destination.");
+            }
         }
         for (MapWorldData.Record allocated : data.all()) {
             if (allocated.mapId().equalsIgnoreCase(definition.id())
