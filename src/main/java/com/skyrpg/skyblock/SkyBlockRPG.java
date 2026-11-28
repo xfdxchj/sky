@@ -27,6 +27,7 @@ import com.skyrpg.skyblock.map.MapRegistry;
 import com.skyrpg.skyblock.map.MapAssemblyManager;
 import com.skyrpg.skyblock.connection.ConnectionRegistry;
 import com.skyrpg.skyblock.hub.HubRegistry;
+import com.skyrpg.skyblock.hub.HubManager;
 import com.skyrpg.skyblock.npc.NpcRegistry;
 import com.skyrpg.skyblock.npc.NpcManager;
 import com.skyrpg.skyblock.quest.QuestRegistry;
@@ -144,19 +145,23 @@ public final class SkyBlockRPG implements ModInitializer {
             PlayerHealthManager.onJoin(player);
             PlayerHealthRegenManager.onJoin(player);
 
-            // Joining the game never creates a Private Island. The intended
-            // opening flow starts in the public Hub; players create their island
-            // explicitly from the Hub when they choose to do so.
-            if (PrivateIslandManager.get(player) == null) {
-                player.sendMessage(Text.literal(
-                        "Welcome to SkyBlock. Visit the Hub and choose Create Private Island when you are ready."
-                ), false);
+            // Hub routing is deliberately gated by a completed map assembly and
+            // a separately validated, persistent landing point. Until then we
+            // leave the player at the preset's safe spawn instead of guessing.
+            HubManager.Result hubResult = HubManager.visit(player);
+            if (!hubResult.success()) {
+                player.sendMessage(Text.literal("Welcome to SkyBlock. " + hubResult.message()), false);
+                if (PrivateIslandManager.get(player) == null) {
+                    player.sendMessage(Text.literal(
+                            "Your Private Island is not created yet. Once Hub is ready, choose Create Private Island there."
+                    ), false);
+                }
             }
 
             LOGGER.info("Loaded SkyBlock profile for {} ({}).",
                     player.getName().getString(), profile.getPlayerId());
         });
 
-        LOGGER.info("{} v{} initialized. P5.4 Private Island foundation is ready.", MOD_NAME, "0.1.0-alpha.3");
+        LOGGER.info("{} v{} initialized. Hub-first routing is gated by validated Hub map data.", MOD_NAME, "0.1.0-alpha.3");
     }
 }
