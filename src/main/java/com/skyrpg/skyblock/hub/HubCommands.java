@@ -44,6 +44,30 @@ public final class HubCommands {
                     context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
                     return 1;
                 }))
+                .then(literal("npc")
+                        .then(literal("list").executes(context -> {
+                            var placements = HubNpcWorldData.get(context.getSource().getServer()).all();
+                            context.getSource().sendFeedback(() -> Text.literal("Registered Hub NPC placements: " + placements.size()), false);
+                            for (HubNpcWorldData.Placement placement : placements) {
+                                context.getSource().sendFeedback(() -> Text.literal(placement.poiId() + " | "
+                                        + placement.npcId() + " | UUID " + placement.entityUuid()
+                                        + " | " + placement.dimension() + " "
+                                        + format(placement.x(), placement.y(), placement.z())), false);
+                            }
+                            return 1;
+                        }))
+                        .then(literal("forget").requires(source -> source.hasPermissionLevel(2))
+                                .then(argument("poiId", StringArgumentType.word()).executes(context -> {
+                                    String poiId = StringArgumentType.getString(context, "poiId");
+                                    boolean removed = HubNpcWorldData.get(context.getSource().getServer()).remove(poiId);
+                                    if (!removed) {
+                                        context.getSource().sendError(Text.literal("No persistent NPC placement is registered for POI: " + poiId));
+                                        return 0;
+                                    }
+                                    context.getSource().sendFeedback(() -> Text.literal("Forgot the NPC placement record for '" + poiId
+                                            + "'. Ensure the old entity was removed manually before placing a replacement."), false);
+                                    return 1;
+                                }))))
                 .then(literal("place-npc").requires(source -> source.hasPermissionLevel(2))
                         .then(argument("poiId", StringArgumentType.word())
                                 .then(argument("npcId", StringArgumentType.word()).executes(context -> {
