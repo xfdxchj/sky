@@ -20,13 +20,19 @@ jobs:
           python-version: "3.12"
 
       - name: Compile audit tools
-        run: python -m py_compile tools/inspect_structure_nbt.py tools/summarize_structure_audit.py
+        run: python -m py_compile tools/inspect_structure_nbt.py tools/summarize_structure_audit.py tools/audit_structure_compat.py
+
+      - name: Download Minecraft 1.21.1 block registry
+        run: curl --fail --location --retry 3 https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.1/blocks.json --output reports/minecraft_1.21.1_blocks.json
 
       - name: Run structure audit
         run: python tools/inspect_structure_nbt.py worlds/structures --output reports/structure_audit.json
 
       - name: Summarize structure audit
         run: python tools/summarize_structure_audit.py reports/structure_audit.json --markdown reports/structure_audit_summary.md
+
+      - name: Audit Minecraft 1.21.1 block compatibility
+        run: python tools/audit_structure_compat.py reports/structure_audit.json --registry reports/minecraft_1.21.1_blocks.json --json reports/structure_compatibility.json --markdown reports/structure_compatibility.md
 
       - name: Upload audit reports
         uses: actions/upload-artifact@v4
@@ -35,3 +41,5 @@ jobs:
           path: |
             reports/structure_audit.json
             reports/structure_audit_summary.md
+            reports/structure_compatibility.json
+            reports/structure_compatibility.md
