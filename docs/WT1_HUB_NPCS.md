@@ -21,7 +21,7 @@ The Hub structure NBT contains no entity records. The Hub POI catalogue stores p
 | `banker_npc` | `hub_banker` | Existing bank balance interaction |
 | `bartender_npc` | `hub_bartender` | Display/interact only |
 | `bazaar_agent_npc` | `hub_bazaar_agent` | Display/interact only; Bazaar system is not implemented yet |
-| `blacksmith_npc` | `hub_blacksmith` | Display/interact only; Hub Blacksmith services are not implemented yet |
+| `blacksmith_npc` | `hub_blacksmith` | Reforge GUI; current reforge pool is test-fixture-only |
 | `maddox_npc` | `hub_maddox` | Display/interact only; Slayer service integration is pending |
 | `angler_angus_npc` | `hub_angler_angus` | Display/interact only; Fishing extension integration is pending |
 | `scoop_npc` | `hub_scoop` | Display/interact only |
