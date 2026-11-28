@@ -6,6 +6,7 @@ import com.skyrpg.skyblock.item.ItemDefinition;
 import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.profile.PlayerProfile;
 import com.skyrpg.skyblock.profile.ProfileManager;
+import com.skyrpg.skyblock.gui.GuiMenuManager;
 import com.skyrpg.skyblock.region.RegionDefinition;
 import com.skyrpg.skyblock.region.RegionManager;
 import com.skyrpg.skyblock.warp.WarpManager;
@@ -63,6 +64,7 @@ public final class NpcManager {
     private static void runAction(ServerPlayerEntity player, NpcDefinition npc) {
         PlayerProfile profile = ProfileManager.get(player);
         switch (npc.action()) {
+            case "reforge" -> GuiMenuManager.openBlacksmith(player);
             case "bank" -> player.sendMessage(Text.literal(
                     "Bank | Purse: " + profile.getCoins() + " coins | Bank: " + profile.getBankCoins() + " coins"
                             + " | Use /skyblock bank deposit <amount> or withdraw <amount>."), false);
