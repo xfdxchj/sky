@@ -124,9 +124,32 @@ def xyz(value: Any, field: str):
         raise NBTError(f"{field} must be a 3-element int array")
     return tuple(int(v) for v in value)
 
+def read_size(root: dict):
+    item = root.get("size")
+    if item is None:
+        raise NBTError("Structure has no size tag")
+    tag, value = item
+    if tag == 11:
+        return xyz(value, "size")
+    if tag == 9:
+        child_tag, values = value
+        if child_tag != 3 or len(values) != 3:
+            raise NBTError("size list must contain exactly three TAG_Int values")
+        return tuple(int(v) for v in values)
+    raise NBTError(f"Unsupported size tag: {tag}")
+
+
+def write_size(root: dict, original_tag: int, size: tuple[int, int, int]):
+    if original_tag == 9:
+        set_tag(root, "size", 9, (3, list(size)))
+    else:
+        set_tag(root, "size", 11, list(size))
+
+
 def slice_structure(source: Path, out_dir: Path, sx: int, sy: int, sz: int):
     name, root = read_nbt(source)
-    size = xyz(get(root, "size", 11), "size")
+    size_tag = root["size"][0]
+    size = read_size(root)
     if any(v <= 0 for v in size): raise NBTError(f"Invalid structure size: {size}")
     blocks = get(root, "blocks", 9)
     if blocks is None: raise NBTError("Structure has no blocks list")
@@ -188,7 +211,7 @@ def slice_structure(source: Path, out_dir: Path, sx: int, sy: int, sz: int):
                             e["pos"] = (9, (6, [coords[0]-ox, coords[1]-oy, coords[2]-oz]))
                     local_entities.append(e)
                 out_root = dict(root)  # Share immutable palette/data tags; replace only sliced lists
-                set_tag(out_root, "size", 11, list(actual))
+                write_size(out_root, size_tag, actual)
                 set_tag(out_root, "blocks", 9, (10, local_blocks))
                 if entities_item: set_tag(out_root, "entities", 9, (10, local_entities))
                 filename = f"hub_x{ix:02d}_y{iy:02d}_z{iz:02d}.nbt"
@@ -215,7 +238,7 @@ def self_test():
     # all block coordinates reconstruct exactly from local position + offset.
     import tempfile
     root = {
-        "DataVersion": (3, 3955), "size": (11, [5,3,4]),
+        "DataVersion": (3, 3955), "size": (9, (3, [5,3,4])),
         "palette": (9, (10, [{"Name": (8,"minecraft:stone")}])),
         "blocks": (9, (10, [
             {"pos": (11,[0,0,0]), "state": (3,0)},
