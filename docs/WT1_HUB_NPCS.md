@@ -48,7 +48,7 @@ Do not use the Wiki POI XYZ values as the placement coordinates. They are refere
 | `angler_angus_npc` | `hub_angler_angus` | Display/interact shell; Fishing extension integration pending |
 | `scoop_npc` | `hub_scoop` | Display/interact shell |
 
-The placement duplicate guard currently checks only the nearby loaded area. It is not a global POI registry and does not provide cross-chunk duplicate prevention or an admin remove/repair workflow.
+The world-persistent placement registry prevents duplicate placement for a POI even when its entity chunk is unloaded or the server restarts. `/skyblock hub npc list` shows registered UUIDs; `/skyblock hub npc forget <poiId>` clears a stale record only after the old entity has been manually removed. The registry stores absolute world coordinates (not map-local coordinates).
 
 
 ## Persistent placement registry (2026-11-28)
@@ -61,3 +61,20 @@ Admin commands:
 - `/skyblock hub npc forget <poiId>` — remove a stale placement record after the old entity has been manually removed.
 
 The registry intentionally does not silently respawn missing entities: an unloaded chunk and a deleted entity cannot safely be distinguished without loading/altering world chunks. Administrators must remove the old entity first, then clear its record before replacing it. This closes the duplicate-across-unloaded-chunks hole, but automatic entity reconciliation and a global removal workflow remain future work.
+
+
+## Measured runtime POI anchors
+
+Static POI XYZ values remain reference metadata and are never treated as coordinates in the imported NBT. The project now stores measured anchors separately in world-persistent state `skyblockrpg_hub_poi_anchors`.
+
+After the Hub map is assembled, an operator can stand at the actual in-map location (on a solid floor with two clear blocks) and run:
+
+```mcfunction
+/skyblock hub anchor village
+/skyblock hub anchor banker_npc
+/skyblock hub anchor clear banker_npc
+```
+
+The command rejects positions outside the assembled Hub bounds, in another dimension, or before map assembly is COMPLETE. Anchors store dimension, exact position and facing. They can be inspected with `/skyblock hub info <poiId>`, listed with `/skyblock hub list`, and used by `/skyblock hub locate <poiId>` and `/skyblock hub nearest`. Anchors are project-local measurements; they do not claim to be derived from Wiki coordinates.
+
+The anchor workflow is implemented but the actual Hub map still needs in-game inspection and manual measurement. No production Village, NPC or service coordinates are bundled as guessed values.
