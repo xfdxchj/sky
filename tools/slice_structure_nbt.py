@@ -260,7 +260,7 @@ def self_test():
         "DataVersion": (3, 3955), "size": (9, (3, [5,3,4])),
         "palette": (9, (10, [{"Name": (8,"minecraft:stone")}])),
         "blocks": (9, (10, [
-            {"pos": (11,[0,0,0]), "state": (3,0)},
+            {"pos": (9,(3,[0,0,0])), "state": (3,0)},
             {"pos": (11,[4,2,3]), "state": (3,0)},
             {"pos": (11,[2,1,1]), "state": (3,0)}
         ]))
