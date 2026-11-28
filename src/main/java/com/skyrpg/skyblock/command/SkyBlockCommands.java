@@ -100,7 +100,44 @@ public final class SkyBlockCommands {
                     context.getSource().sendFeedback(() -> Text.literal("Source: " + map.source()
                             + " | License: " + map.license()), false);
                     return 1;
-                }))))
+                }))
+                .then(literal("generate").requires(source -> source.hasPermissionLevel(2))
+                        .then(argument("mapId", StringArgumentType.word())
+                                .then(argument("x", IntegerArgumentType.integer())
+                                        .then(argument("y", IntegerArgumentType.integer())
+                                                .then(argument("z", IntegerArgumentType.integer()).executes(context -> {
+                                                    var player = context.getSource().getPlayerOrThrow();
+                                                    String id = StringArgumentType.getString(context, "mapId");
+                                                    var origin = new net.minecraft.util.math.BlockPos(
+                                                            IntegerArgumentType.getInteger(context, "x"),
+                                                            IntegerArgumentType.getInteger(context, "y"),
+                                                            IntegerArgumentType.getInteger(context, "z"));
+                                                    var result = com.skyrpg.skyblock.map.MapAssemblyManager.start(
+                                                            player.getServer(), id, origin);
+                                                    if (!result.success()) {
+                                                        context.getSource().sendError(Text.literal(result.message()));
+                                                        return 0;
+                                                    }
+                                                    context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
+                                                    return 1;
+                                                }))))))
+                .then(literal("status").then(argument("mapId", StringArgumentType.word()).executes(context -> {
+                    String id = StringArgumentType.getString(context, "mapId");
+                    var record = com.skyrpg.skyblock.map.MapAssemblyManager.status(
+                            context.getSource().getServer(), id);
+                    if (record == null) {
+                        context.getSource().sendError(Text.literal("No generation record for map: " + id));
+                        return 0;
+                    }
+                    context.getSource().sendFeedback(() -> Text.literal("Map " + record.mapId() + " | "
+                            + record.status() + " | Origin: " + record.originX() + ", "
+                            + record.originY() + ", " + record.originZ()), false);
+                    context.getSource().sendFeedback(() -> Text.literal(record.message()
+                            + " | Preflight cursor: " + record.preflightCursor()
+                            + " | Next slice: " + record.nextSlice()
+                            + (record.sliceInProgress() ? " | SLICE INTERRUPTED RISK" : "")), false);
+                    return 1;
+                })))
                 .then(HubCommands.command())
                 .then(literal("island")
                         .then(literal("list").executes(context -> {
