@@ -121,8 +121,30 @@ def set_tag(root: dict, key: str, tag: int, value: Any):
 
 def xyz(value: Any, field: str):
     if not isinstance(value, list) or len(value) != 3:
-        raise NBTError(f"{field} must be a 3-element int array")
+        raise NBTError(f"{field} must be a 3-element integer list")
     return tuple(int(v) for v in value)
+
+
+def read_triplet(compound: dict, key: str):
+    item = compound.get(key)
+    if item is None:
+        raise NBTError(f"Missing coordinate field {key!r}")
+    tag, value = item
+    if tag == 11:
+        return xyz(value, key), tag
+    if tag == 9:
+        child_tag, values = value
+        if child_tag != 3:
+            raise NBTError(f"{key} list must contain TAG_Int values")
+        return xyz(values, key), tag
+    raise NBTError(f"{key} must be TAG_Int_Array or TAG_List of TAG_Int")
+
+
+def write_triplet(compound: dict, key: str, tag: int, values: tuple[int, int, int]):
+    if tag == 9:
+        set_tag(compound, key, 9, (3, list(values)))
+    else:
+        set_tag(compound, key, 11, list(values))
 
 def read_size(root: dict):
     item = root.get("size")
@@ -164,16 +186,13 @@ def slice_structure(source: Path, out_dir: Path, sx: int, sy: int, sz: int):
     buckets: dict[tuple[int,int,int], list] = {}
     entity_buckets: dict[tuple[int,int,int], list] = {}
     for block in block_values:
-        pos = xyz(get(block, "pos", 11), "block.pos")
+        pos, _ = read_triplet(block, "pos")
         if any(pos[i] < 0 or pos[i] >= size[i] for i in range(3)):
             raise NBTError(f"Block position outside source size: {pos}")
         key = (pos[0]//sx, pos[1]//sy, pos[2]//sz)
         buckets.setdefault(key, []).append(block)
     for entity in entities:
-        bp = get(entity, "blockPos", 11)
-        if bp is None:
-            raise NBTError("Entity lacks blockPos; refusing lossy entity slicing")
-        pos = xyz(bp, "entity.blockPos")
+        pos, _ = read_triplet(entity, "blockPos")
         if any(pos[i] < 0 or pos[i] >= size[i] for i in range(3)):
             raise NBTError(f"Entity blockPos outside source size: {pos}")
         key = (pos[0]//sx, pos[1]//sy, pos[2]//sz)
@@ -195,14 +214,14 @@ def slice_structure(source: Path, out_dir: Path, sx: int, sy: int, sz: int):
                 local_blocks = []
                 for block in buckets.get(key, []):
                     b = copy.deepcopy(block)
-                    p = xyz(get(b, "pos", 11), "block.pos")
-                    set_tag(b, "pos", 11, [p[0]-ox, p[1]-oy, p[2]-oz])
+                    p, pos_tag = read_triplet(b, "pos")
+                    write_triplet(b, "pos", pos_tag, (p[0]-ox, p[1]-oy, p[2]-oz))
                     local_blocks.append(b)
                 local_entities = []
                 for entity in entity_buckets.get(key, []):
                     e = copy.deepcopy(entity)
-                    bp = xyz(get(e, "blockPos", 11), "entity.blockPos")
-                    set_tag(e, "blockPos", 11, [bp[0]-ox, bp[1]-oy, bp[2]-oz])
+                    bp, bp_tag = read_triplet(e, "blockPos")
+                    write_triplet(e, "blockPos", bp_tag, (bp[0]-ox, bp[1]-oy, bp[2]-oz))
                     # Entity pos is a TAG_List of doubles. Translate all three coordinates.
                     pos_item = e.get("pos")
                     if pos_item and pos_item[0] == 9:
@@ -253,7 +272,7 @@ def self_test():
         for entry in report["slices"]:
             _, part = read_nbt(out/entry["file"])
             for block in get(part,"blocks",9)[1]:
-                p = xyz(get(block,"pos",11),"test pos")
+                p, _ = read_triplet(block, "pos")
                 restored.append(tuple(p[i]+entry["source_offset"][i] for i in range(3)))
         expected = [(0,0,0),(4,2,3),(2,1,1)]
         if sorted(restored) != sorted(expected): raise AssertionError((restored, expected))
