@@ -6,25 +6,20 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
-base {
-    archivesName = project.archives_base_name
-}
+base { archivesName = project.archives_base_name }
 
 loom {
-    mixin {
-        defaultRefmapName = "skyblock-rpg-refmap.json"
-    }
+    mixin { defaultRefmapName = "skyblock-rpg-refmap.json" }
 }
 
 sourceSets {
     main {
         java.srcDir 'src/client/java'
+        resources.srcDir layout.buildDirectory.dir('generated/bundled-map-resources')
     }
 }
 
-repositories {
-    // Fabric Loom already configures the Minecraft and Fabric repositories.
-}
+repositories { }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -34,7 +29,76 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
-processResources {
+def bundledMapResources = layout.buildDirectory.dir('generated/bundled-map-resources')
+def bundleCommunityMaps = providers.gradleProperty('includeCommunityMaps').map { it.toBoolean() }.orElse(false)
+def pythonExecutable = providers.gradleProperty('pythonExecutable').orElse('python')
+
+tasks.register('prepareBundledMapResources') {
+    inputs.file('worlds/structures/the_hub_incl_carnival.nbt')
+    inputs.file('worlds/structures/gold_mine_modern_version.nbt')
+    inputs.file('tools/slice_structure_nbt.py')
+    inputs.file('worlds/map_datapack/data/skyblockrpg/skyblock/structures/gold_mine_modern.json')
+    outputs.dir(bundledMapResources)
+    doLast {
+        def outputDir = bundledMapResources.get().asFile
+        delete(outputDir)
+        if (!bundleCommunityMaps.get()) {
+            logger.lifecycle('Community map assets are not bundled. Use -PincludeCommunityMaps=true for a local/private map-enabled build.')
+            return
+        }
+
+        def sliceDir = layout.buildDirectory.dir('map-build/hub-slices').get().asFile
+        delete(sliceDir)
+        exec {
+            commandLine pythonExecutable.get(), 'tools/slice_structure_nbt.py',
+                    'worlds/structures/the_hub_incl_carnival.nbt',
+                    '--output', sliceDir.absolutePath,
+                    '--slice-x', '96', '--slice-y', '64', '--slice-z', '96'
+        }
+
+        def structureDir = new File(outputDir, 'data/skyblockrpg/structures')
+        def manifestDir = new File(outputDir, 'data/skyblockrpg/skyblock/structures')
+        structureDir.mkdirs()
+        manifestDir.mkdirs()
+
+        def index = new groovy.json.JsonSlurper().parse(new File(sliceDir, 'hub_slices.json'))
+        index.slices.each { part ->
+            copy {
+                from new File(sliceDir, part.file)
+                into structureDir
+            }
+            def manifest = [
+                    id: part.id,
+                    name: "Hypixel Hub ${part.id}",
+                    template: "skyblockrpg:${part.id}",
+                    dimension: 'minecraft:overworld',
+                    origin_x: 0, origin_y: 0, origin_z: 0,
+                    rotation: 'none', mirror: 'none',
+                    max_blocks: part.bounding_box_volume,
+                    source: 'Community Hypixel SkyBlock Hub world download',
+                    source_url: 'https://hypixel.net/threads/updated-hypixel-skyblock-world-downloads-for-every-single-island.5140617/',
+                    license: 'Community asset; redistribution permission not verified. Local/private build only.',
+                    test_fixture: false,
+                    source_offset: part.source_offset
+            ]
+            new File(manifestDir, "${part.id}.json").text =
+                    groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(manifest)) + System.lineSeparator()
+        }
+
+        copy {
+            from 'worlds/structures/gold_mine_modern_version.nbt'
+            into structureDir
+        }
+        copy {
+            from 'worlds/map_datapack/data/skyblockrpg/skyblock/structures/gold_mine_modern.json'
+            into manifestDir
+        }
+        logger.lifecycle("Prepared ${index.slices.size()} Hub slices and Gold Mine Modern as in-mod structure resources.")
+    }
+}
+
+tasks.named('processResources') {
+    dependsOn tasks.named('prepareBundledMapResources')
     inputs.property 'version', project.version
     inputs.property 'minecraft_version', project.minecraft_version
     filesMatching('fabric.mod.json') {
@@ -43,8 +107,7 @@ processResources {
     }
 }
 
-// Community map NBTs are deliberately NOT bundled into the mod JAR.
-// This task stages a separate local datapack for the map owner to install in a test world.
+// Retained only as a development/export utility; it is not the player-facing delivery path.
 tasks.register('stageGoldMineMapDatapack', Sync) {
     from('worlds/map_datapack')
     from('worlds/structures/gold_mine_modern_version.nbt') {
@@ -64,7 +127,5 @@ java {
 }
 
 jar {
-    from('LICENSE') {
-        rename { "${it}_${project.archives_base_name}" }
-    }
+    from('LICENSE') { rename { "${it}_${project.archives_base_name}" } }
 }
