@@ -62,11 +62,13 @@ tasks.register('prepareBundledMapResources') {
         manifestDir.mkdirs()
 
         def index = new groovy.json.JsonSlurper().parse(new File(sliceDir, 'hub_slices.json'))
+        def mapSlices = []
         index.slices.each { part ->
             copy {
                 from new File(sliceDir, part.file)
                 into structureDir
             }
+            mapSlices << [structure_id: part.id, offset: part.source_offset, size: part.size]
             def manifest = [
                     id: part.id,
                     name: "Hypixel Hub ${part.id}",
@@ -85,6 +87,18 @@ tasks.register('prepareBundledMapResources') {
                     groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(manifest)) + System.lineSeparator()
         }
 
+        def hubMap = [
+                id: 'hub', name: 'Hub', dimension: 'minecraft:overworld',
+                source_size: index.source_size, slices: mapSlices,
+                source: 'Community Hypixel SkyBlock Hub world download',
+                source_url: 'https://hypixel.net/threads/updated-hypixel-skyblock-world-downloads-for-every-single-island.5140617/',
+                license: 'Community asset; redistribution permission not verified. Local/private build only.'
+        ]
+        def mapDir = new File(outputDir, 'data/skyblockrpg/skyblock/maps')
+        mapDir.mkdirs()
+        new File(mapDir, 'hub.json').text =
+                groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(hubMap)) + System.lineSeparator()
+
         copy {
             from 'worlds/structures/gold_mine_modern_version.nbt'
             into structureDir
@@ -93,6 +107,16 @@ tasks.register('prepareBundledMapResources') {
             from 'worlds/map_datapack/data/skyblockrpg/skyblock/structures/gold_mine_modern.json'
             into manifestDir
         }
+        def goldMineMap = [
+                id: 'gold_mine', name: 'Gold Mine', dimension: 'minecraft:overworld',
+                source_size: [80, 142, 112],
+                slices: [[structure_id: 'gold_mine_modern', offset: [0, 0, 0], size: [80, 142, 112]]],
+                source: 'Community Hypixel SkyBlock island world download',
+                source_url: 'https://hypixel.net/threads/updated-hypixel-skyblock-world-downloads-for-every-single-island.5140617/',
+                license: 'Community asset; redistribution permission not verified. Local/private build only.'
+        ]
+        new File(mapDir, 'gold_mine.json').text =
+                groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(goldMineMap)) + System.lineSeparator()
         logger.lifecycle("Prepared ${index.slices.size()} Hub slices and Gold Mine Modern as in-mod structure resources.")
     }
 }
