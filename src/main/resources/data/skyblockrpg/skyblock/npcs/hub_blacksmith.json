@@ -5,5 +5,5 @@
   "required_region_id": "",
   "interaction_radius": 4.5,
   "dialogue": [],
-  "action": "none"
+  "action": "reforge"
 }
