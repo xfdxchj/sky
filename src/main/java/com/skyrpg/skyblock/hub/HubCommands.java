@@ -144,6 +144,20 @@ public final class HubCommands {
                                     context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
                                     return 1;
                                 }))))
+                .then(literal("place-npc-at-anchor").requires(source -> source.hasPermissionLevel(2))
+                        .then(argument("poiId", StringArgumentType.word())
+                                .then(argument("npcId", StringArgumentType.word()).executes(context -> {
+                                    var player = context.getSource().getPlayerOrThrow();
+                                    HubNpcManager.Result result = HubNpcManager.placeAtAnchor(player,
+                                            StringArgumentType.getString(context, "poiId"),
+                                            StringArgumentType.getString(context, "npcId"));
+                                    if (!result.success()) {
+                                        context.getSource().sendError(Text.literal(result.message()));
+                                        return 0;
+                                    }
+                                    context.getSource().sendFeedback(() -> Text.literal(result.message()), false);
+                                    return 1;
+                                }))))
                 .then(literal("visit").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     HubManager.Result result = HubManager.visit(player);
