@@ -1,0 +1,9 @@
+{
+  "id": "hub_maddox",
+  "name": "Maddox the Slayer",
+  "entity_type": "minecraft.villager",
+  "required_region_id": "",
+  "interaction_radius": 4.5,
+  "dialogue": [],
+  "action": "none"
+}
