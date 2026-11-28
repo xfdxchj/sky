@@ -135,15 +135,6 @@ tasks.named('processResources') {
     }
 }
 
-// Retained only as a development/export utility; it is not the player-facing delivery path.
-tasks.register('stageGoldMineMapDatapack', Sync) {
-    from('worlds/map_datapack')
-    from('worlds/structures/gold_mine_modern_version.nbt') {
-        into 'data/skyblockrpg/structures'
-    }
-    into layout.buildDirectory.dir('skyblockrpg-map-datapack')
-}
-
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release = 21
