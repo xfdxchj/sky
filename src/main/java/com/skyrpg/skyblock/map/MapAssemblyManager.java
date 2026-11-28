@@ -53,6 +53,7 @@ public final class MapAssemblyManager {
         if (definition == null) return fail("Unknown logical map: " + mapId);
         String key = definition.id().toLowerCase(java.util.Locale.ROOT);
         if (ACTIVE.containsKey(key)) return fail("Map assembly is already running: " + definition.id());
+        if (!ACTIVE.isEmpty()) return fail("Another map assembly is already running. Only one map may be assembled at a time.");
 
         MapWorldData data = MapWorldData.get(server);
         MapWorldData.Record previous = data.get(definition.id());
