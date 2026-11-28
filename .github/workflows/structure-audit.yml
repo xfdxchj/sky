@@ -5,6 +5,7 @@ on:
     paths:
       - "worlds/structures/**"
       - "tools/inspect_structure_nbt.py"
+      - "tools/audit_structure_compat.py"
       - "tools/summarize_structure_audit.py"
       - ".github/workflows/structure-audit.yml"
   workflow_dispatch:
