@@ -5,6 +5,7 @@ import com.skyrpg.skyblock.economy.BankManager;
 import com.skyrpg.skyblock.hub.HubManager;
 import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.inventory.EquipmentSlot;
+import com.skyrpg.skyblock.item.ItemRegistry;
 import com.skyrpg.skyblock.reforge.ReforgeDefinition;
 import com.skyrpg.skyblock.reforge.ReforgeManager;
 import com.skyrpg.skyblock.reforge.ReforgeRegistry;
@@ -95,6 +96,8 @@ public final class GuiMenuManager {
                 continue;
             }
             var pool = ReforgeRegistry.forSlot(slot.id());
+            var itemDefinition = ItemRegistry.get(itemId).orElse(null);
+            boolean itemReforgeable = itemDefinition != null && itemDefinition.reforgeable();
             long minCost = pool.stream().mapToLong(ReforgeDefinition::cost).min().orElse(0L);
             long maxCost = pool.stream().mapToLong(ReforgeDefinition::cost).max().orElse(0L);
             String currentId = data.getReforge(slot);
@@ -104,10 +107,12 @@ public final class GuiMenuManager {
                     "Equipped: " + itemId,
                     "Current reforge: " + currentName,
                     "Compatible reforges: " + pool.size(),
-                    pool.isEmpty() ? "No reforge data available"
+                    !itemReforgeable ? "This item cannot be reforged"
+                            : pool.isEmpty() ? "No reforge data available"
                             : "Roll cost: " + minCost + (minCost == maxCost ? "" : " - " + maxCost) + " coins",
-                    "Click to roll");
-            if (!pool.isEmpty()) actions.put(positions[i], "reforge_roll:" + slot.id());
+                    pool.stream().allMatch(ReforgeDefinition::testFixture) && !pool.isEmpty()
+                            ? "Current pool contains test fixtures" : "Click to roll");
+            if (itemReforgeable && !pool.isEmpty()) actions.put(positions[i], "reforge_roll:" + slot.id());
         }
         set(inventory, 26, Items.ARROW, "Close", "Close the Blacksmith menu");
         actions.put(26, "close");
