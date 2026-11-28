@@ -49,3 +49,15 @@ Do not use the Wiki POI XYZ values as the placement coordinates. They are refere
 | `scoop_npc` | `hub_scoop` | Display/interact shell |
 
 The placement duplicate guard currently checks only the nearby loaded area. It is not a global POI registry and does not provide cross-chunk duplicate prevention or an admin remove/repair workflow.
+
+
+## Persistent placement registry (2026-11-28)
+
+Hub NPC placement now records one placement per POI in world-persistent state `skyblockrpg_hub_npcs`. Each record stores the POI ID, NPC definition ID, entity UUID, dimension and map-local position. A second placement is rejected even when the original entity's chunk is unloaded or the world has been restarted.
+
+Admin commands:
+
+- `/skyblock hub npc list` — list registered placements and UUIDs.
+- `/skyblock hub npc forget <poiId>` — remove a stale placement record after the old entity has been manually removed.
+
+The registry intentionally does not silently respawn missing entities: an unloaded chunk and a deleted entity cannot safely be distinguished without loading/altering world chunks. Administrators must remove the old entity first, then clear its record before replacing it. This closes the duplicate-across-unloaded-chunks hole, but automatic entity reconciliation and a global removal workflow remain future work.
