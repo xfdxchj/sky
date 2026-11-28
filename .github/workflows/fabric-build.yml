@@ -16,7 +16,6 @@ on:
       - "worlds/structures/gold_mine_modern_version.nbt"
       - "worlds/structures/the_hub_incl_carnival.nbt"
       - "tools/slice_structure_nbt.py"
-      - "tools/stage_hub_datapack.py"
       - "docs/HUB_MAP_SLICER.md"
       - "docs/MAP_RUNTIME_IMPLEMENTATION.md"
   workflow_dispatch:
@@ -35,12 +34,8 @@ jobs:
           gradle-version: "8.11.1"
       - name: Test structure NBT slicer
         run: python3 tools/slice_structure_nbt.py --self-test
-      - name: Validate Hub datapack staging tool
-        run: python3 -m py_compile tools/stage_hub_datapack.py
       - name: Slice real Hub source (ephemeral CI only)
         run: python3 tools/slice_structure_nbt.py worlds/structures/the_hub_incl_carnival.nbt --output build/hub-slices --slice-x 96 --slice-y 64 --slice-z 96
-      - name: Stage real Hub datapack (legacy utility, ephemeral CI only)
-        run: python3 tools/stage_hub_datapack.py build/hub-slices/hub_slices.json --output build/hub-datapack
       - name: Build mod with bundled map resources for packaging verification
         run: gradle build -PincludeCommunityMaps=true -PpythonExecutable=python3
       - name: Verify in-JAR map resources
@@ -49,11 +44,3 @@ jobs:
           test -n "$JAR"
           jar tf "$JAR" | grep -q 'data/skyblockrpg/structures/hub_x00_y00_z00.nbt'
           jar tf "$JAR" | grep -q 'data/skyblockrpg/structures/gold_mine_modern_version.nbt'
-      - name: Stage legacy local Gold Mine datapack export
-        run: gradle stageGoldMineMapDatapack
-      - name: Upload legacy local map datapack export
-        uses: actions/upload-artifact@v4
-        with:
-          name: skyblockrpg-gold-mine-datapack
-          path: build/skyblockrpg-map-datapack/
-          if-no-files-found: error
