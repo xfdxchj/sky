@@ -44,6 +44,8 @@ import com.skyrpg.skyblock.island.IslandRegistry;
 import com.skyrpg.skyblock.island.IslandManager;
 import com.skyrpg.skyblock.island.PrivateIslandManager;
 import com.skyrpg.skyblock.structure.StructureCommands;
+import com.skyrpg.skyblock.map.MapDefinition;
+import com.skyrpg.skyblock.map.MapRegistry;
 import com.skyrpg.skyblock.connection.ConnectionCommands;
 import com.skyrpg.skyblock.hub.HubCommands;
 import com.skyrpg.skyblock.hub.HubRegistry;
@@ -67,12 +69,38 @@ public final class SkyBlockCommands {
                 .then(literal("map").executes(context -> {
                     var player = context.getSource().getPlayerOrThrow();
                     String dimension = player.getServerWorld().getRegistryKey().getValue().toString();
-                    context.getSource().sendFeedback(() -> Text.literal("SkyBlock Map Format v1 | Loaded islands: "
-                            + IslandRegistry.all().size() + " | Connections: " + com.skyrpg.skyblock.connection.ConnectionRegistry.all().size()
+                    context.getSource().sendFeedback(() -> Text.literal("SkyBlock Map Runtime | Maps: "
+                            + MapRegistry.all().size() + " | Loaded islands: " + IslandRegistry.all().size()
+                            + " | Connections: " + com.skyrpg.skyblock.connection.ConnectionRegistry.all().size()
                             + " | Hub POIs: " + HubRegistry.all().size()
                             + " | Current dimension: " + dimension), false);
                     return 1;
+                })
+                .then(literal("list").executes(context -> {
+                    var maps = MapRegistry.all();
+                    context.getSource().sendFeedback(() -> Text.literal("Registered logical maps: " + maps.size()), false);
+                    for (MapDefinition map : maps) {
+                        context.getSource().sendFeedback(() -> Text.literal(map.id() + " | " + map.name()
+                                + " | " + map.sizeX() + "x" + map.sizeY() + "x" + map.sizeZ()
+                                + " | slices: " + map.slices().size()), false);
+                    }
+                    return 1;
                 }))
+                .then(literal("info").then(argument("mapId", StringArgumentType.word()).executes(context -> {
+                    String id = StringArgumentType.getString(context, "mapId");
+                    MapDefinition map = MapRegistry.get(id).orElse(null);
+                    if (map == null) {
+                        context.getSource().sendError(Text.literal("Unknown logical map: " + id));
+                        return 0;
+                    }
+                    context.getSource().sendFeedback(() -> Text.literal(map.name() + " [" + map.id() + "]"), false);
+                    context.getSource().sendFeedback(() -> Text.literal("Dimension: " + map.dimension()
+                            + " | Size: " + map.sizeX() + "x" + map.sizeY() + "x" + map.sizeZ()
+                            + " | Structure slices: " + map.slices().size()), false);
+                    context.getSource().sendFeedback(() -> Text.literal("Source: " + map.source()
+                            + " | License: " + map.license()), false);
+                    return 1;
+                })))
                 .then(HubCommands.command())
                 .then(literal("island")
                         .then(literal("list").executes(context -> {
