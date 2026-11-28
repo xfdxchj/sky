@@ -65,9 +65,7 @@ public final class NpcManager {
         PlayerProfile profile = ProfileManager.get(player);
         switch (npc.action()) {
             case "reforge" -> GuiMenuManager.openBlacksmith(player);
-            case "bank" -> player.sendMessage(Text.literal(
-                    "Bank | Purse: " + profile.getCoins() + " coins | Bank: " + profile.getBankCoins() + " coins"
-                            + " | Use /skyblock bank deposit <amount> or withdraw <amount>."), false);
+            case "bank" -> GuiMenuManager.openBank(player);
             case "shop" -> {
                 player.sendMessage(Text.literal("Shop catalogue (" + ShopRegistry.all().size() + " offers):"), false);
                 for (ShopOffer offer : ShopRegistry.all()) {
