@@ -1,0 +1,16 @@
+{
+  "id": "gold_mine_modern",
+  "name": "Gold Mine (Modern Community Map)",
+  "template": "skyblockrpg:gold_mine_modern_version",
+  "dimension": "minecraft:overworld",
+  "origin_x": 0,
+  "origin_y": 0,
+  "origin_z": 0,
+  "rotation": "none",
+  "mirror": "none",
+  "max_blocks": 1272320,
+  "source": "Community Hypixel SkyBlock island world download",
+  "source_url": "https://hypixel.net/threads/updated-hypixel-skyblock-world-downloads-for-every-single-island.5140617/",
+  "license": "Community asset; redistribution permission not verified. Local datapack staging only.",
+  "test_fixture": false
+}
